@@ -1,0 +1,15 @@
+@import "standart.css";
+
+
+#main-section {
+    background: url("../images/startBackground.jpeg");
+    background-size: cover;
+    height: 100vh;
+}
+
+#work-section {
+    background: url("../images/startWorkBackground.gif") center;
+    background-size: cover;
+    background-attachment: fixed;
+    height: 100vh;
+}

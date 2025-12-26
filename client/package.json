@@ -1,9 +1,9 @@
 {
   "name": "elofiz",
-  "module": "index.ts",
+  "module": "src/components/index.ts",
   "type": "module",
   "scripts": {
-    "start": "vite --open"
+    "dev": "vite --open"
   },
   "devDependencies": {
     "@types/bun": "latest"
