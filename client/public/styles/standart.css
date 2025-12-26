@@ -17,7 +17,6 @@ html {
 body, h1, h2, h3, h4, p,
 figure, blockquote, dl, dd {
     margin: 0;
-    background: black;
 }
 
 /* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
@@ -30,6 +29,8 @@ ol[role='list'] {
 body {
     min-height: 100vh;
     line-height: 1.5;
+    background: black;
+
 }
 
 /* Set shorter line heights on headings and interactive elements */

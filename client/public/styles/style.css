@@ -1,15 +1,22 @@
 @import "standart.css";
 
-
-#main-section {
-    background: url("../images/startBackground.jpeg");
+.space {
+    background-position: center;
     background-size: cover;
     height: 100vh;
 }
 
-#work-section {
-    background: url("../images/startWorkBackground.gif") center;
-    background-size: cover;
+.modal-open-widget {
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    background: red;
+    width: 300px;
+    height: 50px;
+    z-index: 100;
+}
+
+.space--fixed {
     background-attachment: fixed;
-    height: 100vh;
 }

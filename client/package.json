@@ -1,6 +1,6 @@
 {
   "name": "elofiz",
-  "module": "src/components/index.ts",
+  "module": "src/index.ts",
   "type": "module",
   "scripts": {
     "dev": "vite --open"

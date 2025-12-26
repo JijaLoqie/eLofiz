@@ -4,10 +4,32 @@
     <meta charset="UTF-8">
     <title>eLofiz - Class "E" of vibing</title>
     <link rel="stylesheet" href="public/styles/style.css">
-    <script src="src/components/index.ts" type="module"></script>
+    <script src="src/index.ts" type="module"></script>
 </head>
 <body>
-    <section id="main-section">eLofiz Main</section>
-    <section id="work-section">eLofiz Work</section>
+    <template id ="space-template">
+        <div class="space">
+            <h1 class="space__music">NaN</h1>
+        </div>
+    </template>
+    <template id="widget-music-template">
+        <div class="widget-music">
+            <div class="widget-music__image">music image</div>
+            <div class="widget-music__name">music name</div>
+        </div>
+    </template>
+    <template id="widget-background-template">
+        <div class="widget-background">
+            <div class="widget-background__image">background image</div>
+            <div class="widget-background__name">background name</div>
+        </div>
+    </template>
+
+    <template id="modal-add-widget-template">
+        <div class="modal-open-widget">
+            <button data-type="MUSIC" class="add-music">music widget</button>
+            <button data-type="BACKGROUND" class="add-background">background widget</button>
+        </div>
+    </template>
 </body>
 </html>
