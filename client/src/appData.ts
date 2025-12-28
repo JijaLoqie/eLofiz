@@ -27,4 +27,11 @@ export class AppData {
         }
     }
 
+    removeWidget(spaceId: string, widgetId: string) {
+        const space = this.getSpace(spaceId);
+        if (space) {
+            space.widgets = space.widgets.filter(widget => widget !== widgetId);
+        }
+    }
+
 }

@@ -2,14 +2,18 @@ import {type IEvents, View} from "../../base";
 import {ensureElement} from "../../utils";
 import {ensureAllElements} from "../../utils/utils.ts";
 import type {AddWidgetAction} from "../../actions.ts";
-import type {WidgetType} from "../../types.ts";
+import type {IModalAddWidget, WidgetType} from "../../types.ts";
 
-interface IModalAddWidget {
-}
+
 
 class ModalAddWidget extends View<IModalAddWidget> {
+    private currentSpaceName: HTMLElement;
+
     constructor(container: HTMLElement, events: IEvents) {
         super(container, events);
+        this.currentSpaceName = ensureElement(".modal_currentSpace-name", this.container);
+        this.currentSpaceId = "main";
+
         this.isOpen = false;
         document.body.appendChild(this.container);
 
@@ -23,11 +27,19 @@ class ModalAddWidget extends View<IModalAddWidget> {
         ensureAllElements<HTMLButtonElement>("[data-widget]", this.container).forEach((button) => {
             button.addEventListener("click", () => {
                 const widgetType = button.dataset.widget as WidgetType || "MUSIC";
-                this.events.emit<AddWidgetAction>("add-widget", { currentSpaceId: "main", widgetType });
+                this.events.emit<AddWidgetAction>("add-widget", { currentSpaceId: this.currentSpaceId, widgetType });
                 this.close();
             });
         })
     }
+
+    set currentSpaceId(currentSpaceId: string) {
+        this.currentSpaceName.textContent = currentSpaceId;
+    }
+    get currentSpaceId() {
+        return this.currentSpaceName.textContent;
+    }
+
     get isOpen() {
         return getComputedStyle(this.container).display !== "none";
     }

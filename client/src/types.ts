@@ -2,7 +2,8 @@ export type WidgetType = 'MUSIC' | 'BACKGROUND';
 
 
 export interface IWidget {
-    id: string
+    id: string;
+    spaceId: string;
     content: HTMLElement;
 }
 
@@ -12,4 +13,8 @@ export interface ISpace {
     music: string;
     fixed: boolean;
     widgets: string[];
+}
+
+export interface IModalAddWidget {
+    currentSpaceId: string;
 }

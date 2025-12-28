@@ -1,6 +1,6 @@
 import {type IEvents, View} from "../base";
 import type {ISpace} from "../types.ts";
-import {cloneTemplate} from "../utils";
+import {cloneTemplate, ensureElement} from "../utils";
 
 
 class Space extends View<ISpace> {

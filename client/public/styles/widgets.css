@@ -1,5 +1,7 @@
 /* Widget Container */
 .widget {
+    --x: 0px;
+    --y: 0px;
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -8,8 +10,8 @@
     transition: box-shadow 0.2s ease;
 
     background-color: rgba(0, 0, 0, 0.5);
-    top: 100px;
-    left: 100px;
+    top: var(--y);
+    left: var(--x);
     width: 200px;
     height: 200px;
     color: white;
@@ -26,7 +28,7 @@
 }
 
 /* Close Button */
-.widget__close {
+.button[data-close-button] {
     background: none;
     border: none;
     font-size: 24px;
@@ -42,12 +44,12 @@
     transition: all 0.2s ease;
 }
 
-.widget__close:hover {
+.button[data-close-button]:hover {
     background-color: #f0f0f0;
     color: #333;
 }
 
-.widget__close:active {
+.button[data-close-button]:active {
     background-color: #e0e0e0;
 }
 
