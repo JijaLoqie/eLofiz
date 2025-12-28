@@ -1,4 +1,4 @@
-import { type ISpace } from './types.ts';
+import {type ISpace, type IWidget} from './types.ts';
 import { type IEvents } from './base';
 
 const defaultSpaces: ISpace[] = [
@@ -18,6 +18,13 @@ export class AppData {
 
     getSpace(id: string)  {
         return this.spaces.find(space => space.id === id);
+    }
+
+    addWidget(spaceId: string, widgetId: string) {
+        const space = this.getSpace(spaceId);
+        if (space) {
+            space.widgets.push(widgetId);
+        }
     }
 
 }

@@ -2,7 +2,8 @@ export type WidgetType = 'MUSIC' | 'BACKGROUND';
 
 
 export interface IWidget {
-    type: WidgetType
+    id: string
+    content: HTMLElement;
 }
 
 export interface ISpace {
@@ -10,5 +11,5 @@ export interface ISpace {
     background: string;
     music: string;
     fixed: boolean;
-    widgets: IWidget[];
+    widgets: string[];
 }

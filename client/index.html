@@ -13,22 +13,55 @@
         </div>
     </template>
     <template id="widget-music-template">
-        <div class="widget-music">
-            <div class="widget-music__image">music image</div>
-            <div class="widget-music__name">music name</div>
+        <div class="widget-music__image">
+            <img src="" alt="Album cover" class="widget-music__cover">
+        </div>
+        <div class="widget-music__info">
+            <div class="widget-music__name">Unknown Track</div>
+            <div class="widget-music__artist">Unknown Artist</div>
+            <div class="widget-music__duration">0:00</div>
+        </div>
+        <div class="widget-music__controls">
+            <button class="widget-music__play" aria-label="Play">▶</button>
+            <button class="widget-music__pause" aria-label="Pause">⏸</button>
+            <button class="widget-music__stop" aria-label="Stop">⏹</button>
         </div>
     </template>
+
     <template id="widget-background-template">
-        <div class="widget-background">
-            <div class="widget-background__image">background image</div>
-            <div class="widget-background__name">background name</div>
+        <div class="widget-background__preview">
+            <img src="" alt="Background preview" class="widget-background__image">
+        </div>
+        <div class="widget-background__info">
+            <div class="widget-background__name">Unnamed Background</div>
+            <div class="widget-background__size">1920x1080</div>
+        </div>
+        <div class="widget-background__actions">
+            <button class="widget-background__apply" aria-label="Apply background">Apply</button>
+            <button class="widget-background__download" aria-label="Download">⬇</button>
+        </div>
+    </template>
+
+    <template id="widget-template">
+        <div class="widget" draggable="true">
+            <div class="widget__header">
+                <button class="button" aria-label="Close widget">&times;</button>
+            </div>
+            <div class="widget__content"></div>
         </div>
     </template>
 
     <template id="modal-add-widget-template">
-        <div class="modal-open-widget">
-            <button data-type="MUSIC" class="add-music">music widget</button>
-            <button data-type="BACKGROUND" class="add-background">background widget</button>
+
+        <div class="modal">
+            <div class="modal__currentSpace-info">
+                <span class="modal__currentSpace-label">Текущее пространство:</span>
+                <span class="modal_currentSpace-name">Main</span>
+            </div>
+            <div class="modal__buttons">
+                <button data-widget="MUSIC" class="button">Музыка</button>
+                <button data-widget="BACKGROUND" class="button">Задний фон</button>
+            </div>
         </div>
     </template>
 </body>

@@ -13,14 +13,6 @@ class ModalAddWidget extends View<IModalAddWidget> {
         this.isOpen = false;
         document.body.appendChild(this.container);
 
-
-        this.events.on("open-modal-add-widget", () => {
-            this.open();
-        });
-
-        this.events.on("close-modal-close-widget", () => {
-            this.close();
-        });
         document.addEventListener("keypress", async (e) => {
             if (e.key === "Enter") {
                 this.open();
@@ -28,9 +20,9 @@ class ModalAddWidget extends View<IModalAddWidget> {
         });
 
 
-        ensureAllElements<HTMLButtonElement>("button", this.container).forEach((button) => {
+        ensureAllElements<HTMLButtonElement>("[data-widget]", this.container).forEach((button) => {
             button.addEventListener("click", () => {
-                const widgetType = button.dataset.type as WidgetType || "MUSIC";
+                const widgetType = button.dataset.widget as WidgetType || "MUSIC";
                 this.events.emit<AddWidgetAction>("add-widget", { currentSpaceId: "main", widgetType });
                 this.close();
             });

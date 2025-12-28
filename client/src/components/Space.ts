@@ -8,6 +8,10 @@ class Space extends View<ISpace> {
         super(cloneTemplate("#space-template"), events);
     }
 
+    set id(id: string) {
+        this.container.id = `space-${id}`;
+    }
+
     set background(background: string) {
         this.container.style.backgroundImage = `url(../images/${background})`;
     }

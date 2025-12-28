@@ -1,1 +1,1 @@
-export { ensureElement, cloneTemplate } from './utils';
+export { ensureElement, cloneTemplate, uuid } from './utils';
