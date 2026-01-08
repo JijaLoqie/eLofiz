@@ -1,4 +1,4 @@
-import type {WidgetType} from "./types.ts";
+import type {ISpace, WidgetType} from "./types.ts";
 import type {SpaceMetrics} from "./modules/core/IntersectionSpaceHandler.ts";
 
 export interface AddWidgetAction {
@@ -16,6 +16,7 @@ export interface ChangeIntersectionAction {
 
 export interface CreateSpaceAction {
     spaceName: string;
+    spaceSettings?: Partial<ISpace>;
 }
 
 export interface DeleteSpaceAction {
@@ -30,6 +31,8 @@ export interface RenameSpaceAction {
 export interface ChangeSpaceAction {
     spaceId: string;
 }
+
+export interface SpaceUpdateAction {}
 
 export interface OpenModalAction { }
 export interface CloseModalAction {}

@@ -19,6 +19,23 @@ export class IntersectionSpaceHandler {
     private intersectionObserver: IntersectionObserver | null = null;
 
     constructor(spaceSelector: ISpaceSelector) {
+        this.fetchSpaces(spaceSelector);
+    }
+
+    /**
+     * Fetch and register new spaces
+     */
+    fetchSpaces(spaceSelector: ISpaceSelector): void {
+        // Disconnect existing observer
+        if (this.intersectionObserver) {
+            this.intersectionObserver.disconnect();
+        }
+
+        // Clear existing data
+        this.spaceMetrics.clear();
+        this.currentSpace = 0;
+
+        // Get new spaces
         const spaceViews = spaceSelector.getSpaces();
         const spaceSelectors = spaceViews.keys()
             .map(spaceName => `#${spaceName}`).toArray();
@@ -27,12 +44,17 @@ export class IntersectionSpaceHandler {
             return ensureElement(selector);
         });
 
-        // Initialize metrics
+        // Initialize metrics for new spaces
         this.spaces.forEach(space => this.spaceMetrics.set(space, 0));
 
+        // Re-setup the observer with new spaces
         this.setupIntersectionObserver();
-    }
 
+        // Notify observers of the change
+        this.notifyObservers();
+        console.log("Spaces updated", this.spaces);
+
+    }
     /**
      * Setup Intersection Observer to detect which space is most visible
      */

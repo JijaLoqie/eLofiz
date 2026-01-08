@@ -2,7 +2,8 @@ import {type IEvents, View} from "../../base";
 import {ensureElement} from "../../utils";
 import {ensureAllElements} from "../../utils/utils.ts";
 import type {AddWidgetAction, CloseModalAction} from "../../actions.ts";
-import type {IModalAddWidget, WidgetType} from "../../types.ts";
+import type {IModalAddWidget} from "../../types.ts";
+import {WidgetType} from "../../types.ts";
 
 
 
@@ -12,12 +13,16 @@ export class ModalAddWidget extends View<IModalAddWidget> {
     constructor(container: HTMLElement, events: IEvents) {
         super(container, events);
         this.currentSpaceName = ensureElement(".modal_currentSpace-name", this.container);
-        ensureAllElements<HTMLButtonElement>("[data-widget]", this.container).forEach((button) => {
+        const buttonsContainer = ensureElement<HTMLDivElement>(".modal__buttons", this.container);
+        Object.values(WidgetType).forEach((widgetType) => {
+            const button = document.createElement("button");
+            button.className = "button";
+            button.textContent = widgetType;
+            buttonsContainer.appendChild(button);
             button.addEventListener("click", () => {
-                const widgetType = button.dataset.widget as WidgetType || "MUSIC";
                 this.events.emit<AddWidgetAction>("add-widget", { widgetType });
                 this.events.emit<CloseModalAction>("close-modal");
-            });
+            })
         })
     }
 

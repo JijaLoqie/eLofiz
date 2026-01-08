@@ -1,5 +1,5 @@
 import {Middleware} from "../base/Middleware.ts";
-import type {ChangeIntersectionAction, ChangeSpaceAction} from "../actions.ts";
+import type {ChangeIntersectionAction, ChangeSpaceAction, CreateSpaceAction, SpaceUpdateAction} from "../actions.ts";
 
 import {IntersectionSpaceHandler} from "../modules/core/IntersectionSpaceHandler.ts";
 import type {AppData} from "../app/appData.ts";
@@ -20,6 +20,10 @@ export class IntersectionMiddleware extends Middleware {
         document.addEventListener("scroll", () => {
             const intersectionRatio = this.intersectionSpaceHandler.getSpaceMetrics();
             this.events.emit<ChangeIntersectionAction>("change-intersection", { spaceMetrics: intersectionRatio });
+        });
+
+        this.events.on<SpaceUpdateAction>("spaces-updated", () => {
+            this.intersectionSpaceHandler.fetchSpaces(this.store);
         });
     }
 }

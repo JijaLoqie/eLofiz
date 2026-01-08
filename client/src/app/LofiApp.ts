@@ -8,7 +8,7 @@ class LofiApp {
     private readonly _store: AppData;
     constructor() {
         this._events = new EventEmitter();
-        this._store = new AppData();
+        this._store = new AppData(this._events);
     }
 
     use<T extends Middleware>(NewMiddleware: new (events: IEvents, store: AppData) => T) {

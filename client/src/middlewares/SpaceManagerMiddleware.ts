@@ -3,6 +3,7 @@ import {SpaceManager} from "../modules/core/SpaceManager.ts";
 import type {AppData} from "../app/appData.ts";
 import type {IEvents} from "../base";
 import type {CreateSpaceAction, DeleteSpaceAction, RenameSpaceAction} from "../actions.ts";
+import type {ISpace} from "../types.ts";
 
 export class SpaceManagerMiddleware extends Middleware {
     private readonly spaceManager;
@@ -13,8 +14,8 @@ export class SpaceManagerMiddleware extends Middleware {
     }
 
     register(): void {
-        this.events.on<CreateSpaceAction>("create-space", (data: { spaceName: string }) => {
-            this.spaceManager.createSpace(data.spaceName);
+        this.events.on<CreateSpaceAction>("create-space", (data: { spaceName: string, spaceSettings?: Partial<ISpace> }) => {
+            this.spaceManager.createSpace(data.spaceName, data.spaceSettings);
         });
         this.events.on<DeleteSpaceAction>("delete-space", (data: { spaceId: string }) => {
             this.spaceManager.deleteSpace(data.spaceId);

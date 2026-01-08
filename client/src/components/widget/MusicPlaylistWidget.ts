@@ -3,19 +3,9 @@ import {cloneTemplate, ensureElement} from "../../utils";
 import {album_cover, song_artist, song_title, song_url} from "../../globals.ts";
 import type {ChangeIntersectionAction} from "../../actions.ts";
 import {spaceApi} from "../../modules/core/SpaceApi.ts";
+import type {IMusicPlaylistWidget} from "../../types.ts";
 
 const musicWidgetTemplate = ensureElement<HTMLTemplateElement>("#widget-music-template");
-
-interface IMusicPlaylistWidget {
-    currentMusicIndex: number;
-    musicUrl: string;
-    position: number;
-    playing: boolean;
-    volume: number;
-    cover: string;
-    songTitle: string;
-    artist: string;
-}
 
 class MusicPlaylistWidget extends View<IMusicPlaylistWidget> {
     private model;

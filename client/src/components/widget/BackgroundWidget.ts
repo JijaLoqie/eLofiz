@@ -1,6 +1,7 @@
 import {Component} from "../../base";
 import {spaceApi} from "../../modules/core/SpaceApi.ts";
 import {cloneTemplate, ensureElement} from "../../utils";
+import type {IBackgroundWidget} from "../../types.ts";
 
 class BackgroundWidget extends Component<IBackgroundWidget> {
     _backgroundNode;
@@ -31,11 +32,6 @@ class BackgroundWidget extends Component<IBackgroundWidget> {
             this._backgroundNode.style.backgroundImage = `url('${imageUrl}')`;
         }
     }
-}
-
-
-interface IBackgroundWidget {
-    url: string
 }
 
 export default BackgroundWidget;

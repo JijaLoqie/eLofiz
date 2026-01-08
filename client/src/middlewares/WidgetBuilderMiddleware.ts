@@ -4,6 +4,7 @@ import {AppData} from "../app/appData.ts";
 import {WidgetBuilder} from "../modules/core/WidgetBuilder.ts";
 import type {AddWidgetAction, ChangeSpaceAction} from "../actions.ts";
 import {ensureElement} from "../utils";
+import type {WidgetType} from "../types.ts";
 
 export class WidgetBuilderMiddleware extends Middleware {
     private readonly widgetBuilder;
@@ -16,7 +17,7 @@ export class WidgetBuilderMiddleware extends Middleware {
     }
 
     register(): void {
-        this.events.on<AddWidgetAction>("add-widget", (data: { widgetType: "MUSIC" | "BACKGROUND" }) => {
+        this.events.on<AddWidgetAction>("add-widget", (data: { widgetType: WidgetType }) => {
             const widget = this.widgetBuilder.createWidget(this.currentId, data.widgetType);
             ensureElement(`#${this.currentId}`).appendChild(widget.render());
         })
