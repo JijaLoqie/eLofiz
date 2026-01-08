@@ -13,8 +13,9 @@ class Widget extends View<IWidget> {
 
     constructor(events: IEvents) {
         super(cloneTemplate(widgetTemplate), events);
-
-        this.dragHandler = new DragHandler(this.container);
+        console.log(this.container.innerHTML);
+        const widgetHeader = ensureElement(".widget__header", this.container);
+        this.dragHandler = new DragHandler(widgetHeader, this.container);
         ensureElement<HTMLButtonElement>(".button[data-close-button]", this.container)
             .addEventListener("click", this.destroy.bind(this));
     }

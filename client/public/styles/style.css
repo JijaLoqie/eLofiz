@@ -8,6 +8,11 @@
     background-size: cover;
     height: 100vh;
     position: relative;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.space--transitioning {
+    opacity: 0.1; /* or adjust to your preference */
 }
 
 .modal {

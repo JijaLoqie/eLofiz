@@ -6,19 +6,21 @@ export interface IDraggableOptions {
 
 export class DragHandler {
     private isDragging = false;
-    private element: HTMLElement;
+    private selectElement: HTMLElement;
+    private draggedElement: HTMLElement;
     private options: IDraggableOptions;
     private offsetX = 0;
     private offsetY = 0;
 
-    constructor(element: HTMLElement, options: IDraggableOptions = {}) {
-        this.element = element;
+    constructor(selectElement: HTMLElement, dragElement: HTMLElement, options: IDraggableOptions = {}) {
+        this.selectElement = selectElement;
+        this.draggedElement = dragElement;
         this.options = options;
         this.init();
     }
 
     private init(): void {
-        this.element.addEventListener("pointerdown", (e) => this.handlePointerDown(e));
+        this.selectElement.addEventListener("pointerdown", (e) => this.handlePointerDown(e));
         document.addEventListener("pointermove", (e) => this.handlePointerMove(e));
         document.addEventListener("pointerup", (e) => this.handlePointerUp(e));
     }
@@ -27,7 +29,7 @@ export class DragHandler {
         this.isDragging = true;
 
         // Calculate offset between pointer and element
-        const rect = this.element.getBoundingClientRect();
+        const rect = this.selectElement.getBoundingClientRect();
         this.offsetX = e.clientX - rect.left;
         this.offsetY = e.clientY - rect.top;
 
@@ -38,8 +40,8 @@ export class DragHandler {
         if (!this.isDragging) return;
 
         this.options.onDrag?.(e, this.offsetX, this.offsetY);
-        this.element.style.setProperty("left", `${e.clientX - this.offsetX}px`);
-        this.element.style.setProperty("top", `${e.clientY - this.offsetY}px`);
+        this.draggedElement.style.setProperty("left", `${e.clientX - this.offsetX}px`);
+        this.draggedElement.style.setProperty("top", `${e.clientY - this.offsetY}px`);
     }
 
     private handlePointerUp(e: PointerEvent): void {
