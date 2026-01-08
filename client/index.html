@@ -7,38 +7,86 @@
     <script src="src/index.ts" type="module"></script>
 </head>
 <body>
+    <template id="modal-menu-template">
+        <div id="modal-menu" class="modal">
+            <div class="modal__currentSpace-info">
+                <span class="modal__currentSpace-label">Текущее пространство:</span>
+                <span class="modal_currentSpace-name">Main</span>
+            </div>
+            <div class="modal__buttons">
+                <button data-widget="MUSIC" class="button">Музыка</button>
+                <button data-widget="BACKGROUND" class="button">Задний фон</button>
+            </div>
+        </div>
+    </template>
     <template id ="space-template">
         <div class="space">
-            <h1 class="space__music">NaN</h1>
+            <audio class="space__music">NaN</audio>
         </div>
     </template>
     <template id="widget-music-template">
-        <div class="widget-music__image">
-            <img src="" alt="Album cover" class="widget-music__cover">
-        </div>
-        <div class="widget-music__info">
-            <div class="widget-music__name">Unknown Track</div>
-            <div class="widget-music__artist">Unknown Artist</div>
-            <div class="widget-music__duration">0:00</div>
-        </div>
-        <div class="widget-music__controls">
-            <button class="widget-music__play" aria-label="Play">▶</button>
-            <button class="widget-music__pause" aria-label="Pause">⏸</button>
-            <button class="widget-music__stop" aria-label="Stop">⏹</button>
+        <div class="music-player">
+            <!-- Album Cover -->
+            <div class="player-cover">
+                <img id="album-cover" src="" alt="Album Cover" class="cover-image">
+            </div>
+
+            <!-- Song Info -->
+            <div class="player-info">
+                <h2 id="song-title" class="song-title">Song Title</h2>
+                <p id="song-artist" class="song-artist">Artist Name</p>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="player-progress">
+                <span id="current-time" class="time">0:00</span>
+                <input
+                        type="range"
+                        id="progress-bar"
+                        class="progress-slider"
+                        min="0"
+                        max="100"
+                        value="0"
+                        step="0.1"
+                >
+                <span id="duration" class="time">0:00</span>
+            </div>
+
+            <!-- Controls -->
+            <div class="player-controls">
+                <button id="prev-btn" class="control-btn prev-btn" title="Previous">
+                    <span>⏮️</span>
+                </button>
+
+                <button id="play-btn" class="control-btn play-btn" title="Play/Pause">
+                    <span class="play-icon">▶️</span>
+                    <span class="pause-icon" style="display: none;">⏸️</span>
+                </button>
+
+                <button id="next-btn" class="control-btn next-btn" title="Next">
+                    <span>⏭️</span>
+                </button>
+            </div>
+
+            <!-- Volume Control -->
+            <div class="player-volume">
+                <label for="volume-slider">🔊</label>
+                <input
+                        type="range"
+                        id="volume-slider"
+                        class="volume-slider"
+                        min="0"
+                        max="100"
+                        value="70"
+                        step="1"
+                >
+            </div>
         </div>
     </template>
 
     <template id="widget-background-template">
-        <div class="widget-background__preview">
-            <img src="" alt="Background preview" class="widget-background__image">
-        </div>
-        <div class="widget-background__info">
-            <div class="widget-background__name">Unnamed Background</div>
-            <div class="widget-background__size">1920x1080</div>
-        </div>
-        <div class="widget-background__actions">
-            <button class="widget-background__apply" aria-label="Apply background">Apply</button>
-            <button class="widget-background__download" aria-label="Download">⬇</button>
+        <div>
+            <input class="background-input" type="file" alt="Background Image">
         </div>
     </template>
 
@@ -48,20 +96,6 @@
                 <button data-close-button class="button" aria-label="Close widget">&times;</button>
             </div>
             <div class="widget__content"></div>
-        </div>
-    </template>
-
-    <template id="modal-add-widget-template">
-
-        <div class="modal">
-            <div class="modal__currentSpace-info">
-                <span class="modal__currentSpace-label">Текущее пространство:</span>
-                <span class="modal_currentSpace-name">Main</span>
-            </div>
-            <div class="modal__buttons">
-                <button data-widget="MUSIC" class="button">Музыка</button>
-                <button data-widget="BACKGROUND" class="button">Задний фон</button>
-            </div>
         </div>
     </template>
 </body>

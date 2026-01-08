@@ -1,0 +1,1 @@
+export { IntersectionMiddleware } from "./IntersectionMiddleware.ts";

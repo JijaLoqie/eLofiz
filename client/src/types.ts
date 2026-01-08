@@ -8,13 +8,13 @@ export interface IWidget {
 }
 
 export interface ISpace {
-    id: string;
+    name: string;
     background: string;
-    music: string;
     fixed: boolean;
     widgets: string[];
 }
 
 export interface IModalAddWidget {
+    open: boolean;
     currentSpaceId: string;
 }

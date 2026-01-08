@@ -1,31 +1,30 @@
 // currentSpaceManager.ts
 
-interface SpaceMetrics {
+import {ensureElement} from "../../utils";
+import type {ISpaceSelector} from "../../app/appData.ts";
+
+export interface SpaceMetrics {
     index: number;
+    id: string;
     intersectionRatio: number;
     isVisible: boolean;
     element: HTMLElement;
 }
 
-class CurrentSpaceManager {
+export class IntersectionSpaceHandler {
     private currentSpace: number = 0;
     private spaces: HTMLElement[] = [];
     private spaceMetrics: Map<HTMLElement, number> = new Map();
     private observers: ((space: number, metrics: SpaceMetrics[]) => void)[] = [];
     private intersectionObserver: IntersectionObserver | null = null;
 
-    /**
-     * Initialize the manager with space elements
-     * @param spaceSelectors - CSS selectors or HTMLElements for each space
-     */
-    constructor(spaceSelectors: (string | HTMLElement)[]) {
+    constructor(spaceSelector: ISpaceSelector) {
+        const spaceViews = spaceSelector.getSpaces();
+        const spaceSelectors = spaceViews.keys()
+            .map(spaceName => `#${spaceName}`).toArray();
+
         this.spaces = spaceSelectors.map(selector => {
-            if (typeof selector === 'string') {
-                const element = document.querySelector(selector) as HTMLElement;
-                if (!element) throw new Error(`Space element not found: ${selector}`);
-                return element;
-            }
-            return selector;
+            return ensureElement(selector);
         });
 
         // Initialize metrics
@@ -76,13 +75,16 @@ class CurrentSpaceManager {
     /**
      * Get metrics for all spaces
      */
-    getSpaceMetrics(): SpaceMetrics[] {
-        return this.spaces.map((space, index) => ({
+    getSpaceMetrics(): Record<string, SpaceMetrics> {
+        const allSpaces: SpaceMetrics[] = this.spaces.map((space, index) => ({
+            id: space.id,
             index,
             intersectionRatio: this.spaceMetrics.get(space) || 0,
             isVisible: (this.spaceMetrics.get(space) || 0) > 0,
             element: space,
         }));
+
+        return Object.fromEntries(allSpaces.map((space) => [space.id, space]));
     }
 
     /**
@@ -93,11 +95,19 @@ class CurrentSpaceManager {
 
         const space = this.spaces[index];
         return {
+            id: space.id,
             index,
             intersectionRatio: this.spaceMetrics.get(space) || 0,
             isVisible: (this.spaceMetrics.get(space) || 0) > 0,
             element: space,
         };
+    }
+
+    /**
+     * Get current space id
+     */
+    getCurrentSpaceName(): string {
+        return this.spaces[this.currentSpace].id;
     }
 
     /**
@@ -116,7 +126,7 @@ class CurrentSpaceManager {
      * Notify all observers of space change
      */
     private notifyObservers(): void {
-        const metrics = this.getSpaceMetrics();
+        const metrics = Object.values(this.getSpaceMetrics());
         this.observers.forEach(callback => callback(this.currentSpace, metrics));
     }
 
@@ -162,5 +172,3 @@ class CurrentSpaceManager {
         this.spaceMetrics.clear();
     }
 }
-
-export default CurrentSpaceManager;

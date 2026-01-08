@@ -1,0 +1,28 @@
+import {Middleware} from "../base/Middleware.ts";
+import type {IEvents} from "../base";
+import {AppData} from "../app/appData.ts";
+import {WidgetBuilder} from "../modules/core/WidgetBuilder.ts";
+import type {AddWidgetAction, ChangeSpaceAction} from "../actions.ts";
+import {ensureElement} from "../utils";
+
+export class WidgetBuilderMiddleware extends Middleware {
+    private readonly widgetBuilder;
+    private currentId;
+
+    constructor(events: IEvents, store: AppData) {
+        super(events, store);
+        this.widgetBuilder = new WidgetBuilder(events);
+        this.currentId = "main";
+    }
+
+    register(): void {
+        this.events.on<AddWidgetAction>("add-widget", (data: { widgetType: "MUSIC" | "BACKGROUND" }) => {
+            const widget = this.widgetBuilder.createWidget(this.currentId, data.widgetType);
+            ensureElement(`#${this.currentId}`).appendChild(widget.render());
+        })
+
+        this.events.on<ChangeSpaceAction>("change-space", (data: { spaceId: string }) => {
+            this.currentId = data.spaceId;
+        })
+    }
+}
