@@ -18,10 +18,6 @@ export class WidgetBuilder implements IWidgetBuilder {
     }
     createWidget(spaceId: string, widgetType: WidgetType): Widget {
         const widget = new Widget(this.events);
-        widget.id = uuid();
-        widget.spaceId = spaceId;
-
-        let widgetContentView = null;
 
         const createCustomWidget = widgetBuilders[widgetType];
         widget.content = createCustomWidget(spaceId).render();

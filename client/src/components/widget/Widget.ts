@@ -7,7 +7,6 @@ import type {RemoveWidgetAction} from "../../actions.ts";
 const widgetTemplate = ensureElement<HTMLTemplateElement>("#widget-template");
 
 class Widget extends View<IWidget> {
-    spaceId: string = "";
 
     private dragHandler: DragHandler;
 
@@ -20,10 +19,6 @@ class Widget extends View<IWidget> {
             .addEventListener("click", this.destroy.bind(this));
     }
 
-    set id(id: string) {
-        this.container.id = `widget-${id}`;
-    }
-
     set content(content: HTMLElement) {
         const widgetContent = this.container.querySelector(".widget__content")!;
         widgetContent.innerHTML = "";
@@ -31,9 +26,6 @@ class Widget extends View<IWidget> {
     }
 
     private destroy(): void {
-        this.events.emit<RemoveWidgetAction>
-        ("remove-widget", {spaceId: this.spaceId, widgetId: this.id});
-
         const closeButton =
             this.container
             .querySelector<HTMLButtonElement>

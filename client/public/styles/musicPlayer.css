@@ -1,177 +1,44 @@
-.no-rotate {
-    animation: none;
+.button[data-type="play"] {
+    --button-bg: rgba(255, 255, 255, 0.1);
+    --button-color: #ffffff;
+    --button-hover-bg: rgba(255, 255, 255, 0.2);
+    --button-hover-color: #ffffff;
+    --button-border-width: 2px;
+    --button-border-style: solid;
+    --button-border-color: rgba(255, 255, 255, 0.25);
+    --button-radius: 50%;
+    --button-gap: 0.1em;
+    --button-padding: 0.4em 0.5em;
+    --button-font-weight: 500;
+    --button-icon-size: 1.1cap;
+    --button-outline-width: 0px;
+    --button-outline-style: none;
+    --button-outline-color: transparent;
+    --button-outline-offset: 0px;
+    --button-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 2px 0 rgba(0, 0, 0, 0.2),
+    0 4px 12px 0 rgba(0, 0, 0, 0.15);
 }
-
-.rotate {
-    animation: rotation 8s infinite linear;
-}
-
 
 .music-player {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 20px;
-    max-width: 400px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 12px;
-    color: white;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-
-/* Album Cover */
-.player-cover {
-    display: flex;
-    justify-content: center;
-}
-
-.cover-image {
-    width: 200px;
-    height: 200px;
-    border-radius: 12px;
-    object-fit: cover;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-}
-
-/* Song Info */
-.player-info {
-    text-align: center;
-}
-
-.song-title {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.song-artist {
-    margin: 0;
-    font-size: 14px;
-    opacity: 0.8;
-}
-
-/* Progress Bar */
-.player-progress {
+    font-size: 1em;
     display: flex;
     align-items: center;
-    gap: 8px;
 }
 
-.progress-slider {
-    flex: 1;
-    height: 6px;
-    cursor: pointer;
-    appearance: none;
-    background: rgba(255, 255, 255, 0.3);
-    border: none;
-    border-radius: 3px;
-}
 
-.progress-slider::-webkit-slider-thumb {
-    appearance: none;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: white;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.progress-slider::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: white;
-    cursor: pointer;
-    border: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.time {
-    font-size: 12px;
-    font-weight: 500;
-    min-width: 32px;
-}
-
-/* Controls */
-.player-controls {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    align-items: center;
-}
-
-.control-btn {
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    font-size: 20px;
-    cursor: pointer;
+.music-player__volume {
     display: flex;
     align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    color: white;
+    color: aliceblue;;
 }
 
-.control-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
-}
-
-.control-btn:active {
-    transform: scale(0.95);
-}
-
-.play-btn {
-    width: 56px;
-    height: 56px;
-    font-size: 24px;
-    background: rgba(255, 255, 255, 0.3);
-}
-
-.play-btn:hover {
-    background: rgba(255, 255, 255, 0.4);
-}
-
-/* Volume Control */
-.player-volume {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0 8px;
-}
-
-.volume-slider {
-    flex: 1;
-    height: 4px;
-    cursor: pointer;
-    appearance: none;
-    background: rgba(255, 255, 255, 0.3);
-    border: none;
-    border-radius: 2px;
-}
-
-.volume-slider::-webkit-slider-thumb {
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: white;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.volume-slider::-moz-range-thumb {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: white;
-    cursor: pointer;
-    border: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+.music-player__volume input {
+    fill: none;
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-miterlimit: 10;
+    height: 2.7rem;
+    width: 28rem;
 }
