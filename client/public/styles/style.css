@@ -2,6 +2,7 @@
 @import "modals.css";
 @import "widgets.css";
 @import "buttons.css";
+@import "checkboxes.css";
 
 .space {
     background-position: center;

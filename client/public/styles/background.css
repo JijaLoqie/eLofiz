@@ -1,9 +1,12 @@
 /* Image Widget Styles */
 .image-widget {
+    background-color: #1a1a1a;
+    border-radius: 1rem;
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
     padding: 1rem;
+    color: aliceblue;
 }
 
 .image-widget__section {
@@ -26,10 +29,10 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
     gap: 0.5rem;
-    min-height: 80px;
+    min-height: 40px;
     padding: 0.5rem;
-    background-color: #2a2a2a;
-    border: 1px dashed #404040;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: inset 0 0 10px rgb(0, 0, 0);
     border-radius: 4px;
 }
 
@@ -107,60 +110,48 @@
 }
 
 /* Add Images Button */
-.image-widget__add-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1rem;
-    background-color: #2a2a2a;
-    border: 1px solid #404040;
-    border-radius: 4px;
+.button[data-type='add-images'] {
+    --button-color: #9a6df5;
+    --button-hover-bg: #9a6df5;
+    --button-hover-color: #000000;
+    --button-border-width: 2px;
+    --button-border-style: solid;
+    --button-border-color: rgba(255, 255, 255, 0.25);
+
+    --button-padding: 0.5em 1em;
+    border: none;
+    background-color: transparent;
     cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: #d0d0d0;
-    transition: all 0.2s ease;
+    font-size: 0.95em;
+    border-radius: 0;
+    outline: none;
 }
 
-.image-widget__add-btn:hover {
-    background-color: #333;
-    border-color: #666;
+.checkbox[data-type='pin-images'] {
+    --checkbox-size: 1.2em;
+    --checkbox-bg: #2a2a29;
+    --checkbox-color: #e0e0e0;
+    --checkbox-border-width: 2px;
+    --checkbox-border-style: solid;
+    --checkbox-border-color: #404040;
+    --checkbox-radius: 0.25em;
+    --checkbox-padding: 0.5em;
+    --checkbox-gap: 0.75em;
+    --checkbox-font-weight: 400;
+    --checkbox-font-size: 1em;
+    --checkbox-outline-width: 2px;
+    --checkbox-outline-style: solid;
+    --checkbox-outline-color: #1beb9e;
+    --checkbox-outline-offset: 2px;
+    --checkbox-shadow: none;
+    --checkbox-checked-bg: #1beb9e;
+    --checkbox-checked-border-color: #1beb9e;
+    --checkbox-checkmark-color: #000000;
+    --checkbox-hover-color: white;
+    --checkbox-hover-bg: #353534;
+    --checkbox-hover-border-color: #1beb9e;
+}
+
+.checkbox[data-type='pin-images'] label {
     color: #e0e0e0;
-}
-
-.image-widget__add-btn:active {
-    background-color: #404040;
-}
-
-.image-widget__add-icon {
-    font-size: 1.1rem;
-    font-weight: bold;
-}
-
-/* Checkboxes */
-.image-widget__options {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.image-widget__checkbox {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    user-select: none;
-}
-
-.image-widget__checkbox-input {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    accent-color: #4a90e2;
-}
-
-.image-widget__checkbox-label {
-    font-size: 0.85rem;
-    color: #d0d0d0;
 }

@@ -85,11 +85,42 @@
     </template>
     <template id="widget-music-template">
         <div class="music-player">
-            <button class="button" data-type="play">[Play]</button>
-            <label class="music-player__volume">
-                <span>Volume</span>
-                <input type="range"/>
-            </label>
+            <div class="info">
+                <div class="title">Music Title</div>
+                <button class="button playlist" data-type="playlist" aria-label="Playlist">
+                    [playlist]
+                </button>
+            </div>
+            <div class="navigation">
+                <button class="button" data-type="previous" type="button" aria-label="Previous track">
+                    [prev]
+                </button>
+                <button class="button back" data-type="back">
+                    [-30]
+                </button>
+                <div class="button play" data-type="play">
+                    [play]
+                </div>
+                <button class="button forward" data-type="forward">
+                    [+30]
+                </button>
+                <button class="button" data-type="next" type="button" aria-label="Next track">
+                    [next]
+                </button>
+            </div>
+            <div class="controls">
+                <span class="progress">0:00:00</span>
+                <button class="button v-minus" data-type="volume-decrease" aria-label="Decrease volume">
+                    [v-]
+                </button>
+                <span class="volume">100 %</span>
+                <button class="button v-increase" data-type="volume-increase" aria-label="Increase volume">
+                    [v+]
+                </button>
+                <button class="button" data-type="random" aria-label="Random">
+                    [random]
+                </button>
+            </div>
         </div>
     </template>
 
@@ -98,7 +129,7 @@
             <div class="image-widget__section">
                 <h3 class="image-widget__title">Выберите изображения</h3>
                 <div class="image-widget__grid" data-selected-images></div>
-                <button class="image-widget__add-btn" data-add-images type="button" aria-label="Add images">
+                <button class="button" data-type="add-images" data-add-images type="button" aria-label="Add images">
                     <span class="image-widget__add-icon">+</span>
                     Добавить изображения
                 </button>
@@ -115,7 +146,7 @@
             <div class="image-widget__section">
                 <h3 class="image-widget__title">Параметры</h3>
                 <div class="image-widget__options">
-                    <label class="image-widget__checkbox">
+                    <label data-type="pin-images" class="checkbox">
                         <input
                                 type="checkbox"
                                 class="image-widget__checkbox-input"
