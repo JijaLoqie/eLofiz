@@ -3,6 +3,8 @@
 @import "widgets.css";
 @import "buttons.css";
 @import "checkboxes.css";
+@import "resizable.css";
+
 
 .space {
     background-position: center;

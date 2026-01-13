@@ -2,6 +2,7 @@ import { type IEvents, View } from "../../base";
 import { cloneTemplate, ensureElement } from "../../utils";
 import type { IMusicPlaylistWidget } from "../../types.ts";
 import { spaceApi } from "../../modules/core/SpaceApi.ts";
+import {webAudioApi} from "../../modules/WebAudioApi.ts";
 
 const musicWidgetTemplate = ensureElement<HTMLTemplateElement>("#widget-music-template");
 
@@ -11,9 +12,12 @@ class MusicPlaylistWidget extends View<IMusicPlaylistWidget> {
     private currentTrack: number = 0;
     private isPlaying: boolean = false;
     private playlist: string[] = [
-        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+        "/audio/song1.mp3",
+        "/audio/song2.mp3",
+        "/audio/knight.m4a",
+        "/audio/dark.m4a",
+        "/audio/ambient.m4a",
+        "/audio/phonk.m4a",
     ];
 
     constructor(events: IEvents, spaceId: string) {
@@ -39,21 +43,21 @@ class MusicPlaylistWidget extends View<IMusicPlaylistWidget> {
         });
     }
 
-    private handleButtonClick(event: Event): void {
+    private async handleButtonClick(event: Event): Promise<void> {
+        await webAudioApi.playBeep();
         const button = event.target as HTMLElement;
         const type = button.getAttribute("data-type");
 
-        this.playBeep();
 
         switch (type) {
             case "play":
-                this.togglePlay();
+                await this.togglePlay();
                 break;
             case "previous":
-                this.previousTrack();
+                await this.previousTrack();
                 break;
             case "next":
-                this.nextTrack();
+                await this.nextTrack();
                 break;
             case "back":
                 this.skipBackward();
@@ -75,56 +79,37 @@ class MusicPlaylistWidget extends View<IMusicPlaylistWidget> {
                 break;
         }
     }
-
-    private playBeep(): void {
-        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-
-        oscillator.frequency.value = 800; // Frequency in Hz
-        oscillator.type = "sine";
-
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.1);
-    }
-
-    private togglePlay(): void {
+    private async togglePlay(): Promise<void> {
         if (this.isPlaying) {
             this.audioNode.pause();
             this.isPlaying = false;
         } else {
-            this.audioNode.play();
+            await this.audioNode.play();
             this.isPlaying = true;
         }
         this.updateUI();
     }
 
-    private nextTrack(): void {
+    private async nextTrack(): Promise<void> {
         this.currentTrack = (this.currentTrack + 1) % this.playlist.length;
-        this.loadTrack();
+        await this.loadTrack();
     }
 
-    private previousTrack(): void {
+    private async previousTrack(): Promise<void> {
         this.currentTrack = (this.currentTrack - 1 + this.playlist.length) % this.playlist.length;
-        this.loadTrack();
+        await this.loadTrack();
     }
 
-    private randomTrack(): void {
+    private async randomTrack(): Promise<void> {
         this.currentTrack = Math.floor(Math.random() * this.playlist.length);
-        this.loadTrack();
+        await this.loadTrack();
     }
 
-    private loadTrack(): void {
+    private async loadTrack(): Promise<void> {
         this.audioNode.src = this.playlist[this.currentTrack];
         this.audioNode.currentTime = 0;
         if (this.isPlaying) {
-            this.audioNode.play();
+            await this.audioNode.play();
         }
         this.updateUI();
     }

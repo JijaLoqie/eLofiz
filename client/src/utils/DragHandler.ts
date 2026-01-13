@@ -37,8 +37,6 @@ export class DragHandler {
     private handlePointerDown(e: PointerEvent): void {
         this.isDragging = true;
 
-        // Get the parent's scroll offset to account for scrolled containers
-        const parentRect = this.draggedElement.parentElement?.getBoundingClientRect() || { left: 0, top: 0, x: 0, y: 0 };
         const selectRect = this.selectElement.getBoundingClientRect();
 
         // Calculate offset between pointer and element position
@@ -53,13 +51,29 @@ export class DragHandler {
 
         this.options.onDrag?.(e, this.offsetX, this.offsetY);
 
-        // Get parent element's position and scroll offset
+        // Get parent element's position and dimensions
         const parent = this.draggedElement.parentElement;
-        const parentRect = parent?.getBoundingClientRect() || { left: 0, top: 0 };
+        if (!parent) return;
 
-        // Calculate position relative to parent element
-        const x = e.clientX - parentRect.left - this.offsetX;
-        const y = e.clientY - parentRect.top - this.offsetY;
+        const parentRect = parent.getBoundingClientRect();
+        const draggedRect = this.draggedElement.getBoundingClientRect();
+
+        // Calculate unconstrained position
+        let x = e.clientX - parentRect.left - this.offsetX;
+        let y = e.clientY - parentRect.top - this.offsetY;
+
+        // Get dragged element's dimensions
+        const draggedWidth = draggedRect.width;
+        const draggedHeight = draggedRect.height;
+
+        // Get parent's dimensions
+        const parentWidth = parent.clientWidth;
+        const parentHeight = parent.clientHeight;
+
+        // Apply boundary constraints
+        // Minimum: 0, Maximum: parentSize - draggedSize
+        x = Math.max(0, Math.min(x, parentWidth - draggedWidth));
+        y = Math.max(0, Math.min(y, parentHeight - draggedHeight));
 
         this.draggedElement.style.setProperty("left", `${x}px`);
         this.draggedElement.style.setProperty("top", `${y}px`);

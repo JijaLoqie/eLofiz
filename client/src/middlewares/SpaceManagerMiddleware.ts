@@ -16,6 +16,7 @@ export class SpaceManagerMiddleware extends Middleware {
     register(): void {
         this.events.on<CreateSpaceAction>("create-space", (data: { spaceName: string, spaceSettings?: Partial<ISpace> }) => {
             this.spaceManager.createSpace(data.spaceName, data.spaceSettings);
+            this.events.emit("space-created", {spaceId: data.spaceName});
         });
         this.events.on<DeleteSpaceAction>("delete-space", (data: { spaceId: string }) => {
             this.spaceManager.deleteSpace(data.spaceId);

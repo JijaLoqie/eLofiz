@@ -160,13 +160,15 @@
     </template>
 
     <template id="widget-audio-visualizer-template">
-        <div>
-            <h1>HELLO WORLD</h1>
+        <div class="audio-visualizer resizable">
+            <div class="visualizer-container">
+                <canvas class="visualizer-canvas"></canvas>
+            </div>
         </div>
     </template>
 
     <template id="widget-template">
-        <div class="widget liquidGlass-effect">
+        <div class="widget liquidGlass-effect resizable-wrapper">
             <div class="widget__header">
                 <button data-close-button class="button" data-type="close" aria-label="Close widget">&times;</button>
             </div>

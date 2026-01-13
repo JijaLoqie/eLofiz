@@ -1,0 +1,50 @@
+.resizable {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Top edge handle */
+.resizable::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    pointer-events: auto;
+}
+
+/* Right edge handle */
+.resizable::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 10px;
+    pointer-events: auto;
+}
+
+/* Bottom edge handle */
+.resizable > *:last-child::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    pointer-events: auto;
+}
+
+/* Left edge handle */
+.resizable > *:first-child::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 10px;
+    pointer-events: auto;
+}
