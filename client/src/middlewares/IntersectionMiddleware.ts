@@ -14,7 +14,6 @@ export class IntersectionMiddleware extends Middleware {
     override register() {
         this.intersectionSpaceHandler.onSpaceChange((currentSpace, metrics) => {
             this.events.emit<ChangeSpaceAction>("change-space", {spaceId: metrics[currentSpace].element.id});
-            console.log("Space changed", metrics[currentSpace].element.id);
         });
 
         document.addEventListener("scroll", () => {

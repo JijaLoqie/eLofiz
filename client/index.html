@@ -21,7 +21,7 @@
     <template id="modal-menu-template">
         <div id="modal-menu" class="modal">
             <div class="header">
-                <div class="add_widget_buttons">
+                <div data-type="widget-type" class="button-group widgets">
                     <!--                <button data-widget="MUSIC" class="button">Музыка</button>-->
                     <!--                <button data-widget="BACKGROUND" class="button">Задний фон</button>-->
                 </div>
@@ -32,7 +32,16 @@
             </div>
             <div class="widget__buttons"></div>
             <div class="modal__presets">
-                <button class="button" data-type="new-preset">Добавить новый пресет</button>
+                <div class="modal__presets-search-box">
+                    <label class="text-field modal__presets-search-field">
+                        <input type="text" placeholder="Начните поиск пресетов"/>
+                        <label data-type="preset-tag" class="button-group tags">
+                        </label>
+                    </label>
+                </div>
+                <div class="modal__presets-list">
+                    <button class="button" data-type="new-preset">Добавить новый пресет</button>
+                </div>
             </div>
             <div class="button" data-type="open-presets">Открыть список Пресетов</div>
         </div>

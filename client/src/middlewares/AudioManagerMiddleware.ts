@@ -16,7 +16,6 @@ export class AudioManagerMiddleware extends Middleware {
         })
         this.events.on<ChangeIntersectionAction>("change-intersection", (data: { spaceMetrics: Record<string, SpaceMetrics>}) => {
             const {spaceMetrics} = data;
-            console.log("change-intersection", spaceMetrics);
             for (const metrics of Object.values(spaceMetrics)) {
                 webAudioApi.setVolume(metrics.id, metrics.intersectionRatio);
             }

@@ -3,6 +3,7 @@ import type {SpaceMetrics} from "./modules/core/IntersectionSpaceHandler.ts";
 
 export interface AddWidgetAction {
     widgetType: WidgetType;
+    widgetName: string;
 }
 
 export interface RemoveWidgetAction {
@@ -37,3 +38,11 @@ export interface SpaceUpdateAction {}
 export interface OpenModalAction { }
 export interface CloseModalAction {}
 
+
+export interface SelectAction {
+    selected: string;
+}
+
+export interface InputAction {
+    value: string;
+}

@@ -166,7 +166,6 @@ class MusicPlaylistWidget extends View<IMusicPlaylistWidget> {
 
     private togglePlaylist(): void {
         // Placeholder for playlist toggle functionality
-        console.log("Playlist toggled");
     }
 
     private updateProgress(): void {

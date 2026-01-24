@@ -11,10 +11,11 @@
     width: 300px;
 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: box-shadow 0.3s;
 }
 
-.preset-card {
-    width: 300px;
+.preset-card:hover {
+    box-shadow: 0 0 6px rgb(0, 0, 0);
 }
 .preset-cover {
     position: absolute;

@@ -33,7 +33,6 @@ export class AudioVisualizerWidget extends Component<IAudioVisualizerWidget> {
             minWidth: 300,
             minHeight: 100,
             onResize: (e, width, height) => {
-                console.log("Resize", width, height);
                 this.resizeCanvas(width, height);
             },
         });

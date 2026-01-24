@@ -1,3 +1,5 @@
+import { Component } from "./base";
+
 export enum WidgetType {
     MUSIC = "Музыка",
     BACKGROUND = "Задний фон",
@@ -39,4 +41,31 @@ export interface IMusicPlaylistWidget extends IWidget {
 }
 
 export interface IAudioVisualizerWidget extends IWidget {
+}
+
+export interface IStream {
+    id: string;
+    name: string;
+    audios: string[];
+    breakpoints: number[];
+    cover: string;
+}
+
+
+export interface IPreset {
+    id: string;
+    title: string
+    streamId: string;
+    images: string[];
+    tags: string[];
+}
+
+type WidgetConstructor = (spaceId: string) => Component<IWidget>;
+
+export interface WidgetInfo {
+    name: string;
+    ruName: string;
+    preview: string;
+    builder: WidgetConstructor;
+    type: WidgetType;
 }

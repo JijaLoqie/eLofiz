@@ -1,25 +1,13 @@
 import {type IEvents, View} from "../../base";
 import {cloneTemplate, ensureElement} from "../../utils";
-import type {AddWidgetAction, CloseModalAction} from "../../actions.ts";
-import type {IModalHomeWidget} from "../../types.ts";
+import type { AddWidgetAction, CloseModalAction, InputAction, SelectAction } from "../../actions.ts";
+import type {IModalHomeWidget, IPreset, IStream} from "../../types.ts";
 import {WidgetType} from "../../types.ts";
-
-interface IStream {
-    id: string;
-    name: string;
-    audios: string[];
-    breakpoints: number[];
-    cover: string;
-}
-
-
-interface IPreset {
-    id: string;
-    title: string
-    streamId: string;
-    images: string[];
-    tags: string[];
-}
+import {ButtonGroup} from "../ui/ButtonGroup.ts";
+import {Preset} from "../Preset/Preset.ts";
+import { app } from "../../app/LofiApp.ts";
+import { SearchField } from "../ui/SearchField.ts";
+import { ItemsList } from "../ui/ItemsList.ts";
 
 const streams: Record<string, IStream> = {
     "stream1": {
@@ -31,46 +19,10 @@ const streams: Record<string, IStream> = {
     }
 }
 
-const presets: Record<string, IPreset> = {
-    "preset1": {
-        id: "preset1",
-        title: "preset 1",
-        streamId: "stream1",
-        images: ["startBackground.jpeg", "image2", "image3"],
-        tags: ["ambient"]
-    },
-    "preset2": {
-        id: "preset2",
-        title: "preset 2",
-        streamId: "stream1",
-        images: ["back4.gif", "image2", "image3"],
-        tags: ["electronic"]
-    },
-    "preset3": {
-        id: "preset3",
-        title: "preset 3",
-        streamId: "stream1",
-        images: ["startWorkBackground.gif", "image2", "image3"],
-        tags: ["electronic"]
-    },
-    "preset4": {
-        id: "preset4",
-        title: "preset 4",
-        streamId: "stream1",
-        images: ["back6.png", "image2", "image3"],
-        tags: ["dark"]
-    },
-    "preset5": {
-        id: "preset5",
-        title: "preset 5",
-        streamId: "stream1",
-        images: ["back3.jpg", "image2", "image3"],
-        tags: ["dark"]
-    }
-}
-
 export class ModalHomeWidget extends View<IModalHomeWidget> {
     private currentSpaceName: HTMLElement;
+    private buttonGroupPresetTags: ButtonGroup | undefined;
+    private buttonGroupWidgetTypes: ButtonGroup | undefined;
 
     constructor(container: HTMLElement, events: IEvents) {
         super(container, events);
@@ -84,16 +36,44 @@ export class ModalHomeWidget extends View<IModalHomeWidget> {
     }
 
     private initWidgets() {
-        const buttonsContainer = ensureElement<HTMLDivElement>(".add_widget_buttons", this.container);
-        Object.values(WidgetType).forEach((widgetType) => {
-            const button = document.createElement("button");
-            button.className = "button";
-            button.textContent = widgetType;
-            buttonsContainer.appendChild(button);
-            button.addEventListener("click", () => {
-                this.events.emit<AddWidgetAction>("add-widget", { widgetType });
-                this.events.emit<CloseModalAction>("close-modal");
-            })
+        const key = "widgets"
+        this.buttonGroupWidgetTypes = new ButtonGroup(
+            ensureElement(".button-group[data-type='widget-type']", this.container),
+            this.events,
+            key,
+        )
+        this.buttonGroupWidgetTypes.render({
+            items: Object.values(WidgetType)
+        });
+
+        const widgetsContainer = ensureElement<HTMLElement>(".widget__buttons", this.container);
+        this.events.on<SelectAction>(`button-group:${key}:select`, (data) => {
+            let selectedWidgets;
+            widgetsContainer.innerHTML = ""
+            const { selected } = data;
+            if (selected === "") {
+                selectedWidgets = app.store.getWidgets();
+            } else {
+                const selectedWidgetType = selected as WidgetType;
+                selectedWidgets = app.store.getWidgetsByType(selectedWidgetType);
+            }
+
+
+            Object.values(selectedWidgets).forEach((widgetData) => {
+                const button = document.createElement("div");
+                button.className = "button";
+                button.textContent = widgetData.ruName;
+                widgetsContainer.appendChild(button);
+                button.addEventListener("click", () => {
+                    this.events.emit<AddWidgetAction>("add-widget", {
+                        widgetType: widgetData.type,
+                        widgetName: widgetData.name,
+                    });
+                    this.events.emit<CloseModalAction>("close-modal");
+                })
+            });
+
+
         })
     }
 
@@ -107,28 +87,59 @@ export class ModalHomeWidget extends View<IModalHomeWidget> {
 
     closeModal() {
         this.setHidden(this.container);
-        this.toggleClass(this.container, "open-preset", false)
+        this.toggleClass(this.container, "open-preset", false);
+        this.buttonGroupWidgetTypes?.reset();
+        this.buttonGroupPresetTags?.reset();
     }
 
-
     private initPresets() {
+        const key = "preset-tags"
+        const presetsContainer = ensureElement<HTMLElement>(`.modal__presets-list`, this.container);
+
+
+
+        const { tagsCount } = app.store.getPresetListInfo()
+
+
         const addPreset = ensureElement(".button[data-type='new-preset']", this.container);
-        Object.values(presets).forEach((presetInfo) => {
-            const preset = cloneTemplate("#preset-template");
-            // init
-            ensureElement<HTMLImageElement>(".preset-cover", preset).src = `images/${presetInfo.images[0]}`;
-            const tagsContainer = ensureElement<HTMLDivElement>(".preset-tags", preset);
-            presetInfo.tags.forEach((tagName) => {
-                const tagDiv = document.createElement("div");
-                tagDiv.className = "tag";
-                tagDiv.textContent = tagName;
-                tagsContainer.appendChild(tagDiv);
+
+
+        // Поиск по тегу
+        this.buttonGroupPresetTags = new ButtonGroup(
+            ensureElement(".button-group[data-type='preset-tag']", this.container),
+            this.events,
+            key
+        );
+        this.events.on<SelectAction>(`button-group:${key}:select`, (data) => {
+            presetsContainer.innerHTML = "";
+            presetsContainer.appendChild(addPreset);
+            const { selected: selectedTag } = data;
+            let presets: Record<string, IPreset>;
+
+            if (selectedTag === "") {
+                presets = app.store.getPresets();
+            } else {
+                presets = app.store.getPresetsByTag(selectedTag);
+            }
+            Object.values(presets).forEach((presetInfo) => {
+                const preset = new Preset(this.events).render(presetInfo);
+                presetsContainer.insertBefore(preset, addPreset);
             });
-            const titleContainer = ensureElement<HTMLDivElement>(".preset-title", preset);
-            titleContainer.textContent = presetInfo.title;
+        });
 
-            ensureElement(`.modal__presets`, this.container).insertBefore(preset, addPreset);
+        // Поиск по названию
+        new SearchField(
+            ensureElement(".modal__presets-search-field", this.container),
+            this.events,
+            key
+        );
+        this.events.on<InputAction>(`text-field:${key}:change`, (data) => {
+            const { value } = data;
 
+        });
+
+        this.buttonGroupPresetTags.render( {
+            items: Array.from(tagsCount.keys())
         });
     }
 }

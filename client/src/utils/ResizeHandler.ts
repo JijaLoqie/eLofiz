@@ -93,7 +93,6 @@ export class ResizeHandler {
             'se': 'nwse-resize',
             'sw': 'nesw-resize',
         };
-        console.log(edge);
         this.resizeElement.style.cursor = edge ? cursorMap[edge] : 'auto';
     }
 

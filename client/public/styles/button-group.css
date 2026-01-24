@@ -1,0 +1,15 @@
+.button-group {
+    display: flex;
+}
+
+.button-group[data-type="preset-tag"] {
+    background-color: red;
+}
+
+.button-group[data-type="widget-type"] {
+    background-color: blue;
+}
+
+.button-group > .button.selected {
+    background-color: yellow;
+}

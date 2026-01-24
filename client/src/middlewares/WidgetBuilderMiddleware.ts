@@ -17,8 +17,10 @@ export class WidgetBuilderMiddleware extends Middleware {
     }
 
     register(): void {
-        this.events.on<AddWidgetAction>("add-widget", (data: { widgetType: WidgetType }) => {
-            const widget = this.widgetBuilder.createWidget(this.currentId, data.widgetType);
+        this.events.on<AddWidgetAction>("add-widget", (data) => {
+            const { widgetType, widgetName } = data;
+            const widget = this.widgetBuilder
+                .createWidget(this.currentId, widgetType, widgetName);
             ensureElement(`#${this.currentId}`).appendChild(widget.render());
         })
 

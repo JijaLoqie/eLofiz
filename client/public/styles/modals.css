@@ -35,11 +35,11 @@
     min-height: 245px;
 }
 
-.modal__presets {
+.modal__presets-list {
     display: flex;
-    justify-content: center;
     gap: 16px;
     flex-wrap: wrap;
+    padding-top: 16px;
 }
 
 .button[data-type='open-presets'] {

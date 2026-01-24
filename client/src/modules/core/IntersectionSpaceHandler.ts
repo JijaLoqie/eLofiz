@@ -52,7 +52,6 @@ export class IntersectionSpaceHandler {
 
         // Notify observers of the change
         this.notifyObservers();
-        console.log("Spaces updated", this.spaces);
 
     }
     /**

@@ -17,16 +17,20 @@ let opened = false;
 
 // todo: это так-то middleware с логикой горячих клавиш
 document.body.addEventListener("keypress", (e) => {
-    console.log(e.key)
     if (e.key === "1") {
         if (opened) {
             app.events.emit<CloseModalAction>("close-modal");
-            opened = false;
         } else {
             app.events.emit<OpenModalAction>("open-modal");
-            opened = true;
         }
     }
+});
+
+app.events.on<CloseModalAction>("close-modal", () => {
+    opened = false;
+});
+app.events.on<OpenModalAction>("open-modal", () => {
+    opened = true;
 });
 
 
