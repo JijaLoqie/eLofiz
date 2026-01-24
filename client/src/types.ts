@@ -1,7 +1,7 @@
 export enum WidgetType {
-    MUSIC = "MUSIC",
-    BACKGROUND = "BACKGROUND",
-    AUDIO_VISUALIZER = "AUDIO VISUALIZER",
+    MUSIC = "Музыка",
+    BACKGROUND = "Задний фон",
+    AUDIO_VISUALIZER = "Аудио полоски",
 }
 
 
@@ -18,7 +18,7 @@ export interface ISpace {
     widgets: string[];
 }
 
-export interface IModalAddWidget {
+export interface IModalHomeWidget {
     open: boolean;
     currentSpaceId: string;
 }

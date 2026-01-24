@@ -18,11 +18,6 @@
 
 }
 
-.music-player .button {
-    font-weight: 600;
-    padding: 4px;
-}
-
 /* Info Section */
 .music-player .info {
     display: flex;
@@ -51,10 +46,6 @@
     --button-hover-bg: var(--navigation-color);
 }
 
-.music-player .navigation .button:hover {
-    color: black;
-    background-color: var(--navigation-color);
-}
 
 /* Controls Section */
 .music-player .controls {
@@ -65,6 +56,13 @@
     min-width: 70px;
     text-align: center;
     color: var(--info-color);
+}
+
+
+
+.music-player .button {
+    font-weight: 600;
+    padding: 4px;
 }
 
 .music-player .controls .button {
@@ -94,4 +92,10 @@
 
 .music-player .button:active {
     transform: scale(0.95);
+}
+
+.music-player .navigation .button:disabled {
+    cursor: not-allowed;
+    color: var(--info-color);
+    --button-hover-bg: transparent;
 }

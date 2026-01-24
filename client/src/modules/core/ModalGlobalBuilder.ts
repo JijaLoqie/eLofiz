@@ -1,4 +1,4 @@
-import {ModalAddWidget} from "../../components/Modal/ModalAddWidget.ts";
+import {ModalHomeWidget} from "../../components/Modal/ModalHomeWidget.ts";
 import {cloneTemplate, ensureElement} from "../../utils";
 import type {IEvents} from "../../base";
 
@@ -7,17 +7,17 @@ export class ModalGlobalBuilder implements IModalGlobalBuilder {
 
     constructor(private readonly events: IEvents) {
         const modalMenuHtml = cloneTemplate("#modal-menu-template");
-        this.modalMenu = new ModalAddWidget(modalMenuHtml, this.events);
+        this.modalMenu = new ModalHomeWidget(modalMenuHtml, this.events);
         document.body.appendChild(
             this.modalMenu.render({open: false, currentSpaceId: "main"})
         );
     }
 
     openMainMenu(): void {
-        this.modalMenu.open = true;
+        this.modalMenu.openModal();
     }
     closeMainMenu(): void {
-        this.modalMenu.open = false;
+        this.modalMenu.closeModal();
     }
 
     changeSpace(spaceId: string): void {

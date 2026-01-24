@@ -91,12 +91,41 @@ class MusicPlaylistWidget extends View<IMusicPlaylistWidget> {
     }
 
     private async nextTrack(): Promise<void> {
+        if (this.currentTrack + 1 === this.playlist.length) return;
         this.currentTrack = (this.currentTrack + 1) % this.playlist.length;
+        if (this.currentTrack + 1 === this.playlist.length) {
+            // disable button next
+            const button = ensureElement<HTMLButtonElement>(
+                "[data-type='next']",
+                this.container
+            )
+            this.setDisabled(button, true);
+        } else if (this.currentTrack > 0) {
+            const button = ensureElement<HTMLButtonElement>(
+                "[data-type='previous']",
+                this.container
+            )
+            this.setDisabled(button, false);
+        }
         await this.loadTrack();
     }
 
     private async previousTrack(): Promise<void> {
         this.currentTrack = (this.currentTrack - 1 + this.playlist.length) % this.playlist.length;
+        if (this.currentTrack === 0) {
+            // disable button prev
+            const button = ensureElement<HTMLButtonElement>(
+                "[data-type='previous']",
+                this.container
+            )
+            this.setDisabled(button, true);
+        } else if (this.currentTrack + 1 < this.playlist.length) {
+            const button = ensureElement<HTMLButtonElement>(
+                "[data-type='next']",
+                this.container
+            )
+            this.setDisabled(button, false);
+        }
         await this.loadTrack();
     }
 

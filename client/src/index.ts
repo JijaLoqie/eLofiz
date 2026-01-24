@@ -2,23 +2,30 @@ import {app} from "./app/LofiApp.ts";
 import {IntersectionMiddleware} from "./middlewares";
 import {SpaceManagerMiddleware} from "./middlewares/SpaceManagerMiddleware.ts";
 import {ModalGlobalMiddleware} from "./middlewares/ModalGlobalMiddleware.ts";
-import type {CreateSpaceAction, OpenModalAction} from "./actions.ts";
+import type {CloseModalAction, CreateSpaceAction, OpenModalAction} from "./actions.ts";
 import {WidgetBuilderMiddleware} from "./middlewares/WidgetBuilderMiddleware.ts";
 import type {ISpace} from "./types.ts";
 import {AudioManagerMiddleware} from "./middlewares/AudioManagerMiddleware.ts";
 
 app.use(SpaceManagerMiddleware);
-app.use(IntersectionMiddleware); //todo: набор пространств не обновляется, пока что он должен быть последним
+app.use(IntersectionMiddleware);
 app.use(WidgetBuilderMiddleware);
 app.use(ModalGlobalMiddleware);
 app.use(AudioManagerMiddleware);
 
-
+let opened = false;
 
 // todo: это так-то middleware с логикой горячих клавиш
 document.body.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-        app.events.emit<OpenModalAction>("open-modal");
+    console.log(e.key)
+    if (e.key === "1") {
+        if (opened) {
+            app.events.emit<CloseModalAction>("close-modal");
+            opened = false;
+        } else {
+            app.events.emit<OpenModalAction>("open-modal");
+            opened = true;
+        }
     }
 });
 

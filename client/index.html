@@ -10,16 +10,31 @@
     <script src="src/index.ts" type="module"></script>
 </head>
 <body>
+    <template id="preset-template">
+        <div class="preset-card">
+            <img  alt="preset-cover" src="" class="preset-cover"/>
+            <div class="preset-title"></div>
+            <div class="preset-tags">
+            </div>
+        </div>
+    </template>
     <template id="modal-menu-template">
         <div id="modal-menu" class="modal">
-            <div class="modal__currentSpace-info">
-                <span class="modal__currentSpace-label">Текущее пространство:</span>
-                <span class="modal_currentSpace-name">Main</span>
+            <div class="header">
+                <div class="add_widget_buttons">
+                    <!--                <button data-widget="MUSIC" class="button">Музыка</button>-->
+                    <!--                <button data-widget="BACKGROUND" class="button">Задний фон</button>-->
+                </div>
+                <div class="modal__currentSpace-info">
+                    <span class="modal__currentSpace-label">Текущее пространство:</span>
+                    <span class="modal_currentSpace-name">Main</span>
+                </div>
             </div>
-            <div class="modal__buttons">
-<!--                <button data-widget="MUSIC" class="button">Музыка</button>-->
-<!--                <button data-widget="BACKGROUND" class="button">Задний фон</button>-->
+            <div class="widget__buttons"></div>
+            <div class="modal__presets">
+                <button class="button" data-type="new-preset">Добавить новый пресет</button>
             </div>
+            <div class="button" data-type="open-presets">Открыть список Пресетов</div>
         </div>
     </template>
     <template id ="space-template">
