@@ -1,19 +1,23 @@
-import { type IEvents, View } from "../../base";
-import type { InputAction } from "../../actions.ts";
-import type { IPreset } from "../../types.ts";
-import { app } from "../../app/LofiApp.ts";
-import { Preset } from "../Preset/Preset.ts";
+import { type IEvents } from "../../base";
+import { FieldType, type ISearchField } from "../../types.ts";
+import { FieldBase } from "./FieldBase.ts";
+import { ensureElement } from "../../utils";
 
-interface ISearchField {
-    value: string;
-}
+const searchTemplate = ensureElement<HTMLTemplateElement>("#search-template");
 
-export class SearchField extends View<ISearchField> {
-    constructor(container: HTMLElement, events: IEvents, private readonly _key: string) {
-        super(container, events);
-        this.container.addEventListener("input", (e: Event) => {
-            const targetValue = (e.target as HTMLInputElement).value;
-            this.events.emit<InputAction>(`text-field:${this._key}:change`, {value: targetValue});
+export class SearchField extends FieldBase<ISearchField> {
+    input: HTMLInputElement
+    constructor(wrapper: HTMLElement, events: IEvents, _key: string) {
+        super(wrapper, searchTemplate, events, _key);
+        this.input = ensureElement<HTMLInputElement>("input", this.container);
+
+        this.input.addEventListener("input", (e: Event) => {
+            const value = (e.target as HTMLInputElement).value;
+            this.setValue(value, FieldType.SEARCH);
         })
+    };
+
+    handleChange(value: string) {
+        this.input.value = value;
     }
 }

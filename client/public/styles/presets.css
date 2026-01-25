@@ -1,4 +1,4 @@
-.button[data-type="new-preset"], .preset-card {
+.preset-card {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -52,9 +52,4 @@
     bottom: 6px;
     left: 6px;
     z-index: 2;
-}
-
-
-.button[data-type="new-preset"] {
-    --button-bg: gray;
 }

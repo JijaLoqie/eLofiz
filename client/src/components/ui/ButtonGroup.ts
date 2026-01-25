@@ -1,17 +1,16 @@
-import {type IEvents, View} from "../../base";
-import {ensureElement} from "../../utils";
-import type {SelectAction} from "../../actions.ts";
+import { type IEvents } from "../../base";
+import { FieldBase } from "./FieldBase.ts";
+import { FieldType, type IButtonGroup } from "../../types.ts";
+import { cloneTemplate, ensureElement } from "../../utils";
 
-interface IButtonGroup {
-    items: string[];
-}
+const buttonGroupTemplate = ensureElement<HTMLTemplateElement>("#button-group-template")
 
+export class ButtonGroup extends FieldBase<IButtonGroup> {
+    static type = FieldType.BUTTON_GROUP
+    constructor(wrapper: HTMLElement, events: IEvents, _key: string) {
+        super(wrapper, buttonGroupTemplate, events, _key);
+        this.setValue("", ButtonGroup.type);
 
-export class ButtonGroup extends View<IButtonGroup> {
-    private _selected: string = "";
-    constructor(container: HTMLElement, events: IEvents, private readonly _key: string) {
-        super(container, events);
-        this.setSelected("");
     }
 
     set items(items: string[]) {
@@ -21,35 +20,23 @@ export class ButtonGroup extends View<IButtonGroup> {
             button.className = "button";
             button.textContent = itemText;
             button.dataset.type = itemText;
-            button.addEventListener("click", () => {
-                this.setSelected(itemText);
+            button.addEventListener("click", (e) => {
+                this.setValue(itemText, ButtonGroup.type);
             });
             this.container.appendChild(button);
         })
     }
 
-    private setSelected(newSelected: string) {
-        const oldButton = this.container.querySelector<HTMLElement>(`[data-type='${this._selected}']`);
+    override handleChange(newSelected: string) {
+        const oldButton = this.container.querySelector<HTMLElement>(`[data-type='${this._currentValue}']`);
         const newButton = this.container.querySelector<HTMLElement>(`[data-type='${newSelected}']`);
 
-        console.log({oldSelected: this._selected, newSelected: newSelected});
         if (oldButton) {
             this.toggleClass(oldButton, "selected", false);
-            if (newSelected === this._selected) {
-                this.events.emit<SelectAction>(`button-group:${this._key}:select`, {selected: ""});
-                this._selected = "";
-                return;
-            }
         }
         if (newButton) {
             this.toggleClass(newButton, "selected", true);
         }
-
-        this._selected = newSelected;
-        this.events.emit<SelectAction>(`button-group:${this._key}:select`, {selected: newSelected});
-    }
-
-    reset() {
-        this.setSelected("");
+        this._currentValue = newSelected;
     }
 }

@@ -2,11 +2,11 @@
     display: flex;
 }
 
-.button-group[data-type="preset-tag"] {
+.button-box[data-type="preset-tag"].button-group {
     background-color: red;
 }
 
-.button-group[data-type="widget-type"] {
+.button-box[data-type="widget-type"].button-group {
     background-color: blue;
 }
 

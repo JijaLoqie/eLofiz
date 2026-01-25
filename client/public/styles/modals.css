@@ -24,24 +24,17 @@
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
+    position: absolute;
+    right: 10px;
+    top: 26px;
 }
 .modal_currentSpace-name {
     color: red;
 }
 
-.widget__buttons {
+.widgets_list {
     min-height: 245px;
 }
-
-.modal__presets-list {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    padding-top: 16px;
-}
-
 .button[data-type='open-presets'] {
     transition: all 0.3s ease-in;
     justify-content: center;

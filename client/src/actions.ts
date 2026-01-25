@@ -1,4 +1,4 @@
-import type {ISpace, WidgetType} from "./types.ts";
+import { FieldType, type ISpace, type WidgetType } from "./types.ts";
 import type {SpaceMetrics} from "./modules/core/IntersectionSpaceHandler.ts";
 
 export interface AddWidgetAction {
@@ -45,4 +45,5 @@ export interface SelectAction {
 
 export interface InputAction {
     value: string;
+    type: FieldType;
 }

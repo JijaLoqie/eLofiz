@@ -21,26 +21,21 @@
     <template id="modal-menu-template">
         <div id="modal-menu" class="modal">
             <div class="header">
-                <div data-type="widget-type" class="button-group widgets">
-                    <!--                <button data-widget="MUSIC" class="button">Музыка</button>-->
-                    <!--                <button data-widget="BACKGROUND" class="button">Задний фон</button>-->
-                </div>
                 <div class="modal__currentSpace-info">
                     <span class="modal__currentSpace-label">Текущее пространство:</span>
                     <span class="modal_currentSpace-name">Main</span>
                 </div>
             </div>
-            <div class="widget__buttons"></div>
+            <div class="items-list" data-type="widgets">
+                <div class="wrapper" data-type="button-group"></div>
+                <div class="wrapper" data-type="items"></div>
+            </div>
             <div class="modal__presets">
-                <div class="modal__presets-search-box">
-                    <label class="text-field modal__presets-search-field">
-                        <input type="text" placeholder="Начните поиск пресетов"/>
-                        <label data-type="preset-tag" class="button-group tags">
-                        </label>
-                    </label>
-                </div>
-                <div class="modal__presets-list">
-                    <button class="button" data-type="new-preset">Добавить новый пресет</button>
+                <div data-type="presets" class="items-list">
+                    <div class="wrapper" data-type="button-group"></div>
+                    <div class="wrapper" data-type="search"></div>
+                    <div class="wrapper" data-type="items"></div>
+<!--                    <button class="button" data-type="new-preset">Добавить новый пресет</button>-->
                 </div>
             </div>
             <div class="button" data-type="open-presets">Открыть список Пресетов</div>
@@ -197,6 +192,27 @@
                 <button data-close-button class="button" data-type="close" aria-label="Close widget">&times;</button>
             </div>
             <div class="widget__content"></div>
+        </div>
+    </template>
+
+    <template id="search-template">
+        <div class="modal__presets-search-box">
+            <label class="text-field modal__presets-search-field">
+                <input type="text" placeholder="Начните поиск пресетов"/>
+                <label data-type="preset-tag" class="button-group tags">
+                </label>
+            </label>
+        </div>
+    </template>
+
+    <template id="button-group-template">
+        <div class="button-group">
+        </div>
+    </template>
+
+    <template id="widget-preview-template">
+        <div class="widget-preview">
+            <div class="button"></div>
         </div>
     </template>
 

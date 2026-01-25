@@ -5,10 +5,12 @@ export enum WidgetType {
     BACKGROUND = "Задний фон",
     AUDIO_VISUALIZER = "Аудио полоски",
 }
-
-
-export interface IWidget {
+export interface IObject {
     id: string;
+}
+
+
+export interface IWidget extends IObject {
     spaceId: string;
     content: HTMLElement;
 }
@@ -43,8 +45,7 @@ export interface IMusicPlaylistWidget extends IWidget {
 export interface IAudioVisualizerWidget extends IWidget {
 }
 
-export interface IStream {
-    id: string;
+export interface IStream extends IObject {
     name: string;
     audios: string[];
     breakpoints: number[];
@@ -52,8 +53,7 @@ export interface IStream {
 }
 
 
-export interface IPreset {
-    id: string;
+export interface IPreset extends IObject {
     title: string
     streamId: string;
     images: string[];
@@ -62,10 +62,23 @@ export interface IPreset {
 
 type WidgetConstructor = (spaceId: string) => Component<IWidget>;
 
-export interface WidgetInfo {
-    name: string;
+export interface WidgetInfo extends IObject {
     ruName: string;
     preview: string;
     builder: WidgetConstructor;
     type: WidgetType;
+}
+
+export interface IFieldBase {
+    value: string;
+}
+export interface IButtonGroup extends IFieldBase {
+    items: string[];
+}
+export interface ISearchField extends IFieldBase {
+}
+
+export enum FieldType {
+    BUTTON_GROUP = "button-group",
+    SEARCH = "search",
 }

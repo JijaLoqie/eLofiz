@@ -15,7 +15,7 @@ export class WidgetBuilder implements IWidgetBuilder {
 
         const createCustomWidget = app
             .store
-            .getDerivedWidgetData(widgetType, widgetName)
+            .getWidgets()[widgetName]
             .builder;
 
         if (createCustomWidget) {

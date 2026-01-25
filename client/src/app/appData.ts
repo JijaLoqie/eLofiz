@@ -1,7 +1,7 @@
 import SpaceView from "../components/Space/SpaceView.ts";
 import type { IEvents } from "../base";
 import type { SpaceUpdateAction } from "../actions.ts";
-import { type IPreset, type WidgetInfo, WidgetType } from "../types.ts";
+import { type IObject, type IPreset, type WidgetInfo, WidgetType } from "../types.ts";
 import MusicPlaylistWidget from "../components/widget/MusicPlaylistWidget.ts";
 import BackgroundWidget from "../components/widget/BackgroundWidget.ts";
 import { AudioVisualizerWidget } from "../components/widget/AudioVisualizerWidget.ts";
@@ -18,7 +18,7 @@ export class AppData implements ISpaceSelector {
 
     musicWidgetsData: Record<string, WidgetInfo> = {
         "basic player": {
-            name: "basic player",
+            id: "basic player",
             ruName: "Базовый аудио плеер",
             preview: "",
             builder: (spaceId: string) => new MusicPlaylistWidget(this.events, spaceId),
@@ -27,7 +27,7 @@ export class AppData implements ISpaceSelector {
     };
     backgroundWidgetsData: Record<string, WidgetInfo> = {
         "basic redactor": {
-            name: "basic redactor",
+            id: "basic redactor",
             ruName: "Базовый редактор фона",
             preview: "Базовый редактор фона",
             builder: (spaceId: string) => new BackgroundWidget(spaceId),
@@ -36,7 +36,7 @@ export class AppData implements ISpaceSelector {
     };
     audioVisualizerData: Record<string, WidgetInfo> = {
         "basic visualizer": {
-            name: "basic visualizer",
+            id: "basic visualizer",
             ruName: "Базовый визуализатор",
             preview: "Базовый визуализатор",
             builder: (spaceId: string) => new AudioVisualizerWidget(spaceId),
@@ -102,12 +102,12 @@ export class AppData implements ISpaceSelector {
     }
 
 
-    getDerivedWidgetData(widgetType: WidgetType, name: string) {
-        return this.widgetsData[widgetType][name];
-    }
-    getWidgetsByType(widgetType: WidgetType) {
-        return this.widgetsData[widgetType];
-    }
+    // getDerivedWidgetData(widgetType: WidgetType, name: string) {
+    //     return this.widgetsData[widgetType][name];
+    // }
+    // getWidgetsByType(widgetType: WidgetType) {
+    //     return this.widgetsData[widgetType];
+    // }
     getWidgets() {
         return Object.values(this.widgetsData)
             .reduce((acc, widgets) => {
@@ -133,13 +133,13 @@ export class AppData implements ISpaceSelector {
         return {tagsCount};
     }
 
-    getPresetsByTag(selectedTag: string) {
-        return Object.fromEntries(
-            Object.values(this.presetsData).filter((preset) => {
-                return preset.tags.some(tag => selectedTag === tag);
-            }).map(presetInfo => [presetInfo.id, presetInfo])
-        );
-    }
+    // getPresetsByTag(selectedTag: string) {
+    //     return Object.fromEntries(
+    //         Object.values(this.presetsData).filter((preset) => {
+    //             return preset.tags.some(tag => selectedTag === tag);
+    //         }).map(presetInfo => [presetInfo.id, presetInfo])
+    //     );
+    // }
 }
 
 export interface ISpaceSelector {

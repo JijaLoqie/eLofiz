@@ -1,0 +1,14 @@
+.items-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+
+
+.items-list [data-type='items'] {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 16px;
+}
