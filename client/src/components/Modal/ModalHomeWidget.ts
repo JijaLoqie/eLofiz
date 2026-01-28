@@ -6,50 +6,95 @@ import {
     type IModalHomeWidget,
     type IPreset,
     type IStream,
-    type WidgetInfo,
+    ModalType,
+    type IWidget,
     WidgetType
 } from "../../types.ts";
 import { ButtonGroup } from "../ui/ButtonGroup.ts";
-import { Preset } from "../Preset/Preset.ts";
+import { PresetCard } from "../Preset/PresetCard.ts";
 import { app } from "../../app/LofiApp.ts";
 import { SearchField } from "../ui/SearchField.ts";
 import { ItemsList } from "../ui/ItemsList.ts";
-import { WidgetPreview } from "../widget/WidgetPreview.ts";
+import { WidgetCard } from "../widget/WidgetCard.ts";
+import { StreamCard } from "../Stream/StreamCard.ts";
 
-const streams: Record<string, IStream> = {
-    "stream1": {
-        id: "stream1",
-        name: "stream 1",
-        audios: ["audio1", "audio2", "audio3"],
-        breakpoints: [10000,20000,30000,40000],
-        cover: "image1",
-    }
-}
 
 export class ModalHomeWidget extends View<IModalHomeWidget> {
+    private _currentType: ModalType | "" = "";
     private currentSpaceName: HTMLElement;
-    private widgetsList!: ItemsList<WidgetInfo>;
+    private widgetsList!: ItemsList<IWidget>;
     private presetsList!: ItemsList<IPreset>;
+    private streamsList!: ItemsList<IStream>;
+    private itemsList;
 
     constructor(container: HTMLElement, events: IEvents) {
         super(container, events);
         this.currentSpaceName = ensureElement(".modal_currentSpace-name", this.container);
         this.initWidgets();
         this.initPresets();
-        this.closeModal();
+        this.initStreams();
+        this.itemsList = {
+            [ModalType.WIDGETS]: this.widgetsList,
+            [ModalType.PRESETS]: this.presetsList,
+            [ModalType.STREAMS]: this.streamsList,
+        };
+
+        this.open = false;
         ensureElement(".button[data-type='open-presets']", this.container).addEventListener("click", () => {
             this.toggleClass(this.container, "open-preset")
         });
     }
 
+
+
+    set currentSpaceId(currentSpaceId: string) {
+        this.currentSpaceName.textContent = currentSpaceId;
+    }
+
+    set modalType(type: ModalType) {
+        this._currentType = type;
+        Object.keys(this.itemsList).forEach(itemType => {
+            const itemList = this.itemsList[itemType as ModalType];
+            if (this._currentType === itemType) {
+                this.setVisible(itemList.render());
+            } else {
+                this.setHidden(itemList.render());
+                itemList.reset();
+            }
+        })
+    }
+    set open(open: boolean) {
+        if (open) {
+            this.setVisible(this.container);
+        } else {
+            this.setHidden(this.container);
+            this.toggleClass(this.container, "open-preset", false);
+        }
+    }
+
+    toggleModal(newType: ModalType) {
+        if (this._currentType !== newType) {
+            this.modalType = newType;
+            this.open = true;
+        } else {
+            const itemList = this.itemsList[this._currentType];
+            this.setHidden(itemList.render());
+            itemList.reset();
+
+            this._currentType = "";
+            this.open = false;
+        }
+    }
+
+
     private initWidgets() {
-        const key = "widgets"
-        this.widgetsList = new ItemsList(
-            ensureElement<HTMLElement>(`.items-list[data-type='${key}']`, this.container),
+        const key = ModalType.WIDGETS;
+        this.widgetsList = new ItemsList<IWidget>(
+            this.container,
             this.events,
             key,
             () => app.store.getWidgets(),
-            WidgetPreview
+            WidgetCard
         );
         const props: IButtonGroup = {
             items: Object.values(WidgetType),
@@ -59,36 +104,20 @@ export class ModalHomeWidget extends View<IModalHomeWidget> {
             ButtonGroup,
             props,
             FieldType.BUTTON_GROUP,
-            (widget: WidgetInfo, selectedType: string) => {
+            (widget: IWidget, selectedType: string) => {
                 if (selectedType === "") return true;
                 return widget.type === selectedType;
             }
         )
     }
-
-    set currentSpaceId(currentSpaceId: string) {
-        this.currentSpaceName.textContent = currentSpaceId;
-    }
-
-    openModal() {
-        this.setVisible(this.container);
-    }
-
-    closeModal() {
-        this.setHidden(this.container);
-        this.toggleClass(this.container, "open-preset", false);
-        this.widgetsList.reset();
-        this.presetsList.reset();
-    }
-
     private initPresets() {
-        const key = "presets";
+        const key = ModalType.PRESETS;
         this.presetsList = new ItemsList(
-            ensureElement<HTMLElement>(`.items-list[data-type='${key}']`, this.container),
+            this.container,
             this.events,
             key,
             () => app.store.getPresets(),
-            Preset,
+            PresetCard,
         );
         const { tagsCount } = app.store.getPresetListInfo()
         const props: IButtonGroup = {
@@ -113,5 +142,25 @@ export class ModalHomeWidget extends View<IModalHomeWidget> {
                 return preset.id.includes(selectedName);
             }
         )
+    }
+    private initStreams() {
+        const key = ModalType.STREAMS;
+        this.streamsList = new ItemsList<IStream>(
+            this.container,
+            this.events,
+            key,
+            () => app.store.getStreams(),
+            StreamCard
+        );
+        this.streamsList.register(
+            SearchField,
+            {},
+            FieldType.SEARCH,
+            (stream: IStream, selectedName: string) => {
+                if (selectedName === "") return true;
+                return stream.id.includes(selectedName) || stream.name.includes(selectedName);
+            }
+        )
+
     }
 }

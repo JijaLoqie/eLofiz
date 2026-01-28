@@ -31,10 +31,6 @@
 .modal_currentSpace-name {
     color: red;
 }
-
-.widgets_list {
-    min-height: 245px;
-}
 .button[data-type='open-presets'] {
     transition: all 0.3s ease-in;
     justify-content: center;

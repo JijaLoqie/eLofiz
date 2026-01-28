@@ -1,4 +1,4 @@
-import { FieldType, type ISpace, type WidgetType } from "./types.ts";
+import { FieldType, type ISpace, ModalType, type WidgetType } from "./types.ts";
 import type {SpaceMetrics} from "./modules/core/IntersectionSpaceHandler.ts";
 
 export interface AddWidgetAction {
@@ -35,8 +35,9 @@ export interface ChangeSpaceAction {
 
 export interface SpaceUpdateAction {}
 
-export interface OpenModalAction { }
-export interface CloseModalAction {}
+export interface ToggleModalAction {
+    modalType: ModalType;
+}
 
 
 export interface SelectAction {

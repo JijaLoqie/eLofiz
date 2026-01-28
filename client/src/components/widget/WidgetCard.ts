@@ -1,9 +1,9 @@
-import { type WidgetInfo, WidgetType } from "../../types.ts";
+import { ModalType, type IWidget, WidgetType } from "../../types.ts";
 import { type IEvents, View } from "../../base";
 import { cloneTemplate, ensureElement } from "../../utils";
-import type { AddWidgetAction, CloseModalAction } from "../../actions.ts";
+import type { AddWidgetAction, ToggleModalAction } from "../../actions.ts";
 
-export class WidgetPreview extends View<WidgetInfo> {
+export class WidgetCard extends View<IWidget> {
     private _id: string = "";
     private _type: WidgetType = WidgetType.BACKGROUND;
 
@@ -16,7 +16,7 @@ export class WidgetPreview extends View<WidgetInfo> {
                 widgetType: this.getType(),
                 widgetName: this.getId(),
             });
-            this.events.emit<CloseModalAction>("close-modal");
+            this.events.emit<ToggleModalAction>("toggle-modal", {modalType: ModalType.WIDGETS});
         })
     }
 

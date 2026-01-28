@@ -2,9 +2,9 @@ import {app} from "./app/LofiApp.ts";
 import {IntersectionMiddleware} from "./middlewares";
 import {SpaceManagerMiddleware} from "./middlewares/SpaceManagerMiddleware.ts";
 import {ModalGlobalMiddleware} from "./middlewares/ModalGlobalMiddleware.ts";
-import type {CloseModalAction, CreateSpaceAction, OpenModalAction} from "./actions.ts";
+import type { CreateSpaceAction, ToggleModalAction } from "./actions.ts";
 import {WidgetBuilderMiddleware} from "./middlewares/WidgetBuilderMiddleware.ts";
-import type {ISpace} from "./types.ts";
+import { type ISpace, ModalType } from "./types.ts";
 import {AudioManagerMiddleware} from "./middlewares/AudioManagerMiddleware.ts";
 
 app.use(SpaceManagerMiddleware);
@@ -13,25 +13,20 @@ app.use(WidgetBuilderMiddleware);
 app.use(ModalGlobalMiddleware);
 app.use(AudioManagerMiddleware);
 
-let opened = false;
+const openActions: Record<string, () => void | undefined> = {
+    "1": () => app.events.emit<ToggleModalAction>("toggle-modal", {modalType: ModalType.WIDGETS}),
+    "2": () => app.events.emit<ToggleModalAction>("toggle-modal", {modalType: ModalType.PRESETS}),
+    "3": () => app.events.emit<ToggleModalAction>("toggle-modal", {modalType: ModalType.STREAMS})
+}
 
-// todo: это так-то middleware с логикой горячих клавиш
 document.body.addEventListener("keypress", (e) => {
-    if (e.key === "1") {
-        if (opened) {
-            app.events.emit<CloseModalAction>("close-modal");
-        } else {
-            app.events.emit<OpenModalAction>("open-modal");
-        }
+    const handlePress = openActions[e.key];
+    if (handlePress) {
+        handlePress();
     }
-});
 
-app.events.on<CloseModalAction>("close-modal", () => {
-    opened = false;
-});
-app.events.on<OpenModalAction>("open-modal", () => {
-    opened = true;
-});
+})
+
 
 
 const defaultSpaces: ISpace[] = [

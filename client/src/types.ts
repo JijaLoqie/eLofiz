@@ -5,14 +5,19 @@ export enum WidgetType {
     BACKGROUND = "Задний фон",
     AUDIO_VISUALIZER = "Аудио полоски",
 }
-export interface IObject {
-    id: string;
+
+export interface IBaseWidget {
+    spaceId: string;
+    content: HTMLElement;
 }
 
 
 export interface IWidget extends IObject {
-    spaceId: string;
     content: HTMLElement;
+    ruName: string;
+    preview: string;
+    builder: WidgetConstructor;
+    type: WidgetType;
 }
 
 export interface ISpace {
@@ -22,9 +27,16 @@ export interface ISpace {
     widgets: string[];
 }
 
+export enum ModalType {
+    WIDGETS = "widgets",
+    PRESETS = "presets",
+    STREAMS = "streams",
+}
+
 export interface IModalHomeWidget {
     open: boolean;
     currentSpaceId: string;
+    modalType: ModalType;
 }
 
 export interface IBackgroundWidget extends IWidget {
@@ -42,6 +54,7 @@ export interface IMusicPlaylistWidget extends IWidget {
     artist: string;
 }
 
+type WidgetConstructor = (spaceId: string) => Component<IWidget>;
 export interface IAudioVisualizerWidget extends IWidget {
 }
 
@@ -53,20 +66,14 @@ export interface IStream extends IObject {
 }
 
 
+export interface IObject {
+    id: string;
+}
 export interface IPreset extends IObject {
     title: string
     streamId: string;
     images: string[];
     tags: string[];
-}
-
-type WidgetConstructor = (spaceId: string) => Component<IWidget>;
-
-export interface WidgetInfo extends IObject {
-    ruName: string;
-    preview: string;
-    builder: WidgetConstructor;
-    type: WidgetType;
 }
 
 export interface IFieldBase {

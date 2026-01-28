@@ -26,19 +26,24 @@
                     <span class="modal_currentSpace-name">Main</span>
                 </div>
             </div>
-            <div class="items-list" data-type="widgets">
-                <div class="wrapper" data-type="button-group"></div>
-                <div class="wrapper" data-type="items"></div>
-            </div>
-            <div class="modal__presets">
-                <div data-type="presets" class="items-list">
-                    <div class="wrapper" data-type="button-group"></div>
-                    <div class="wrapper" data-type="search"></div>
-                    <div class="wrapper" data-type="items"></div>
-<!--                    <button class="button" data-type="new-preset">Добавить новый пресет</button>-->
-                </div>
-            </div>
             <div class="button" data-type="open-presets">Открыть список Пресетов</div>
+        </div>
+    </template>
+    <template id="modal-edit-template">
+        <div id="modal-edit" class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title"></h2>
+                <button class="modal-close" aria-label="Close modal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-content">
+                <div class="stream-info"></div>
+                <div class="tracks-list"></div>
+            </div>
         </div>
     </template>
     <template id ="space-template">
@@ -210,9 +215,29 @@
         </div>
     </template>
 
+    <template id="items-list-template">
+        <div class="items-list">
+            <div class="wrapper" data-type="button-group"></div>
+            <div class="wrapper" data-type="search"></div>
+            <div class="wrapper" data-type="items"></div>
+        </div>
+    </template>
+
     <template id="widget-preview-template">
         <div class="widget-preview">
             <div class="button"></div>
+        </div>
+    </template>
+
+    <template id="stream-card-template">
+        <div class="stream-card" data-id="">
+            <div class="cover-image">
+                <div class="disk"></div>
+            </div>
+            <div class="card-content">
+                <div class="name"></div>
+                <div class="description"></div>
+            </div>
         </div>
     </template>
 

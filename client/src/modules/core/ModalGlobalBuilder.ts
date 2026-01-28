@@ -1,6 +1,7 @@
 import {ModalHomeWidget} from "../../components/Modal/ModalHomeWidget.ts";
 import {cloneTemplate, ensureElement} from "../../utils";
 import type {IEvents} from "../../base";
+import type { ModalType } from "../../types.ts";
 
 export class ModalGlobalBuilder implements IModalGlobalBuilder {
     private readonly modalMenu;
@@ -13,11 +14,8 @@ export class ModalGlobalBuilder implements IModalGlobalBuilder {
         );
     }
 
-    openMainMenu(): void {
-        this.modalMenu.openModal();
-    }
-    closeMainMenu(): void {
-        this.modalMenu.closeModal();
+    toggleModal(modalType: ModalType): void {
+        this.modalMenu.toggleModal(modalType);
     }
 
     changeSpace(spaceId: string): void {
@@ -27,8 +25,7 @@ export class ModalGlobalBuilder implements IModalGlobalBuilder {
 }
 
 export interface IModalGlobalBuilder {
-    openMainMenu(): void;
-    closeMainMenu(): void;
-
     changeSpace(spaceId: string): void;
+
+    toggleModal(modalType: ModalType): void;
 }

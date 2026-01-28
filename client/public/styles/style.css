@@ -1,13 +1,15 @@
 @import "standart.css";
 @import "modals.css";
-@import "widgets.css";
+@import "modal-edit.css";
 @import "buttons.css";
+@import "widgets.css";
+@import "presets.css";
+@import "streams.css";
 @import "checkboxes.css";
 @import "text-field.css";
 @import "items-list.css";
 @import "button-group.css";
 @import "resizable.css";
-@import "presets.css";
 
 
 .space {

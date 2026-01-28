@@ -1,10 +1,10 @@
 import { type IEvents, View } from "../../base";
 import { FieldBase } from "./FieldBase.ts";
 import { FieldType, type IFieldBase, type IObject } from "../../types.ts";
-import { ensureElement } from "../../utils";
+import { cloneTemplate, ensureElement } from "../../utils";
 import type { InputAction } from "../../actions.ts";
 import { app } from "../../app/LofiApp.ts";
-import { Preset } from "../Preset/Preset.ts";
+import { PresetCard } from "../Preset/PresetCard.ts";
 
 
 interface IItemsList {
@@ -25,19 +25,22 @@ type FieldInfo<T> = {
 }
 type FieldsInfo<T> = Record<FieldType, FieldInfo<T>>
 
-export class ItemsList<ItemType extends IObject> extends View<IItemsList> {
+
+export class ItemsList<ItemType extends IObject = IObject> extends View<IItemsList> {
     fields: Partial<FieldsInfo<ItemType>> = {};
     items: ItemType[] = [];
     itemsContainer: HTMLElement = ensureElement(".wrapper[data-type='items']", this.container);
 
     constructor(
-        container: HTMLElement,
+        wrapper: HTMLElement,
         events: IEvents,
         private readonly _key: string,
         private readonly getItems: () => Record<string, ItemType>,
         private readonly ViewClass: new (events: IEvents) => View<ItemType>
     ) {
-        super(container, events);
+
+        super(cloneTemplate(ensureElement<HTMLTemplateElement>("#items-list-template")), events);
+        wrapper.appendChild(this.container);
         this.fetchItems();
 
 

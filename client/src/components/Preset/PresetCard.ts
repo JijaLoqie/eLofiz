@@ -3,7 +3,7 @@ import {cloneTemplate, ensureElement} from "../../utils";
 import type {IPreset} from "../../types.ts";
 
 
-export class Preset extends View<IPreset> {
+export class PresetCard extends View<IPreset> {
     constructor(events: IEvents) {
         const container = cloneTemplate("#preset-template");
         super(container, events);

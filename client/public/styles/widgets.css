@@ -81,7 +81,3 @@
     border-radius: 10px;
     outline: solid rgba(255, 255, 255, 0.2);
 }
-
-.items-list[data-type="widgets"] {
-    min-height: 300px;
-}

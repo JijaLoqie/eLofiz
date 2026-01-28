@@ -1,12 +1,11 @@
 import { View, type IEvents } from "../../base";
-import type { IWidget, WidgetType } from "../../types.ts";
+import type { IBaseWidget } from "../../types.ts";
 import { cloneTemplate, ensureElement } from "../../utils";
 import { DragHandler } from "../../utils/DragHandler.ts";
-import type {RemoveWidgetAction} from "../../actions.ts";
 
 const widgetTemplate = ensureElement<HTMLTemplateElement>("#widget-template");
 
-class Widget extends View<IWidget> {
+class Widget extends View<IBaseWidget> {
 
     private dragHandler: DragHandler;
 
