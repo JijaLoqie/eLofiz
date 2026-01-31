@@ -1,12 +1,11 @@
 import SpaceView from "../components/Space/SpaceView.ts";
 import type { IEvents } from "../base";
 import type { SpaceUpdateAction } from "../actions.ts";
-import { type IObject, type IPreset, type IStream, type IWidget, WidgetType } from "../types.ts";
-import MusicPlaylistWidget from "../components/widget/MusicPlaylistWidget.ts";
-import BackgroundWidget from "../components/widget/BackgroundWidget.ts";
-import { AudioVisualizerWidget } from "../components/widget/AudioVisualizerWidget.ts";
+import { type IPreset, type IStream, type IWidget, WidgetType } from "../types.ts";
+import MusicPlaylistWidget from "../components/Widget/MusicPlaylistWidget.ts";
+import BackgroundWidget from "../components/Widget/BackgroundWidget.ts";
+import { AudioVisualizerWidget } from "../components/Widget/AudioVisualizerWidget.ts";
 import { app } from "./LofiApp.ts";
-import { PresetCard } from "../components/Preset/PresetCard.ts";
 import { cloneTemplate } from "../utils";
 
 type PresetListInfo = {
@@ -14,10 +13,6 @@ type PresetListInfo = {
 }
 
 
-
-// TODO: Начать делать три модалки - для списка виджетов, для списка пресетов, для списка потоков
-// TODO: Возможно ещё два: окно с превью пресета, окно с превью потока
-// TODO: Возможно ещё одно: окно с превью виджета, но выглядит как что-то излишнее. Может быть потом
 
 
 export class AppData implements ISpaceSelector {
@@ -162,10 +157,6 @@ export class AppData implements ISpaceSelector {
         return this.presetsData;
     }
 
-    getStreams() {
-        return this.streams;
-    }
-
     getPresetListInfo(): PresetListInfo {
         const tagsCount = new Map<string, number>();
         Object.values(app.store.getPresets()).forEach((presetInfo) => {
@@ -178,53 +169,6 @@ export class AppData implements ISpaceSelector {
             })
         });
         return {tagsCount};
-    }
-
-
-    getAudioStats(streamId: string): IStream | null {
-        return this.streams[streamId] || null;
-    }
-
-    /**
-     * Get all audio files from a stream recursively
-     * Expands nested stream references to get all actual audio files
-     * @param streamId - The ID of the stream
-     * @param visited - Set to track visited streams and prevent infinite recursion
-     * @returns Array of audio file paths
-     */
-    getAllAudioFiles(
-        streamId: string,
-        visited: Set<string> = new Set()
-    ): string[] {
-        if (visited.has(streamId)) {
-            return [];
-        }
-        visited.add(streamId);
-
-        const stream = this.streams[streamId];
-        if (!stream) {
-            return [];
-        }
-
-        const audioFiles: string[] = [];
-
-        for (const audio of stream.audios) {
-            if (this.isAudioFile(audio)) {
-                audioFiles.push(audio);
-            } else {
-                // It's a stream reference, recurse
-                const nestedFiles = this.getAllAudioFiles(audio, visited);
-                audioFiles.push(...nestedFiles);
-            }
-        }
-
-        return audioFiles;
-    }
-
-    private isAudioFile(path: string): boolean {
-        const audioExtensions = [".mp3", ".m4a", ".wav", ".ogg", ".flac", ".aac"];
-        const lowerPath = path.toLowerCase();
-        return audioExtensions.some(ext => lowerPath.endsWith(ext));
     }
 }
 
