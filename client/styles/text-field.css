@@ -14,8 +14,13 @@
 
 
 }
-.text-field input {
-    height: 100%;
+
+.text-field label {
+    width: 100%;
+    height: auto;
+    background-color: transparent;
+}
+.text-field input, .text-field textarea {
     width: 100%;
     padding: 16px 0;
     transition: width ease-out 300ms;

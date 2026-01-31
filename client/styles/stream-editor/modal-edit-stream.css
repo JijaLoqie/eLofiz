@@ -1,3 +1,5 @@
+@import "stream-card-part.css";
+
 /* Stream Editor Container */
 .stream-editor {
     display: flex;
@@ -29,64 +31,63 @@
         margin-bottom: 1rem;
 
     }
+    .image-cover {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .stream-editor__cover-preview {
+        width: 300px;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 0.5rem;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    .text-field[data-type="description"] {
+        align-items: start;
+        justify-content: start;
+        border-radius: 10px;
+        flex: 1;
+        text-wrap: wrap;
+        background-color: transparent;
+    }
+    /* Action Buttons */
+    .stream-editor__actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        .button[data-type="save"] {
+            --button-padding: 0.8em 2em;
+            --button-font-size: 1.1em;
+            --button-bg: rgba(76, 175, 80, 0.3);
+            --button-color: #4CAF50;
+            --button-hover-bg: #4CAF50;
+            --button-hover-color: #ffffff;
+        }
+        .button[data-type="cancel"] {
+            --button-padding: 0.8em 2em;
+            --button-font-size: 1.1em;
+            --button-bg: rgba(211, 211, 211, 0.2);
+            --button-color: #d3d3d3;
+            --button-hover-bg: rgba(211, 211, 211, 0.4);
+            --button-hover-color: #ffffff;
+        }
+        .button[data-type="change-cover"] {
+            --button-padding: 0.8em 1.5em;
+            --button-font-size: 1.1em;
+        }
+    }
+
 }
 
-.image-cover {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
 
 
-.stream-editor__cover-preview {
-    width: 300px;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 0.5rem;
-    border: 3px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
 
-/* Action Buttons */
-.stream-editor__actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.button[data-type="save"] {
-    --button-padding: 0.8em 2em;
-    --button-font-size: 1.1em;
-    --button-bg: rgba(76, 175, 80, 0.3);
-    --button-color: #4CAF50;
-    --button-hover-bg: #4CAF50;
-    --button-hover-color: #ffffff;
-}
-.button[data-type="cancel"] {
-    --button-padding: 0.8em 2em;
-    --button-font-size: 1.1em;
-    --button-bg: rgba(211, 211, 211, 0.2);
-    --button-color: #d3d3d3;
-    --button-hover-bg: rgba(211, 211, 211, 0.4);
-    --button-hover-color: #ffffff;
-}
-.button[data-type="change-cover"] {
-    --button-padding: 0.8em 1.5em;
-    --button-font-size: 1.1em;
-}
-
-.text-field[data-type="description"] {
-    align-items: start;
-    justify-content: start;
-    border-radius: 10px;
-    flex: 1;
-    text-wrap: wrap;
-    background-color: transparent;
-}
 
 /* Stream Controls */
 .stream_control {
@@ -99,9 +100,6 @@
 }
 
 .stream_parts {
-    display: flex;
-    gap: 1rem;
-    flex: 1;
 }
 
 
@@ -187,6 +185,8 @@
 
 /* Audio Section */
 .editor-section[data-type="stream-parts"] {
+    display: flex;
+    flex: 1;
     gap: 1rem;
     width: 100%;
     align-items: stretch;
@@ -199,29 +199,6 @@
     color: #ffffff;
     text-transform: uppercase;
     letter-spacing: 0.05ch;
-}
-
-.stream-editor__audio-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    min-height: 50px;
-    padding: 1rem;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 0.5rem;
-    border: 1px dashed rgba(107, 198, 255, 0.2);
-}
-
-.stream-editor__audio-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    background: rgba(107, 198, 255, 0.1);
-    border-left: 3px solid #6BC6FF;
-    border-radius: 0.25rem;
-    color: #ffffff;
-    gap: 1rem;
 }
 
 .stream-editor__audio-item-name {
@@ -274,27 +251,6 @@
 .stream-editor__streams-controls {
     display: flex;
     gap: 0.75rem;
-}
-
-.stream-editor__stream-id-input {
-    flex: 1;
-    padding: 0.75rem;
-    font-size: 1rem;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 0.5rem;
-    background: rgba(0, 0, 0, 0.2);
-    color: #ffffff;
-    font-family: sans-serif;
-}
-
-.stream-editor__stream-id-input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-}
-
-.stream-editor__stream-id-input:focus {
-    outline: 3px solid #6BC6FF;
-    outline-offset: 2px;
-    border-color: #6BC6FF;
 }
 
 .stream-editor__stream-add-button {

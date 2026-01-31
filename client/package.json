@@ -12,6 +12,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.11.2",
     "vite": "^7.3.0"
   }
 }
