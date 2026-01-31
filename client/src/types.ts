@@ -1,4 +1,5 @@
 import { Component } from "./base";
+import { appStore } from "@/app/appStore.ts";
 
 export enum WidgetType {
     MUSIC = "Музыка",
@@ -27,16 +28,30 @@ export interface ISpace {
     widgets: string[];
 }
 
-export enum ModalType {
+export enum EntityType {
     WIDGETS = "widgets",
     PRESETS = "presets",
     STREAMS = "streams",
 }
 
-export interface IModalHomeWidget {
+
+export enum ModalType {
+    LIST = "list",
+    EDITOR = "editor",
+}
+
+export interface IModalWidget {
     open: boolean;
     currentSpaceId: string;
-    modalType: ModalType;
+    entityType: EntityType;
+}
+
+export interface IModalHomeWidget extends IModalWidget {
+    modalType: EntityType;
+}
+
+export interface IModalEditWidget extends IModalWidget {
+    entityId: string;
 }
 
 export interface IBackgroundWidget extends IWidget {
@@ -88,4 +103,15 @@ export interface ISearchField extends IFieldBase {
 export enum FieldType {
     BUTTON_GROUP = "button-group",
     SEARCH = "search",
+}
+
+
+export enum StreamType {
+    COMPLEX = "Complex",
+    SINGLE = "SINGLE",
+}
+
+export interface IStreamPart extends IObject {
+    title: string;
+    type: StreamType;
 }

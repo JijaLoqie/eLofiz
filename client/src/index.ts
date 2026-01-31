@@ -1,11 +1,12 @@
-import {app} from "./app/LofiApp.ts";
-import {IntersectionMiddleware} from "./middlewares";
-import {SpaceManagerMiddleware} from "./middlewares/SpaceManagerMiddleware.ts";
-import {ModalGlobalMiddleware} from "./middlewares/ModalGlobalMiddleware.ts";
+import { app } from "./app/LofiApp.ts";
+import { IntersectionMiddleware } from "./middlewares";
+import { SpaceManagerMiddleware } from "./middlewares/SpaceManagerMiddleware.ts";
+import { ModalGlobalMiddleware } from "./middlewares/ModalGlobalMiddleware.ts";
 import type { CreateSpaceAction, ToggleModalAction } from "./actions.ts";
-import {WidgetBuilderMiddleware} from "./middlewares/WidgetBuilderMiddleware.ts";
-import { type ISpace, ModalType } from "./types.ts";
-import {AudioManagerMiddleware} from "./middlewares/AudioManagerMiddleware.ts";
+import { WidgetBuilderMiddleware } from "./middlewares/WidgetBuilderMiddleware.ts";
+import { EntityType, type ISpace, ModalType } from "./types.ts";
+import { AudioManagerMiddleware } from "./middlewares/AudioManagerMiddleware.ts";
+import { appStore } from "@/app/appStore.ts";
 
 app.use(SpaceManagerMiddleware);
 app.use(IntersectionMiddleware);
@@ -14,9 +15,12 @@ app.use(ModalGlobalMiddleware);
 app.use(AudioManagerMiddleware);
 
 const openActions: Record<string, () => void | undefined> = {
-    "1": () => app.events.emit<ToggleModalAction>("toggle-modal", {modalType: ModalType.WIDGETS}),
-    "2": () => app.events.emit<ToggleModalAction>("toggle-modal", {modalType: ModalType.PRESETS}),
-    "3": () => app.events.emit<ToggleModalAction>("toggle-modal", {modalType: ModalType.STREAMS})
+    "1": () => app.events.emit<ToggleModalAction>("toggle-modal",
+        {entityType: EntityType.WIDGETS, modalType: ModalType.LIST}),
+    "2": () => app.events.emit<ToggleModalAction>("toggle-modal",
+        {entityType: EntityType.PRESETS, modalType: ModalType.LIST}),
+    "3": () => app.events.emit<ToggleModalAction>("toggle-modal",
+        {entityType: EntityType.STREAMS, modalType: ModalType.LIST})
 }
 
 document.body.addEventListener("keypress", (e) => {
@@ -41,3 +45,6 @@ const defaultSpaces: ISpace[] = [
 defaultSpaces.forEach((space) => {
     app.events.emit<CreateSpaceAction>("create-space", {spaceName: space.name, spaceSettings: space});
 });
+
+export type RootState = ReturnType<typeof appStore.getState>;
+export type AppDispatch = typeof appStore.dispatch;

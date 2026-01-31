@@ -1,4 +1,4 @@
-import Widget from "../../components/widget/Widget.ts";
+import Widget from "../../components/Widget/Widget.ts";
 import { Component, type IEvents, View } from "../../base";
 import { WidgetType } from "../../types.ts";
 import { app } from "../../app/LofiApp.ts";

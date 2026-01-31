@@ -34,8 +34,8 @@ export class ItemsList<ItemType extends IObject = IObject> extends View<IItemsLi
     constructor(
         wrapper: HTMLElement,
         events: IEvents,
-        private readonly _key: string,
-        private readonly getItems: () => Record<string, ItemType>,
+        protected readonly _key: string,
+        private getItems: () => Record<string, ItemType>,
         private readonly ViewClass: new (events: IEvents) => View<ItemType>
     ) {
 
@@ -69,8 +69,13 @@ export class ItemsList<ItemType extends IObject = IObject> extends View<IItemsLi
         }
     };
 
+    updateFunction(newFunction: () => Record<string, ItemType>) {
+        this.getItems = newFunction;
+        this.fetchItems()
+    }
 
-    private fetchItems() {
+
+    protected fetchItems() {
         this.items = Object.values(this.getItems());
         Object.values(this.fields).forEach((fieldInfo) => {
             this.items = this.items.filter((item) => {

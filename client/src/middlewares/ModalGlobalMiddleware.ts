@@ -1,10 +1,9 @@
-import {Middleware} from "../base/Middleware.ts";
-import type {IEvents} from "../base";
-import type {AppData} from "../app/appData.ts";
-import {type IModalGlobalBuilder, ModalGlobalBuilder} from "../modules/core/ModalGlobalBuilder.ts";
-import type {ChangeSpaceAction} from "../actions.ts";
-import { app } from "../app/LofiApp.ts";
-import type { ModalType } from "../types.ts";
+import { Middleware } from "../base/Middleware.ts";
+import type { IEvents } from "../base";
+import type { AppData } from "../app/appData.ts";
+import { type IModalGlobalBuilder, ModalGlobalBuilder } from "../modules/core/ModalGlobalBuilder.ts";
+import type { ChangeSpaceAction, ToggleModalAction } from "../actions.ts";
+import { ModalType } from "../types.ts";
 
 export class ModalGlobalMiddleware extends Middleware {
     private modalGlobalBuilder: IModalGlobalBuilder;
@@ -20,8 +19,13 @@ export class ModalGlobalMiddleware extends Middleware {
             this.modalGlobalBuilder.changeSpace(data.spaceId);
         });
 
-        this.events.on("toggle-modal", (data: { modalType: ModalType }) => {
-            this.modalGlobalBuilder.toggleModal(data.modalType)
+        this.events.on<ToggleModalAction>("toggle-modal", (data) => {
+            const { modalType, entityType, props: entityId } = data;
+            if (modalType === ModalType.LIST) {
+                this.modalGlobalBuilder.toggleModal(entityType)
+            } else if (modalType === ModalType.EDITOR) {
+                this.modalGlobalBuilder.openEditor(entityType, entityId);
+            }
         })
     }
 }

@@ -1,31 +1,42 @@
 import {ModalHomeWidget} from "../../components/Modal/ModalHomeWidget.ts";
 import {cloneTemplate, ensureElement} from "../../utils";
 import type {IEvents} from "../../base";
-import type { ModalType } from "../../types.ts";
+import type { EntityType } from "../../types.ts";
+import { ModalEditWidget } from "../../components/Modal/ModalEditWidget.ts";
 
 export class ModalGlobalBuilder implements IModalGlobalBuilder {
-    private readonly modalMenu;
+    private readonly modalItemsList;
+    private readonly modalEditor;
 
     constructor(private readonly events: IEvents) {
-        const modalMenuHtml = cloneTemplate("#modal-menu-template");
-        this.modalMenu = new ModalHomeWidget(modalMenuHtml, this.events);
+        this.modalItemsList = new ModalHomeWidget(this.events);
+        this.modalEditor = new ModalEditWidget(this.events);
         document.body.appendChild(
-            this.modalMenu.render({open: false, currentSpaceId: "main"})
+            this.modalItemsList.render({open: false, currentSpaceId: "main"})
+        );
+        document.body.appendChild(
+            this.modalEditor.render({open: false, currentSpaceId: "main"})
         );
     }
 
-    toggleModal(modalType: ModalType): void {
-        this.modalMenu.toggleModal(modalType);
+    openEditor(entityType: EntityType, entityId: string): void {
+        this.modalEditor.openModal(entityType, entityId);
+    }
+
+    toggleModal(modalType: EntityType): void {
+        this.modalItemsList.toggleModal(modalType);
     }
 
     changeSpace(spaceId: string): void {
-        this.modalMenu.currentSpaceId = spaceId;
+        this.modalItemsList.currentSpaceId = spaceId;
+        this.modalEditor.currentSpaceId = spaceId;
     }
-
 }
 
 export interface IModalGlobalBuilder {
     changeSpace(spaceId: string): void;
 
-    toggleModal(modalType: ModalType): void;
+    toggleModal(modalType: EntityType): void;
+
+    openEditor(entityType: EntityType, entityId: string): void;
 }

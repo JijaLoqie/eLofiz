@@ -1,4 +1,4 @@
-import { ModalType, type IWidget, WidgetType } from "../../types.ts";
+import { EntityType, type IWidget, ModalType, WidgetType } from "../../types.ts";
 import { type IEvents, View } from "../../base";
 import { cloneTemplate, ensureElement } from "../../utils";
 import type { AddWidgetAction, ToggleModalAction } from "../../actions.ts";
@@ -12,11 +12,11 @@ export class WidgetCard extends View<IWidget> {
     constructor(events: IEvents) {
         super(cloneTemplate("#widget-preview-template"), events);
         this.button.addEventListener("click", () => {
-            this.events.emit<AddWidgetAction>("add-widget", {
+            this.events.emit<AddWidgetAction>("add-Widget", {
                 widgetType: this.getType(),
                 widgetName: this.getId(),
             });
-            this.events.emit<ToggleModalAction>("toggle-modal", {modalType: ModalType.WIDGETS});
+            this.events.emit<ToggleModalAction>("toggle-modal", {entityType: EntityType.WIDGETS, modalType: ModalType.LIST});
         })
     }
 
