@@ -8,7 +8,6 @@ export interface SpaceMetrics {
     id: string;
     intersectionRatio: number;
     isVisible: boolean;
-    element: HTMLElement;
 }
 
 export class IntersectionSpaceHandler {
@@ -120,7 +119,6 @@ export class IntersectionSpaceHandler {
             index,
             intersectionRatio: this.spaceMetrics.get(space) || 0,
             isVisible: (this.spaceMetrics.get(space) || 0) > 0,
-            element: space,
         };
     }
 

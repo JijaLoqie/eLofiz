@@ -3,7 +3,7 @@ import { cloneTemplate, ensureElement } from "../../utils";
 import {
     type IModalHomeWidget,
     EntityType,
-} from "../../types.ts";
+} from "@/types.ts";
 import { WidgetCardList } from "../Widget/WidgetCardList.ts";
 import { PresetCardList } from "../Preset/PresetCardList.ts";
 import { StreamCardList } from "../Stream/StreamCardList.ts";

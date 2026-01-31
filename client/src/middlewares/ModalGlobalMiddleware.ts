@@ -2,7 +2,7 @@ import { Middleware } from "../base/Middleware.ts";
 import type { IEvents } from "../base";
 import type { AppData } from "../app/appData.ts";
 import { type IModalGlobalBuilder, ModalGlobalBuilder } from "../modules/core/ModalGlobalBuilder.ts";
-import type { ChangeSpaceAction, ToggleModalAction } from "../actions.ts";
+import type { ToggleModalAction } from "../actions.ts";
 import { ModalType } from "../types.ts";
 
 export class ModalGlobalMiddleware extends Middleware {
@@ -14,10 +14,6 @@ export class ModalGlobalMiddleware extends Middleware {
     }
 
     register(): void {
-
-        this.events.on<ChangeSpaceAction>("change-space", (data: { spaceId: string }) => {
-            this.modalGlobalBuilder.changeSpace(data.spaceId);
-        });
 
         this.events.on<ToggleModalAction>("toggle-modal", (data) => {
             const { modalType, entityType, props: entityId } = data;

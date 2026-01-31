@@ -1,3 +1,5 @@
+import React from "react";
+import ReactDOM from "react-dom/client";
 import { app } from "./app/LofiApp.ts";
 import { IntersectionMiddleware } from "./middlewares";
 import { SpaceManagerMiddleware } from "./middlewares/SpaceManagerMiddleware.ts";
@@ -7,6 +9,10 @@ import { WidgetBuilderMiddleware } from "./middlewares/WidgetBuilderMiddleware.t
 import { EntityType, type ISpace, ModalType } from "./types.ts";
 import { AudioManagerMiddleware } from "./middlewares/AudioManagerMiddleware.ts";
 import { appStore } from "@/app/appStore.ts";
+import { ensureElement } from "@/utils";
+import ModalEditWidget from "@/components/Modal/ModalEditWidget.tsx";
+import { Provider } from "react-redux";
+import { Modal } from "@/components/Modal/Modal.tsx";
 
 app.use(SpaceManagerMiddleware);
 app.use(IntersectionMiddleware);
@@ -31,6 +37,12 @@ document.body.addEventListener("keypress", (e) => {
 
 })
 
+const modalEditRoot = ReactDOM.createRoot(ensureElement("#modal-edit-root"));
+modalEditRoot.render(
+    <Provider store={appStore}>
+        <Modal />
+    </Provider>
+)
 
 
 const defaultSpaces: ISpace[] = [
@@ -45,6 +57,10 @@ const defaultSpaces: ISpace[] = [
 defaultSpaces.forEach((space) => {
     app.events.emit<CreateSpaceAction>("create-space", {spaceName: space.name, spaceSettings: space});
 });
+
+
+
+
 
 export type RootState = ReturnType<typeof appStore.getState>;
 export type AppDispatch = typeof appStore.dispatch;

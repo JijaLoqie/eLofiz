@@ -21,9 +21,9 @@ export class StreamCardList extends ItemsList<IStream> {
             SearchField,
             {},
             FieldType.SEARCH,
-            (stream: IStream, selectedName: string) => {
-                if (selectedName === "") return true;
-                return stream.id.includes(selectedName) || stream.name.includes(selectedName);
+            (stream: IStream, newValue: string) => {
+                if (newValue === "") return true;
+                return stream.id.includes(newValue) || stream.name.includes(newValue);
             }
         )
 

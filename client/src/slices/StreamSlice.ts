@@ -1,6 +1,7 @@
 import { createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { type IStream, type IStreamPart, StreamType } from "@/types.ts";
-import type { RootState } from "@/index.ts";
+import type { RootState } from "@/index.tsx";
+import * as stream from "node:stream";
 
 interface StreamSliceState {items: Record<string, IStream>}
 
@@ -83,17 +84,9 @@ export const selectStreamPartInfo = createSelector(
 
 
 export const selectStreamParts = createSelector(
-    [selectStreams, selectStream],
-    (streams, stream) => {
-        if (!stream) return {};
-        return Object.fromEntries(stream.audios.map((streamPartId): IStreamPart => {
-            const streamType = streams[streamPartId] ? StreamType.COMPLEX : StreamType.SINGLE;
-            return {
-                id: streamPartId,
-                title: streamType === StreamType.SINGLE ? streamPartId : streams[ streamPartId ].name,
-                type: streamType,
-            }
-        }).map(streamPart => [streamPart.id, streamPart]))
+    [selectStream],
+    (stream): string[] => {
+        return stream?.audios || [];
     }
 )
 

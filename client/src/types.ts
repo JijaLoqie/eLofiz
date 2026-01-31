@@ -1,5 +1,4 @@
 import { Component } from "./base";
-import { appStore } from "@/app/appStore.ts";
 
 export enum WidgetType {
     MUSIC = "Музыка",

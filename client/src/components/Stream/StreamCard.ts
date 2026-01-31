@@ -1,10 +1,10 @@
-import { EntityType, type IStream, ModalType } from "@/types.ts";
+import { EntityType, type IStream } from "@/types.ts";
 import { type IEvents, View } from "@/base";
 import { cloneTemplate, ensureElement } from "@/utils";
-import type { ToggleModalAction } from "@/actions.ts";
 import { getAudioDuration } from "@/modules/StreamEditor";
 import { selectStream } from "@/slices/StreamSlice.ts";
 import { appStore } from "@/app/appStore.ts";
+import { openEditor } from "@/slices/ModalSlice.ts";
 
 const template = ensureElement<HTMLTemplateElement>("#stream-card-template");
 
@@ -18,11 +18,12 @@ export class StreamCard extends View<IStream> {
         super(cloneTemplate(template), events);
         this.description = ensureElement(".description", this.container);
         this.container.addEventListener("click", () => {
-            this.events.emit<ToggleModalAction>("toggle-modal", {
-                entityType: EntityType.STREAMS,
-                modalType: ModalType.EDITOR,
-                props: this.container.getAttribute("data-id")
-            })
+            appStore.dispatch(openEditor(
+                {
+                    entityType: EntityType.STREAMS,
+                    entityId: this.container.getAttribute("data-id") || ""
+                }
+            ));
         });
     }
 
