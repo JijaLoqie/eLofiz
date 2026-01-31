@@ -1,0 +1,13 @@
+.stream-card-part {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(107, 198, 255, 0.1);
+    border-left: 3px solid #6BC6FF;
+    border-radius: 0.25rem;
+    color: #ffffff;
+    gap: 1rem;
+}

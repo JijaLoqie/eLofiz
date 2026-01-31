@@ -9,7 +9,7 @@
     border-radius: 16px;
     padding: 24px;
     width: calc(100vw - 20px);
-    height: 300px;
+    height: 50%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
     background-image: linear-gradient(#ff6b6b99, #00000099);
