@@ -1,31 +1,31 @@
 import { ItemsList } from "../ui/ItemsList.ts";
-import { EntityType, FieldType, type IButtonGroup, type IWidget, WidgetType } from "../../types.ts";
-import type { IEvents } from "../../base";
-import { app } from "../../app/LofiApp.ts";
-import { ButtonGroup } from "../ui/ButtonGroup.ts";
-import { WidgetCard } from "./WidgetCard.ts";
+import {
+    EntityType, FieldType, type IStream,
+} from "@/types.ts";
+import type { IEvents } from "@/base";
+import { StreamCard } from "./StreamCard.ts";
+import { SearchField } from "../ui/SearchField.ts";
+import { appStore } from "@/app/appStore.ts";
+import { selectStreams } from "@/slices/StreamSlice.ts";
 
-export class WidgetCardList extends ItemsList<IWidget> {
+export class StreamCardList extends ItemsList<IStream> {
     constructor(wrapper: HTMLElement, events: IEvents) {
         super(
             wrapper,
             events,
-            EntityType.WIDGETS,
-            () => app.store.getWidgets(),
-            WidgetCard
+            EntityType.STREAMS,
+            () => selectStreams(appStore.getState()),
+            StreamCard,
         );
-        const props: IButtonGroup = {
-            items: Object.values(WidgetType),
-            value: "",
-        }
         this.register(
-            ButtonGroup,
-            props,
-            FieldType.BUTTON_GROUP,
-            (widget: IWidget, selectedType: string) => {
-                if (selectedType === "") return true;
-                return widget.type === selectedType;
+            SearchField,
+            {},
+            FieldType.SEARCH,
+            (stream: IStream, selectedName: string) => {
+                if (selectedName === "") return true;
+                return stream.id.includes(selectedName) || stream.name.includes(selectedName);
             }
         )
+
     }
 }

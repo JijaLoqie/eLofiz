@@ -1,10 +1,13 @@
-import type { IStream } from "../../types.ts";
-import { type IEvents, View } from "../../base";
-import { cloneTemplate, ensureElement } from "../../utils";
-import { app } from "../../app/LofiApp.ts";
-import { ModalEditWidget } from "../Modal/ModalEditWidget.ts";
+import { EntityType, type IStream, ModalType } from "@/types.ts";
+import { type IEvents, View } from "@/base";
+import { cloneTemplate, ensureElement } from "@/utils";
+import type { ToggleModalAction } from "@/actions.ts";
+import { getAudioDuration } from "@/modules/StreamEditor";
+import { selectStream } from "@/slices/StreamSlice.ts";
+import { appStore } from "@/app/appStore.ts";
 
 const template = ensureElement<HTMLTemplateElement>("#stream-card-template");
+
 
 export class StreamCard extends View<IStream> {
     private tracks: Array<{ path: string; duration: number }> = [];
@@ -14,9 +17,12 @@ export class StreamCard extends View<IStream> {
     constructor(events: IEvents) {
         super(cloneTemplate(template), events);
         this.description = ensureElement(".description", this.container);
-        this.container.addEventListener("click", async () => {
-            const modal = new ModalEditWidget(events);
-            await modal.openStream(this.container.getAttribute("data-id")!);
+        this.container.addEventListener("click", () => {
+            this.events.emit<ToggleModalAction>("toggle-modal", {
+                entityType: EntityType.STREAMS,
+                modalType: ModalType.EDITOR,
+                props: this.container.getAttribute("data-id")
+            })
         });
     }
 
@@ -50,10 +56,10 @@ export class StreamCard extends View<IStream> {
         }
     }
 
-    private async resolveAudioTracks(
-        audioPaths: string[],
-        visited: Set<string> = new Set()
-    ): Promise<Array<{ path: string; duration: number }>> {
+    private async resolveAudioTracks(audioPaths: string[], visited: Set<string> = new Set()): Promise<Array<{
+        path: string;
+        duration: number
+    }>> {
         const tracks: Array<{ path: string; duration: number }> = [];
 
         for (const audioPath of audioPaths) {
@@ -61,11 +67,14 @@ export class StreamCard extends View<IStream> {
             visited.add(audioPath);
 
             if (this.isAudioFile(audioPath)) {
-                tracks.push({ path: audioPath, duration: await this.getAudioDuration(audioPath) });
+                tracks.push({
+                    path: audioPath,
+                    duration: await getAudioDuration(audioPath)
+                });
             } else {
-                const audioStats = app.store.getAudioStats(audioPath);
-                if (audioStats?.audios) {
-                    tracks.push(...await this.resolveAudioTracks(audioStats.audios, visited));
+                const streamInfo = selectStream(appStore.getState(), audioPath)
+                if (streamInfo?.audios) {
+                    tracks.push(...await this.resolveAudioTracks(streamInfo.audios, visited));
                 }
             }
         }
@@ -122,34 +131,7 @@ export class StreamCard extends View<IStream> {
     }
 
     private isAudioFile(path: string): boolean {
-        return [".mp3", ".m4a", ".wav", ".ogg", ".flac", ".aac"].some(ext =>
-            path.toLowerCase().endsWith(ext)
-        );
-    }
-
-    private async getAudioDuration(filePath: string): Promise<number> {
-        return new Promise((resolve, reject) => {
-            const audio = new Audio();
-            audio.src = filePath;
-
-            const cleanup = () => {
-                audio.removeEventListener("loadedmetadata", handleMetadata);
-                audio.removeEventListener("error", handleError);
-            };
-
-            const handleMetadata = () => {
-                cleanup();
-                resolve(Math.round(audio.duration * 1000));
-            };
-
-            const handleError = () => {
-                cleanup();
-                reject(new Error(`Failed to load audio: ${filePath}`));
-            };
-
-            audio.addEventListener("loadedmetadata", handleMetadata);
-            audio.addEventListener("error", handleError);
-        });
+        return [".mp3", ".m4a", ".wav", ".ogg", ".flac", ".aac"].some(ext => path.toLowerCase().endsWith(ext));
     }
 
     private extractFileName(path: string): string {
