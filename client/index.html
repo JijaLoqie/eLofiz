@@ -10,88 +10,7 @@
     <script src="src/index.tsx" type="module"></script>
 </head>
 <body>
-    <div id="modal-edit-root"></div>
-    <template id="preset-template">
-        <div class="preset-card">
-            <img  alt="preset-cover" src="" class="preset-cover"/>
-            <div class="preset-title"></div>
-            <div class="preset-tags">
-            </div>
-        </div>
-    </template>
-    <template id="modal-menu-template">
-        <div id="modal-menu" class="modal">
-            <div class="header">
-                <div class="modal__currentSpace-info">
-                    <span class="modal__currentSpace-label">Текущее пространство:</span>
-                    <span class="modal_currentSpace-name">Main</span>
-                </div>
-            </div>
-            <div class="button" data-type="open-presets">Раскрыть</div>
-        </div>
-    </template>
-
-    <template id ="space-template">
-        <div class="space">
-            <svg style="display: none">
-                <filter
-                        id="glass-distortion"
-                        x="0%"
-                        y="0%"
-                        width="100%"
-                        height="100%"
-                        filterUnits="objectBoundingBox"
-                >
-                    <feTurbulence
-                            type="fractalNoise"
-                            baseFrequency="0.01 0.01"
-                            numOctaves="1"
-                            seed="5"
-                            result="turbulence"
-                    />
-                    <!-- Seeds: 14, 17,  -->
-
-                    <feComponentTransfer in="turbulence" result="mapped">
-                        <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5" />
-                        <feFuncG type="gamma" amplitude="0" exponent="1" offset="0" />
-                        <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5" />
-                    </feComponentTransfer>
-
-                    <feGaussianBlur in="turbulence" stdDeviation="3" result="softMap" />
-
-                    <feSpecularLighting
-                            in="softMap"
-                            surfaceScale="5"
-                            specularConstant="1"
-                            specularExponent="100"
-                            lighting-color="white"
-                            result="specLight"
-                    >
-                        <fePointLight x="-200" y="-200" z="300" />
-                    </feSpecularLighting>
-
-                    <feComposite
-                            in="specLight"
-                            operator="arithmetic"
-                            k1="0"
-                            k2="1"
-                            k3="1"
-                            k4="0"
-                            result="litImage"
-                    />
-
-                    <feDisplacementMap
-                            in="SourceGraphic"
-                            in2="softMap"
-                            scale="150"
-                            xChannelSelector="R"
-                            yChannelSelector="G"
-                    />
-                </filter>
-            </svg>
-            <audio class="space__music">NaN</audio>
-        </div>
-    </template>
+    <div id="root"></div>
     <template id="widget-music-template">
         <div class="music-player">
             <div class="info">
@@ -199,32 +118,5 @@
         <div class="button-group">
         </div>
     </template>
-
-    <template id="items-list-template">
-        <div class="items-list">
-            <div class="wrapper" data-type="button-group"></div>
-            <div class="wrapper" data-type="search"></div>
-            <div class="wrapper" data-type="items"></div>
-        </div>
-    </template>
-
-    <template id="widget-preview-template">
-        <div class="widget-preview">
-            <div class="button"></div>
-        </div>
-    </template>
-
-    <template id="stream-card-template">
-        <div class="stream-card" data-id="">
-            <div class="cover-image">
-                <div class="disk"></div>
-            </div>
-            <div class="card-content">
-                <div class="name"></div>
-                <div class="description"></div>
-            </div>
-        </div>
-    </template>
-
 </body>
 </html>
