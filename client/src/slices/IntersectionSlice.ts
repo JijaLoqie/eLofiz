@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { SpaceMetrics } from "@/modules/core/IntersectionSpaceHandler.ts";
+import type { SpaceMetrics } from "@/components/hooks/useIntersectionSpaceHandler.ts";
 
 interface IntersectionSliceType {
     currentSpace: string,
@@ -22,9 +22,14 @@ export const IntersectionSlice = createSlice({
             state.currentSpace = action.payload;
         },
         updateSpaceMetrics: (state, action: PayloadAction<Record<string, SpaceMetrics>>) => {
-            state.spaceMetrics = action.payload;
+            state.spaceMetrics = {...action.payload};
         }
+    },
+    selectors: {
+        selectCurrentSpace: (state) => state.currentSpace,
     }
 });
+
+export const { selectCurrentSpace } = IntersectionSlice.selectors
 
 export const { setCurrentSpace, updateSpaceMetrics } = IntersectionSlice.actions;

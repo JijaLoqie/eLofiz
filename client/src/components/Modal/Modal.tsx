@@ -6,11 +6,11 @@ import React from "react";
 import { ModalListWidget } from "@/components/Modal/ModalListWidget.tsx";
 
 export const Modal = () => {
-    const modalType = useSelector((state: RootState) => state.modal.modalType);
+    const isOpen = useSelector((state: RootState) => state.modal.isOpen);
     const currentEntityId = useSelector((state: RootState) => state.modal.currentEntityId);
     return (
         <>
-            {modalType === ModalType.LIST && <ModalListWidget />}
+            {isOpen && <ModalListWidget />}
             {currentEntityId && <ModalEditWidget />}
         </>
     );

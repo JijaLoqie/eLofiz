@@ -3,16 +3,23 @@ import React, { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/index.tsx";
 import { StreamCardList } from "@/components/Stream/StreamCardList.tsx";
+import { PresetCardList } from "@/components/Preset/PresetCardList.tsx";
+import { WidgetCardList } from "@/components/Widget/WidgetCardList.tsx";
+import { selectCurrentSpace } from "@/slices/IntersectionSlice.ts";
 
 export const ModalListWidget = () => {
     const entityType = useSelector((state: RootState) => state.modal.entityType);
-    const currentSpace = useSelector((state: RootState) => state.intersection.currentSpace);
+    const currentSpace = useSelector((state: RootState) => selectCurrentSpace(state));
     const [extended, setExtended] = useState(false);
 
     const renderList = () => {
         switch (entityType) {
             case EntityType.WIDGETS:
+                return <WidgetCardList />
             case EntityType.PRESETS:
+                return (
+                    <PresetCardList />
+                )
             case EntityType.STREAMS:
                 return (
                     <StreamCardList />
@@ -35,7 +42,7 @@ export const ModalListWidget = () => {
                 </div>
             </div>
             {renderList()}
-            <div className="button" onClick={handleToggleOpen}>Раскрыть</div>
+            <div className="button" data-type="wide-up" onClick={handleToggleOpen}>Раскрыть</div>
         </div>
-        )
-        }
+    )
+}

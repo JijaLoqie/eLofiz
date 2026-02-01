@@ -16,6 +16,8 @@
 .widget {
     --x: 10px;
     --y: 10px;
+    min-width: 100px;
+    min-height: 100px;
     position: absolute;
     top: var(--y);
     left: var(--x);

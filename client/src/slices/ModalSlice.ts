@@ -28,13 +28,12 @@ export const ModalSlice = createSlice({
         },
         closeEditor: (state) => {
             state.currentEntityId = "";
-            state.entityType = "";
+            // state.entityType = "";
+            state.modalType = ModalType.LIST;
         },
         toggleItemsList: (state, action: PayloadAction<EntityType>) => {
-            console.log("TOGGLE", state.currentEntityId);
             if (state.currentEntityId) return;
             const newType = action.payload;
-            console.log("OPENING", newType)
             if (state.entityType !== newType) {
                 state.entityType = newType;
                 state.modalType = ModalType.LIST;

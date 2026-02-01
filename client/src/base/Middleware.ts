@@ -1,7 +1,6 @@
 import type {IEvents} from "./index.ts";
-import type {AppData} from "../app/appData.ts";
 
 export abstract class Middleware {
-    protected constructor(protected readonly events: IEvents, protected readonly store: AppData) {}
+    protected constructor(protected readonly events: IEvents) {}
     abstract register(): void;
 }

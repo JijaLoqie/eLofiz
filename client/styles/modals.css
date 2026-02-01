@@ -31,7 +31,7 @@
 .modal_currentSpace-name {
     color: red;
 }
-.button[data-type='open-presets'] {
+.button[data-type='wide-up'] {
     transition: all 0.3s ease-in;
     justify-content: center;
     --button-hover-bg: linear-gradient(#00000000, #ffffff44);
