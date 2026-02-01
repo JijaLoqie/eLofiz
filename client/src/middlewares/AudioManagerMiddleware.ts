@@ -1,14 +1,13 @@
-import type {IEvents} from "../base";
-import type {AppData} from "../app/appData.ts";
+import type {IEvents} from "@/base";
 import {Middleware} from "../base/Middleware.ts";
-import type {ChangeIntersectionAction, CreateSpaceAction} from "../actions.ts";
-import type {SpaceMetrics} from "../modules/core/IntersectionSpaceHandler.ts";
+import type {ChangeIntersectionAction} from "../actions.ts";
 import {webAudioApi} from "../modules/WebAudioApi.ts";
 import {spaceApi} from "../modules/core/SpaceApi.ts";
+import type { SpaceMetrics } from "@/components/hooks/useIntersectionSpaceHandler.ts";
 
 export class AudioManagerMiddleware extends Middleware {
-    constructor(events: IEvents, store: AppData) {
-        super(events, store);
+    constructor(events: IEvents) {
+        super(events);
     }
     override register() {
         this.events.on("space-created", (data: { spaceId: string }) => {

@@ -158,36 +158,6 @@ class ImageSelectionWidget extends Component<IBackgroundWidget> {
             }
         }
     }
-
-    public getState(): IImageSelectionWidgetState {
-        return {
-            images: Array.from(this.selectedImages.values()),
-            selectedImageId: this.selectedImageId,
-            isPinned: this.pinCheckbox.checked,
-        };
-    }
-
-    public setState(state: IImageSelectionWidgetState): void {
-        this.selectedImages.clear();
-        state.images.forEach((image) => {
-            this.selectedImages.set(image.id, image);
-        });
-
-        this.pinCheckbox.checked = state.isPinned;
-
-        // Apply pinned class
-        this.updatePinned();
-
-        // Set selected image and update background
-        if (state.selectedImageId && this.selectedImages.has(state.selectedImageId)) {
-            this.selectImage(state.selectedImageId);
-        } else if (this.selectedImages.size > 0) {
-            const firstImageId = this.selectedImages.keys().next().value;
-            this.selectImage(firstImageId || "");
-        }
-
-        this.renderGrid();
-    }
 }
 
 export default ImageSelectionWidget;

@@ -5,12 +5,14 @@ import type { RootState } from "@/index.tsx";
 import type { IStream } from "@/types.ts";
 
 export const StreamCardList = () => {
-    const streams = useSelector((state: RootState): Record<string, IStream> => selectStreams(state))
+    const streams = useSelector((state: RootState): Record<string, IStream> => selectStreams(state));
     return (
-        <div className="stream-cards-container">
-            {Object.keys(streams).map((streamId) => (
-                <StreamCard key={streamId} streamId={streamId} />
-            ))}
+        <div className="items-list">
+            <div data-type="items">
+                {Object.keys(streams).map((streamId) => (
+                    <StreamCard key={streamId} streamId={streamId} />
+                ))}
+            </div>
         </div>
     );
 };

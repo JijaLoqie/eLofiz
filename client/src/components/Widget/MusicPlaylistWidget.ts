@@ -1,4 +1,4 @@
-import { type IEvents, View } from "../../base";
+import { Component, type IEvents, View } from "../../base";
 import { cloneTemplate, ensureElement } from "../../utils";
 import type { IMusicPlaylistWidget } from "../../types.ts";
 import { spaceApi } from "../../modules/core/SpaceApi.ts";
@@ -6,7 +6,7 @@ import {webAudioApi} from "../../modules/WebAudioApi.ts";
 
 const musicWidgetTemplate = ensureElement<HTMLTemplateElement>("#widget-music-template");
 
-class MusicPlaylistWidget extends View<IMusicPlaylistWidget> {
+class MusicPlaylistWidget extends Component<IMusicPlaylistWidget> {
     _spaceId: string;
     audioNode: HTMLAudioElement;
     private currentTrack: number = 0;
@@ -20,8 +20,8 @@ class MusicPlaylistWidget extends View<IMusicPlaylistWidget> {
         "/audio/phonk.m4a",
     ];
 
-    constructor(events: IEvents, spaceId: string) {
-        super(cloneTemplate(musicWidgetTemplate), events);
+    constructor(spaceId: string) {
+        super(cloneTemplate(musicWidgetTemplate));
         this._spaceId = spaceId;
         this.audioNode = spaceApi.getMusicNode(this._spaceId);
         this.setupAudio();
