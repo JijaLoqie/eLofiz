@@ -13,14 +13,12 @@ export interface IBaseWidget {
 
 
 export interface IWidget extends IObject {
-    content: HTMLElement;
-    ruName: string;
+    title: string;
     preview: string;
-    builder: WidgetConstructor;
     type: WidgetType;
 }
 
-export interface ISpace {
+export interface ISpace extends IObject {
     name: string;
     background: string;
     fixed: boolean;
@@ -113,4 +111,9 @@ export enum StreamType {
 export interface IStreamPart extends IObject {
     title: string;
     type: StreamType;
+}
+export interface WidgetInstance extends IObject {
+    spaceId: string;
+    widgetId: string;
+    position: { x: number; y: number };
 }
