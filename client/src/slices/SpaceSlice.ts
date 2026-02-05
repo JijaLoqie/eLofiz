@@ -11,12 +11,24 @@ interface SpaceSliceState {
 
 const initialState: SpaceSliceState = {
     items: [
-        {id: "space-1", name: "main", background: 'startBackground.jpeg', fixed: false, widgets: []},
-        {id: "space-2", name: "ambient", background: 'back4.gif', fixed: true, widgets: []},
-        {id: "space-3", name: "work", background: 'startWorkBackground.gif', fixed: true, widgets: []},
-        {id: "space-4", name: "Dark", background: 'back6.png', fixed: false, widgets: []},
-        {id: "space-5", name: "Phonk", background: 'back3.jpg', fixed: true, widgets: []},
-        {id: "space-6", name: "Knight", background: 'back5.jpg', fixed: true, widgets: []},
+        {id: "space-1", name: "main", currentBackground: 'start', fixed: false, widgets: [], images: {"start": {
+            id: "start", imageUrl:"/images/startBackground.jpeg"
+                }}},
+        {id: "space-2", name: "ambient", currentBackground: 'start', fixed: true, widgets: [], images: {"start": {
+            id: "start", imageUrl:"/images/back4.gif"
+                }}},
+        {id: "space-3", name: "work", currentBackground: 'start', fixed: true, widgets: [], images: {"start": {
+            id: "start", imageUrl:"/images/startWorkBackground.gif"
+                }}},
+        {id: "space-4", name: "Dark", currentBackground: 'start', fixed: false, widgets: [], images: {"start": {
+            id: "start", imageUrl:"/images/back6.png"
+                }}},
+        {id: "space-5", name: "Phonk", currentBackground: 'start', fixed: true, widgets: [], images: {"start": {
+            id: "start", imageUrl:"/images/back3.jpg"
+                }}},
+        {id: "space-6", name: "Knight", currentBackground: 'start', fixed: true, widgets: [], images: {"start": {
+            id: "start", imageUrl:"/images/back5.jpg"
+                }}},
     ],
     widgetsOnSpace: {},
 }
@@ -76,6 +88,14 @@ export const selectSpace = createSelector(
         if (!space) throw new Error(`Unknown space id: ${id}, ${spaces.map(space => space.id)}`);
         return space;
     },
+);
+
+export const selectImageInfo = createSelector(
+    [selectSpace],
+    (space) => ({
+        currentBackground: space.currentBackground,
+        images: space.images
+    })
 );
 export const selectWidgetsOnSpace = createSelector([
         (state: RootState) => state.spaces.widgetsOnSpace,

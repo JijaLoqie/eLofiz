@@ -52,40 +52,6 @@
         </div>
     </template>
 
-    <template id="widget-image-selection-template">
-        <div class="image-widget">
-            <div class="image-widget__section">
-                <h3 class="image-widget__title">Выберите изображения</h3>
-                <div class="image-widget__grid" data-selected-images></div>
-                <button class="button" data-type="add-images" data-add-images type="button" aria-label="Add images">
-                    <span class="image-widget__add-icon">+</span>
-                    Добавить изображения
-                </button>
-                <input
-                        type="file"
-                        multiple
-                        accept="image/*"
-                        class="image-widget__file-input"
-                        data-file-input
-                        hidden
-                />
-            </div>
-
-            <div class="image-widget__section">
-                <h3 class="image-widget__title">Параметры</h3>
-                <div class="image-widget__options">
-                    <label data-type="pin-images" class="checkbox">
-                        <input
-                                type="checkbox"
-                                class="image-widget__checkbox-input"
-                                data-pin-images
-                        />
-                        <span class="image-widget__checkbox-label">Закрепить</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-    </template>
 
     <template id="widget-audio-visualizer-template">
         <div class="audio-visualizer resizable">

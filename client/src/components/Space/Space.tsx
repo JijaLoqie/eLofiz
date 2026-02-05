@@ -13,12 +13,12 @@ export const Space = (props: SpaceProps) => {
     const widgets = useSelector((state: RootState): WidgetInstance[] => selectWidgetsOnSpace(state, `${props.spaceId}`));
 
 
-    const { id, background, fixed } = spaceInfo;
+    const { id, currentBackground, images, fixed } = spaceInfo;
     return (
         <div
             id={`${id}`}
             className={`space ${fixed ? "space--fixed" : ""}`}
-            style={{backgroundImage: `url(../images/${background})`}}
+            style={{backgroundImage:`url('${images[currentBackground].imageUrl}')`}}
         >
             <audio className="space__music">NaN</audio>
             {widgets.map((widInst) => <Widget widgetInstance={widInst} key={widInst.id} />)}

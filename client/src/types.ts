@@ -1,4 +1,7 @@
-import { Component } from "./base";
+export type ImageInfo = {
+    id: string;
+    imageUrl: string;
+}
 
 export enum WidgetType {
     MUSIC = "Музыка",
@@ -20,7 +23,8 @@ export interface IWidget extends IObject {
 
 export interface ISpace extends IObject {
     name: string;
-    background: string;
+    currentBackground: string;
+    images: Record<string, ImageInfo>
     fixed: boolean;
     widgets: string[];
 }
@@ -66,7 +70,6 @@ export interface IMusicPlaylistWidget extends IWidget {
     artist: string;
 }
 
-type WidgetConstructor = (spaceId: string) => Component<IWidget>;
 export interface IAudioVisualizerWidget extends IWidget {
 }
 
