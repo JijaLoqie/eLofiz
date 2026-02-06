@@ -1,15 +1,16 @@
-@import "standart.css";
-@import "modals.css";
-@import "modal-edit.css";
-@import "buttons.css";
-@import "widgets.css";
-@import "presets.css";
-@import "streams.css";
-@import "checkboxes.css";
-@import "text-field.css";
-@import "items-list.css";
-@import "button-group.css";
-@import "resizable.css";
+@import "../styles/standart.css";
+@import "../styles/modals.css";
+@import "../styles/modal-edit.css";
+@import "../styles/buttons.css";
+@import "../styles/widgets.css";
+@import "../styles/presets.css";
+@import "../styles/streams.css";
+@import "../styles/checkboxes.css";
+@import "../styles/text-field.css";
+@import "../styles/items-list.css";
+@import "../styles/button-group.css";
+@import "../styles/resizable.css";
+@import "tailwindcss";
 
 
 .space {
@@ -27,3 +28,5 @@
 .space--fixed {
     background-attachment: fixed;
 }
+
+

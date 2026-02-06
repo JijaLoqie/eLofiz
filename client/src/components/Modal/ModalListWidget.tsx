@@ -10,7 +10,6 @@ import { selectCurrentSpace } from "@/slices/IntersectionSlice.ts";
 export const ModalListWidget = () => {
     const entityType = useSelector((state: RootState) => state.modal.entityType);
     const currentSpace = useSelector((state: RootState) => selectCurrentSpace(state));
-    const [extended, setExtended] = useState(false);
 
     const renderList = () => {
         switch (entityType) {
@@ -29,20 +28,18 @@ export const ModalListWidget = () => {
         }
     };
 
-    const handleToggleOpen = useCallback((() => {
-        setExtended(old => !old)
-    }), [])
 
     return (
-        <div id="modal-menu" className={`modal ${extended ? "open-preset" : ""}`}>
+        <div id="modal-menu" className="modal">
             <div className="header">
                 <div className="modal__currentSpace-info">
-                    <span className="modal__currentSpace-label">Текущее пространство:</span>
+                    <span className="modal__currentSpace-label">Текущее пространство: </span>
                     <span className="modal_currentSpace-name">{currentSpace}</span>
                 </div>
             </div>
-            {renderList()}
-            <div className="button" data-type="wide-up" onClick={handleToggleOpen}>Раскрыть</div>
+            <div style={{paddingTop: "16px"}}>
+                {renderList()}
+            </div>
         </div>
     )
 }

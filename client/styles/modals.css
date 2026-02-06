@@ -9,7 +9,8 @@
     border-radius: 16px;
     padding: 24px;
     width: calc(100vw - 20px);
-    height: 50%;
+    height: calc(100vh - 20px);
+    overflow: auto;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
     background-image: linear-gradient(#ff6b6b99, #00000099);
@@ -19,7 +20,6 @@
     filter: url(#glass-distortion);
     outline: solid rgba(255, 255, 255, 0.2);
     text-align: center;
-    overflow: hidden;
     transition: height 0.3s;
 }
 
@@ -30,21 +30,4 @@
 }
 .modal_currentSpace-name {
     color: red;
-}
-.button[data-type='wide-up'] {
-    transition: all 0.3s ease-in;
-    justify-content: center;
-    --button-hover-bg: linear-gradient(#00000000, #ffffff44);
-    --button-bg: linear-gradient(#00000011, #ffffff22);
-    --button-border-width: 0;
-    position: absolute;
-    width: 100%;
-    bottom: 0;
-    left: 0;
-    z-index: 101;
-}
-
-.open-preset {
-    height: calc(100vh - 20px);
-    overflow: auto;
 }

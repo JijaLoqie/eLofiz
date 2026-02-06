@@ -1,6 +1,6 @@
-@import "background.css";
-@import "musicPlayer.css";
-@import "audio-visualizer.css";
+@import "../styles/background.css";
+@import "../styles/musicPlayer.css";
+@import "../styles/audio-visualizer.css";
 
 /* Widget Header */
 .widget__header {

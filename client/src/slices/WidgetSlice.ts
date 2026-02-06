@@ -11,20 +11,20 @@ const initialState: WidgetSliceState = {
         "basic player": {
             id: "basic player",
             title: "Базовый аудио плеер",
-            preview: "",
+            preview: "music_player.png",
             type: WidgetType.MUSIC,
 
         },
         "basic redactor": {
             id: "basic redactor",
             title: "Базовый редактор фона",
-            preview: "",
+            preview: "background_setting.png",
             type: WidgetType.BACKGROUND,
         },
         "basic visualizer": {
             id: "basic visualizer",
             title: "Базовый визуализатор",
-            preview: "",
+            preview: "audio_visualizer.png",
             type: WidgetType.AUDIO_VISUALIZER,
 
         },

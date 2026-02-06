@@ -1,4 +1,4 @@
-@import "stream-editor/modal-edit-stream.css";
+@import "../styles/stream-editor/modal-edit-stream.css";
 
 .modal#modal-edit {
     background-image: linear-gradient(#6BC6FF99, #00000099);
