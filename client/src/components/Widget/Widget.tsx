@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/index.tsx";
 import { type WidgetInstance, WidgetType } from "@/types.ts";
-import { type MouseEventHandler, type ReactNode, useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
 import { selectWidget } from "@/slices/WidgetSlice.ts";
 import { useDragHandler } from "@/components/hooks/useDragHandler.ts";
 import { removeWidget } from "@/slices/SpaceSlice.ts";
