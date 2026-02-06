@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/index.tsx";
 import { type WidgetInstance, WidgetType } from "@/types.ts";
-import { type ReactNode, useCallback, useRef } from "react";
+import { type MouseEventHandler, type ReactNode, useCallback, useRef } from "react";
 import { selectWidget } from "@/slices/WidgetSlice.ts";
 import { useDragHandler } from "@/components/hooks/useDragHandler.ts";
 import { removeWidget } from "@/slices/SpaceSlice.ts";
@@ -18,8 +18,9 @@ interface WidgetProps {
 }
 
 export const Widget = (props: WidgetProps) => {
+    const {widgetId, spaceId} = props.widgetInstance;
     const currentSpace = useSelector((state: RootState) => selectCurrentSpace(state));
-    const widgetInfo = useSelector((state: RootState) => selectWidget(state, props.widgetInstance.widgetId));
+    const widgetInfo = useSelector((state: RootState) => selectWidget(state, widgetId));
     const headerRef = useRef<HTMLDivElement>(null);
     const rootRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
@@ -40,11 +41,11 @@ export const Widget = (props: WidgetProps) => {
     const renderWidget = useCallback(() => {
         switch (widgetInfo.type) {
             case WidgetType.BACKGROUND:
-                return <BackgroundWidget spaceId={props.widgetInstance.spaceId} />
+                return <BackgroundWidget spaceId={spaceId} />
             case WidgetType.MUSIC:
-                return <PlayerWidget spaceId={props.widgetInstance.spaceId} />
+                return <PlayerWidget spaceId={spaceId} />
             case WidgetType.AUDIO_VISUALIZER:
-                return <AudioVisualizerWidget />
+                return <AudioVisualizerWidget spaceId={spaceId} />
         }
     }, [widgetInfo.type, widgetInfo.id]);
 
@@ -58,7 +59,11 @@ export const Widget = (props: WidgetProps) => {
     return (
         <div ref={rootRef} className="widget liquidGlass-effect resizable-wrapper">
             <div ref={headerRef} className="widget__header">
-                <button className="button" data-type="close" aria-label="Close widget" onClick={handleClose}>
+                <button
+                        className="button"
+                        data-type="close"
+                        aria-label="Close widget"
+                        onClick={handleClose}>
                     &times;
                 </button>
             </div>

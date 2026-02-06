@@ -9,7 +9,7 @@ export const useAudioNode = (props: {spaceId: string, streamId: string}) => {
     const {spaceId, streamId} = props;
     const stream = useSelector((state: RootState): IStream | undefined => selectStream(state, streamId))
     const audioNode = useRef(ensureElement<HTMLAudioElement>(`#${spaceId} audio`));
-    const [isPlaying, setPlaying] = useState(false);
+    const [isPlaying, setPlaying] = useState(!audioNode.current.paused);
     const [currentTime, _setCurrentTime] = useState(audioNode.current.currentTime);
     const [volume, _setVolume] = useState(audioNode.current.volume);
 
@@ -18,7 +18,7 @@ export const useAudioNode = (props: {spaceId: string, streamId: string}) => {
 
 
     useEffect(() => {
-        if (!audioNode.current) return;
+        if (!audioNode.current || audioNode.current.src) return;
         audioNode.current.src = stream?.audios[0]!
     }, [audioNode.current, stream?.audios]);
 

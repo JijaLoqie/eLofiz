@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { app } from "./app/LofiApp.ts";
 import { EntityType, ModalType } from "./types.ts";
 import { appStore } from "@/app/appStore.ts";
 import { ensureElement } from "@/utils";

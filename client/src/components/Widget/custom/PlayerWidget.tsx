@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/index.tsx";
 import { selectSpace } from "@/slices/SpaceSlice.ts";
-import { useAudioNode } from "@/components/hooks/useAudioNode.tsx";
+import { useAudioNode } from "@/components/hooks/useAudioNode.ts";
 import type { IStream } from "@/types.ts";
 import { selectStream } from "@/slices/StreamSlice.ts";
 import { useCallback, useMemo } from "react";

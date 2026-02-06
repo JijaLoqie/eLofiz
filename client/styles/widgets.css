@@ -53,7 +53,7 @@
 .liquidGlass-effect {
     height: fit-content;
     box-sizing: border-box;
-    transition: outline 0.2s;
+    outline: solid rgba(255, 255, 255, 0);
     padding: 4px;
     .button[data-type="close"] {
         color: transparent;
@@ -62,6 +62,8 @@
         padding: 0;
         margin-right: 10px;
     }
+
+    transition: outline 0.2s;
 }
 
 .liquidGlass-effect:hover {

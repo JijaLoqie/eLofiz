@@ -15,6 +15,7 @@ export const useDragHandler = (
     const offsetRef = useRef({ x: 0, y: 0 });
 
     const handlePointerDown = useCallback((e: PointerEvent) => {
+        if (e.target !== selectElementRef.current) return;
         isDraggingRef.current = true;
 
         const selectRect = (e.target as HTMLElement).getBoundingClientRect();
