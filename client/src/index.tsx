@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { app } from "./app/LofiApp.ts";
 import { EntityType, ModalType } from "./types.ts";
-import { AudioManagerMiddleware } from "./middlewares/AudioManagerMiddleware.ts";
 import { appStore } from "@/app/appStore.ts";
 import { ensureElement } from "@/utils";
 import { Provider } from "react-redux";
@@ -31,7 +30,6 @@ modalEditRoot.render(
     </Provider>
 );
 
-app.use(AudioManagerMiddleware);
 
 
 

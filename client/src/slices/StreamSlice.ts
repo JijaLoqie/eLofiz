@@ -18,7 +18,7 @@ const initialSlice: StreamSliceState = {
             id: "stream-link1",
             name: "stream 1",
             audios: ["audio/ambient.m4a"],
-            breakpoints: [10,20,30,40],
+            breakpoints: [10000,20000,30000,40000],
             cover: "images/back4.gif",
         },
         "stream-link2": {
@@ -48,7 +48,6 @@ export const StreamSlice = createSlice({
         },
         removeStreamParts: (state, action: PayloadAction<{streamId: string, partId: string}>) => {
             const {streamId, partId} = action.payload;
-            console.log(`REMOVING ${partId} from ${streamId}`);
             state.items[streamId].audios = state.items[streamId].audios.filter(audioLink => audioLink !== partId);
         }
     },

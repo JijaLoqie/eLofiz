@@ -1,6 +1,6 @@
 import { FieldType, type ISpace, EntityType, type WidgetType, ModalType } from "./types.ts";
-import type {SpaceMetrics} from "./modules/core/IntersectionSpaceHandler.ts";
 import { createAction } from "@reduxjs/toolkit";
+import type { SpaceMetrics } from "@/components/hooks/useIntersectionSpaceHandler.ts";
 
 export interface AddWidgetAction {
     widgetType: WidgetType;
@@ -33,3 +33,9 @@ export interface InputAction {
     value: string;
     type: FieldType;
 }
+
+export const registerAudio = createAction<{
+    spaceId: string,
+}>("registerAudio");
+
+export const playBeep = createAction("playBeep");

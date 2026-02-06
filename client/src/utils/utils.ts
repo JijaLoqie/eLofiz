@@ -142,3 +142,38 @@ export function uuid(): string {
     });
 }
 
+export function trailingThrottle(cb: (...args: any[]) => void, delay: number = 600) {
+    let isThrottled = false
+    let lastEvent: {
+        context: any,
+        args: any[]
+    } | null = null;
+
+    function resetThrottle() {
+        if (lastEvent) {
+            cb.apply(lastEvent.context, lastEvent.args)
+            lastEvent = null
+            setTimeout(resetThrottle, delay)
+        } else {
+            isThrottled = false
+        }
+    }
+
+    return (...args: any[]) => {
+        if (isThrottled) {
+            lastEvent = {
+                args,
+                // @ts-ignore
+                context: this,
+            }
+            return
+        }
+
+        // @ts-ignore
+        cb.apply(this, args)
+        isThrottled = true
+
+        setTimeout(resetThrottle, delay)
+    }
+}
+

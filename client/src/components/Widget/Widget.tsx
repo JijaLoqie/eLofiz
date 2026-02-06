@@ -42,7 +42,7 @@ export const Widget = (props: WidgetProps) => {
             case WidgetType.BACKGROUND:
                 return <BackgroundWidget spaceId={props.widgetInstance.spaceId} />
             case WidgetType.MUSIC:
-                return <PlayerWidget />
+                return <PlayerWidget spaceId={props.widgetInstance.spaceId} />
             case WidgetType.AUDIO_VISUALIZER:
                 return <AudioVisualizerWidget />
         }

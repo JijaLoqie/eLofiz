@@ -13,22 +13,28 @@ const initialState: SpaceSliceState = {
     items: [
         {id: "space-1", name: "main", currentBackground: 'start', fixed: false, widgets: [], images: {"start": {
             id: "start", imageUrl:"/images/startBackground.jpeg"
-                }}},
+                }}, streamId: "stream-link1",
+        },
         {id: "space-2", name: "ambient", currentBackground: 'start', fixed: true, widgets: [], images: {"start": {
             id: "start", imageUrl:"/images/back4.gif"
-                }}},
+                }}, streamId: "stream-link2",
+        },
         {id: "space-3", name: "work", currentBackground: 'start', fixed: true, widgets: [], images: {"start": {
             id: "start", imageUrl:"/images/startWorkBackground.gif"
-                }}},
+                }}, streamId: "stream-link3",
+        },
         {id: "space-4", name: "Dark", currentBackground: 'start', fixed: false, widgets: [], images: {"start": {
             id: "start", imageUrl:"/images/back6.png"
-                }}},
+                }}, streamId: "stream1",
+        },
         {id: "space-5", name: "Phonk", currentBackground: 'start', fixed: true, widgets: [], images: {"start": {
             id: "start", imageUrl:"/images/back3.jpg"
-                }}},
+                }}, streamId: "stream-link2",
+        },
         {id: "space-6", name: "Knight", currentBackground: 'start', fixed: true, widgets: [], images: {"start": {
             id: "start", imageUrl:"/images/back5.jpg"
-                }}},
+                }}, streamId: "stream-link3",
+        },
     ],
     widgetsOnSpace: {},
 }

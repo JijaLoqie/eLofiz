@@ -20,7 +20,6 @@ export const useIntersectionSpaceHandler = () => {
 
     const [currentSpace, setCurrentSpace] = useState<number>(0);
     const [currentSpaceName, setCurrentSpaceName] = useState<string>('');
-    const [currentSpaceInfo, setCurrentSpaceInfo] = useState<SpaceMetrics>();
     const [spaceMetrics, setSpaceMetrics] = useState<Record<string, SpaceMetrics>>({});
 
     const updateMetrics = useCallback(() => {
@@ -39,40 +38,6 @@ export const useIntersectionSpaceHandler = () => {
         setSpaceMetrics(metrics);
     }, []);
 
-    const setupIntersectionObserver = useCallback(() => {
-        const options: IntersectionObserverInit = {
-            root: null,
-            rootMargin: '0px',
-            threshold: Array.from({ length: 101 }, (_, i) => i / 100),
-        };
-
-        intersectionObserverRef.current = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                spaceMetricsRef.current.set(entry.target as HTMLElement, entry.intersectionRatio);
-            });
-
-            let maxRatio = 0;
-            let maxIndex = 0;
-
-            spacesRef.current.forEach((space, index) => {
-                const ratio = spaceMetricsRef.current.get(space) || 0;
-                if (ratio > maxRatio) {
-                    maxRatio = ratio;
-                    maxIndex = index;
-                }
-            });
-
-            if (currentSpace !== maxIndex && maxRatio > 0) {
-                setCurrentSpace(maxIndex);
-                setCurrentSpaceName(spacesRef.current[maxIndex]?.id || '');
-                updateMetrics();
-            }
-        }, options);
-
-        spacesRef.current.forEach(space =>
-            intersectionObserverRef.current?.observe(space)
-        );
-    }, [currentSpace, updateMetrics]);
 
     useEffect(() => {
         if (spaces.length === 0) return;

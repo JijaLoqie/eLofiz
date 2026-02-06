@@ -62,10 +62,6 @@ export class WebAudioApi {
         return mediaElementSource;
     }
 
-    // Get a specific media element source
-    getMediaElementSource(spaceId: string): MediaElementAudioSourceNode | undefined {
-        return this.mediaElementSources.get(spaceId);
-    }
 
     // Get a specific analyser
     getAnalyser(spaceId: string): AnalyserNode {
@@ -74,14 +70,6 @@ export class WebAudioApi {
             throw new Error(`No analyser found for space ${spaceId}`);
         }
         return result;
-    }
-
-    // Remove a media element source
-    unregisterMediaElement(spaceId: string): boolean {
-        this.mediaElementSources.delete(spaceId);
-        this.gainNodes.delete(spaceId);
-        this.analysers.delete(spaceId);
-        return true;
     }
 
     setVolume(spaceId: string, intersectionRatio: number) {

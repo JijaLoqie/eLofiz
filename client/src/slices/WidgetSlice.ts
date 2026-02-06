@@ -1,8 +1,5 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import { type IWidget, WidgetType } from "@/types.ts";
-import { cloneTemplate } from "@/utils";
-import MusicPlaylistWidget from "@/components/Widget/MusicPlaylistWidget.ts";
-import { AudioVisualizerWidget } from "@/components/Widget/AudioVisualizerWidget.ts";
 import type { RootState } from "@/index.tsx";
 
 interface WidgetSliceState {

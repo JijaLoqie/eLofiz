@@ -9,11 +9,6 @@ export enum WidgetType {
     AUDIO_VISUALIZER = "Аудио полоски",
 }
 
-export interface IBaseWidget {
-    spaceId: string;
-    content: HTMLElement;
-}
-
 
 export interface IWidget extends IObject {
     title: string;
@@ -27,6 +22,7 @@ export interface ISpace extends IObject {
     images: Record<string, ImageInfo>
     fixed: boolean;
     widgets: string[];
+    streamId: string;
 }
 
 export enum EntityType {
