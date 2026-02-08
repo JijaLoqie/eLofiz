@@ -1,9 +1,10 @@
-import React, { useState, useCallback, useRef } from "react";
-import { EntityType, type IModalEditWidget } from "@/types.ts";
-import StreamEditor from "@/components/Stream/StreamEditor.tsx";
+import React, { useState, useCallback, useRef, useEffect, createContext } from "react";
+import { EntityType, type IModalEditWidget, type IPreset, type IStream, type IWidget } from "@/types.ts";
+import StreamEditor from "@/components/Stream/StreamEditor/StreamEditor.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { closeEditor } from "@/slices/ModalSlice.ts";
 import type { RootState } from "@/index.tsx";
+import { selectStream, setEditingStream } from "@/slices/StreamSlice.ts";
 
 interface ModalEditWidgetProps {
 }
@@ -13,6 +14,16 @@ export const ModalEditWidget: React.FC<ModalEditWidgetProps> = () => {
     const currentType = useSelector((state: RootState) => state.modal.entityType);
     const currentEntityId = useSelector((state: RootState) => state.modal.currentEntityId)
     const dispatch = useDispatch();
+
+    const stream = useSelector((state: RootState) =>
+        selectStream(state, currentEntityId)
+    );
+
+    useEffect(() => {
+        if (stream !== undefined) {
+            dispatch(setEditingStream(stream))
+        }
+    }, [dispatch, stream]);
 
     const handleCloseClick = useCallback(() => {
         dispatch(closeEditor());

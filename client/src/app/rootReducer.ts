@@ -6,6 +6,7 @@ import { PresetSlice } from "@/slices/PresetSlice.ts";
 import { WidgetSlice } from "@/slices/WidgetSlice.ts";
 import { SpaceSlice } from "@/slices/SpaceSlice.ts";
 import { AudioSlice } from "@/slices/AudioSlice.ts";
+import { baseApi } from "@/utils/api";
 
 export const rootReducer = combineReducers({
     [StreamSlice.name]: StreamSlice.reducer,
@@ -15,5 +16,6 @@ export const rootReducer = combineReducers({
     [WidgetSlice.name]: WidgetSlice.reducer,
     [SpaceSlice.name]: SpaceSlice.reducer,
     [AudioSlice.name]: AudioSlice.reducer,
+    [baseApi.reducerPath]: baseApi.reducer,
 });
 

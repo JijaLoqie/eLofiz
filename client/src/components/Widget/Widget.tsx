@@ -23,20 +23,19 @@ export const Widget = (props: WidgetProps) => {
     const widgetInfo = useSelector((state: RootState) => selectWidget(state, widgetId));
     const headerRef = useRef<HTMLDivElement>(null);
     const rootRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
 
-    // @ts-ignore
-    useDragHandler(headerRef, rootRef, {
-        onDragStart: (e) => {
-            // console.log('Drag started');
-        },
-        onDrag: (e, offsetX, offsetY) => {
-            // Optional: track dragging
-        },
-        onDragEnd: (e) => {
-            // console.log('Drag ended');
-        },
-    });
+    useDragHandler(
+        {
+            // @ts-ignore
+            selectElementRef: headerRef,
+            // @ts-ignore
+            dragElementRef: rootRef,
+            options: {
+            }
+        }
+    );
 
     const renderWidget = useCallback(() => {
         switch (widgetInfo.type) {

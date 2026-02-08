@@ -49,7 +49,6 @@ export const useAudioNode = (props: {spaceId: string, streamId: string}) => {
             _setCurrentTime(audioNode.current.currentTime);
         }
         audioNode.current.onended = (e) => {
-            setCurrentTime(0);
             setPlaying(false);
         }
     }, [audioNode.current]);
@@ -67,7 +66,7 @@ export const useAudioNode = (props: {spaceId: string, streamId: string}) => {
         if (!audioNode.current) return;
         const breakpoints = stream?.breakpoints || [];
         let i = 0;
-        while (i < breakpoints.length && breakpoints[i] < currentTime * 1000) i++;
+        while (i < breakpoints.length && breakpoints[i] <= currentTime * 1000) i++;
         if (i === breakpoints.length) {
             setCurrentTime(audioNode.current.duration);
         } else {

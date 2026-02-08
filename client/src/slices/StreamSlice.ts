@@ -1,9 +1,9 @@
-import { createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { type IStream, type IStreamPart, StreamType } from "@/types.ts";
+import { createAsyncThunk, createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { type IStream, StreamType } from "@/types.ts";
 import type { RootState } from "@/index.tsx";
-import * as stream from "node:stream";
+import { getAudioDuration } from "@/modules/StreamEditor";
 
-interface StreamSliceState {items: Record<string, IStream>}
+interface StreamSliceState {items: Record<string, IStream>, editingStream: IStream | null}
 
 const initialSlice: StreamSliceState = {
     items: {
@@ -35,29 +35,44 @@ const initialSlice: StreamSliceState = {
             breakpoints: [10,20,30,40],
             cover: "images/back6.png",
         }
-    }
+    },
+    editingStream: null
 }
 
 export const StreamSlice = createSlice({
-    name: "StreamSlice",
+    name: "stream",
     initialState: initialSlice,
     reducers: {
-        updateStream: (state, action: PayloadAction<IStream>) => {
-            const changedItem = action.payload;
-            Object.assign(state.items[changedItem.id], changedItem);
+        saveStream: (state) => {
+            if (!state.editingStream) return;
+            Object.assign(state.items[ state.editingStream.id ], state.editingStream);
+            state.editingStream = null;
         },
-        removeStreamParts: (state, action: PayloadAction<{streamId: string, partId: string}>) => {
-            const {streamId, partId} = action.payload;
-            state.items[streamId].audios = state.items[streamId].audios.filter(audioLink => audioLink !== partId);
+        removeStreamParts: (state, action: PayloadAction<{ streamId: string, partId: string }>) => {
+            const {
+                streamId,
+                partId
+            } = action.payload;
+            state.items[ streamId ].audios = state.items[ streamId ].audios.filter(audioLink => audioLink !== partId);
+        },
+        setEditingStream: (state, action: PayloadAction<IStream | null>) => {
+            state.editingStream = action.payload;
+        },
+        updateEditingStream: (state, action: PayloadAction<Partial<IStream>>) => {
+            if (!state.editingStream) return;
+            // All checks passed, update the property
+            const newEditingSteamProps = action.payload;
+            Object.assign(state.editingStream, newEditingSteamProps);
         }
     },
     selectors: {
         selectStreams: (state) => state.items,
+        selectEditingStream: (state) => state.editingStream,
     }
 })
 
-export const { updateStream, removeStreamParts } = StreamSlice.actions
-export const { selectStreams } = StreamSlice.selectors
+export const { saveStream, removeStreamParts, setEditingStream, updateEditingStream } = StreamSlice.actions
+export const { selectStreams, selectEditingStream } = StreamSlice.selectors
 
 
 
@@ -87,7 +102,5 @@ export const selectStreamParts = createSelector(
     (stream): string[] => {
         return stream?.audios || [];
     }
-)
-
-
+);
 

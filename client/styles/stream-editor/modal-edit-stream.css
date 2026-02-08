@@ -145,7 +145,6 @@
     height: 100%;
     transform: translateX(-50%); /* Center the element on the line */
     cursor: ew-resize;
-    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
