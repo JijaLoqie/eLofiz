@@ -17,7 +17,7 @@ const initialState: SpaceSliceState = {
         },
         {id: "space-2", name: "ambient", currentBackground: 'start', fixed: true, widgets: [], images: {"start": {
             id: "start", imageUrl:"/images/back4.gif"
-                }}, streamId: "stream-link2",
+                }}, streamId: "stream-link4",
         },
         {id: "space-3", name: "work", currentBackground: 'start', fixed: true, widgets: [], images: {"start": {
             id: "start", imageUrl:"/images/startWorkBackground.gif"

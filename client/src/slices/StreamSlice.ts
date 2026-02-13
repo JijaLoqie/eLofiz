@@ -3,7 +3,10 @@ import { type IStream, StreamType } from "@/types.ts";
 import type { RootState } from "@/index.tsx";
 import { getAudioDuration } from "@/modules/StreamEditor";
 
-interface StreamSliceState {items: Record<string, IStream>, editingStream: IStream | null}
+interface StreamSliceState {
+    items: Record<string, IStream>,
+    editingStream: IStream | null
+}
 
 const initialSlice: StreamSliceState = {
     items: {
@@ -13,6 +16,7 @@ const initialSlice: StreamSliceState = {
             audios: ["stream-link1", "stream-link2", "stream-link3"],
             breakpoints: [10000,20000,30000,40000],
             cover: "images/back3.jpg",
+            description: "",
         },
         "stream-link1": {
             id: "stream-link1",
@@ -20,6 +24,7 @@ const initialSlice: StreamSliceState = {
             audios: ["audio/ambient.m4a"],
             breakpoints: [10000,20000,30000,40000],
             cover: "images/back4.gif",
+            description: "",
         },
         "stream-link2": {
             id: "stream-link2",
@@ -27,6 +32,7 @@ const initialSlice: StreamSliceState = {
             audios: ["audio/dark.m4a"],
             breakpoints: [10,20,30,40],
             cover: "images/back5.jpg",
+            description: "",
         },
         "stream-link3": {
             id: "stream-link3",
@@ -34,6 +40,15 @@ const initialSlice: StreamSliceState = {
             audios: ["audio/knight.m4a"],
             breakpoints: [10,20,30,40],
             cover: "images/back6.png",
+            description: "",
+        },
+        "stream-link4": {
+            id: "stream-link4",
+            name: "stream 4",
+            audios: ["audio/datassette_1.mp3"],
+            breakpoints: [10000,20000,30000,40000],
+            cover: "images/back6.png",
+            description: "",
         }
     },
     editingStream: null

@@ -2,7 +2,7 @@ import { useIntersectionSpaceHandler } from "@/components/hooks/useIntersectionS
 import React, { useEffect } from "react";
 import { Spaces } from "@/components/Space/Spaces.tsx";
 import { Modal } from "@/components/Modal/Modal.tsx";
-import { Provider, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setCurrentSpace, updateSpaceMetrics } from "@/slices/IntersectionSlice.ts";
 
 export const AppEntry = () => {
@@ -24,9 +24,11 @@ export const AppEntry = () => {
 
 
     return (
-        <>
+        <div style={{
+            scrollbarWidth: "none",
+        }}>
             <Spaces />
             <Modal />
-        </>
+        </div>
     );
 };

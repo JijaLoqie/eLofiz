@@ -23,32 +23,40 @@ export const WidgetCard = (props: WidgetCardProps) => {
     }, [widgetInfo.id, currentSpace]);
 
     return (
-        <div className="relative flex flex-col h-125 w-82 widget-card border bg-[#1a1a1a] border-[#898989] rounded-[12px] shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
-            <div className="p-4">
-                <h3 className="text-[#898989] text-[1.4em] font-semibold truncate">{title}</h3>
+        <div
+            className="stream-card widget-card"
+            onClick={handleAddWidget}
+            style={{cursor: "pointer"}}
+        >
+            <div className="cover-image">
+                <div
+                    className="disk"
+                    style={{
+                        backgroundImage: widgetInfo.preview ? `url('${widgetInfo.preview}')` : "none",
+                    }}
+                ></div>
             </div>
-            <div className="relative flex-1 flex justify-center h-full overflow-hidden"> {/* Fixed size here */}
-                {preview && (
-                    <img
-                        src={`preview/${preview}`}
-                        alt={title}
-                        className="rounded-md w-full h-full object-contain" // Make image responsive within the container
-                    />
-                )}
-            </div>
-            <div className="text-center text-[#1beb9e] font-medium mb-2">
-                {type}
-            </div>
-            <div className="p-4 bg-[#1a1a1a]">
-                <div className="flex justify-center mt-2">
-                    <button
-                        className="bg-[#1beb9e] text-black py-2 px-4 rounded hover:bg-[#1beb9e]/90 transition duration-150"
-                        onClick={handleAddWidget}
-                    >
-                        Add Widget
-                    </button>
+            <div className="card-content">
+                <div className="name">{widgetInfo.title}</div>
+                <div className="description">
+                    <>
+                        <div className="tracks-header">
+                            <span className="track-count">
+                                {widgetInfo.type}
+                            </span>
+                        </div>
+                        <div className="tracks-view">
+                            {/*{tracks.map((track, index) => (<div key={index} className="track-item">*/}
+                            {/*        <span className="track-name">*/}
+                            {/*            {extractFileName(track.path)}*/}
+                            {/*        </span>*/}
+                            {/*        <span className="track-duration">*/}
+                            {/*            {formatDuration(track.duration)}*/}
+                            {/*        </span>*/}
+                            {/*    </div>))}*/}
+                        </div>
+                    </>
                 </div>
             </div>
-        </div>
-    );
+        </div>);
 }

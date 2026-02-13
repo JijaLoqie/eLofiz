@@ -11,22 +11,41 @@ const initialState: WidgetSliceState = {
         "basic player": {
             id: "basic player",
             title: "Базовый аудио плеер",
-            preview: "music_player.png",
+            preview: "preview/music_player.png",
             type: WidgetType.MUSIC,
 
         },
         "basic redactor": {
             id: "basic redactor",
             title: "Базовый редактор фона",
-            preview: "background_setting.png",
+            preview: "preview/background_setting.png",
             type: WidgetType.BACKGROUND,
         },
         "basic visualizer": {
             id: "basic visualizer",
             title: "Базовый визуализатор",
-            preview: "audio_visualizer.png",
+            preview: "preview/audio_visualizer.png",
             type: WidgetType.AUDIO_VISUALIZER,
 
+        },
+        "circle visualizer": {
+            id: "circle visualizer",
+            title: "Круговой аудиовизуализатор",
+            preview: "preview/audio_visualizer.png",
+            type: WidgetType.AUDIO_VISUALIZER,
+
+        },
+        "text visualizer": {
+            id: "text visualizer",
+            title: "Текстовый аудиовизуализатор",
+            preview: "preview/audio_visualizer.png",
+            type: WidgetType.AUDIO_VISUALIZER,
+        },
+        "yoda timer": {
+            id: "yoda timer",
+            title: "Йода таймер",
+            preview: "preview/background_setting.png",
+            type: WidgetType.TIMER,
         },
     },
 }

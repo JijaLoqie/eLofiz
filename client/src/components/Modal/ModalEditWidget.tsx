@@ -47,7 +47,7 @@ export const ModalEditWidget: React.FC<ModalEditWidgetProps> = () => {
     return (
         <div
             id="modal-edit"
-            className={`modal ${isOpen ? "open" : ""}`}
+            className={`modal edit ${isOpen ? "open" : ""}`}
             style={{ display: isOpen ? "block" : "none", zIndex: 1000 }}
         >
             <div className="modal-header">

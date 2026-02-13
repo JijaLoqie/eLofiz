@@ -7,12 +7,12 @@ interface AudioVisualizerWidgetProps {
     spaceId: string;
 }
 
-
+const fftSize = 256
 export const AudioVisualizerWidget = (props: AudioVisualizerWidgetProps) => {
     const { spaceId } = props;
-    const { analyzer } = useAnalyzer({spaceId});
+    const { analyser } = useAnalyzer({spaceId, fftSize: 256});
 
-    const [dimensions, setDimensions] = useState({ width: 300, height: 200 });
+    const [dimensions, setDimensions] = useState({ width: 200, height: 200 });
 
     const spaceContainer = useRef<HTMLElement>(ensureElement(`#${spaceId}`));
     const {
@@ -32,7 +32,10 @@ export const AudioVisualizerWidget = (props: AudioVisualizerWidgetProps) => {
         },
     });
 
-    const dataArray = useRef(new Uint8Array(analyzer.frequencyBinCount))
+    const dataArray = useRef(new Uint8Array(fftSize / 2))
+    const timeArray = useRef(new Uint8Array(fftSize));
+
+
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const canvasContextRef = useRef<CanvasRenderingContext2D | null>(null);
 
@@ -45,11 +48,24 @@ export const AudioVisualizerWidget = (props: AudioVisualizerWidgetProps) => {
         canvasRef.current.width = width;
         canvasRef.current.height = height;
 
+        let totalAmplitude = 0;
+        for (let i = 0; i < timeArray.current.length; i++) {
+            // Переводим из 0..255 в отклонение от центра (128)
+            totalAmplitude += Math.abs(timeArray.current[i] - 128);
+        }
+        const rms = totalAmplitude / timeArray.current.length; // Средняя "сила" удара
+
+
+        const k = 0.5;
+
         const barWidth = (width / dataArray.current.length) * 2.5;
         let x = 0;
 
         for (let i = 0; i < dataArray.current.length; i++) {
-            const barHeight = (dataArray.current[i] / 255) * height;
+            let value = dataArray.current[i];
+            value = value * (1 - k) + rms * k;
+            value *= 1.4;
+            const barHeight = (value / 255) * height;
 
             // Create gradient
             const gradient = canvasContextRef.current.createLinearGradient(0, height - barHeight, 0, height);
@@ -66,15 +82,16 @@ export const AudioVisualizerWidget = (props: AudioVisualizerWidgetProps) => {
 
             x += barWidth;
         }
-    }, [canvasRef.current, canvasContextRef.current, dataArray.current, dimensions.width, dimensions.height]);
+    }, [canvasRef.current, canvasContextRef.current, dataArray.current, dimensions.width, dimensions.height, timeArray.current]);
 
 
     useEffect(() => {
         let requestId: number | undefined;
         const draw = (width: number, height: number) => {
-            if (!canvasRef.current) return;
+            if (!canvasRef.current || !analyser.current) return;
             requestId = requestAnimationFrame(() => draw(width, height));
-            analyzer.getByteFrequencyData(dataArray.current);
+            analyser.current.getByteFrequencyData(dataArray.current);
+            analyser.current.getByteTimeDomainData(timeArray.current);
             drawVisualizer(width, height);
         };
         draw(dimensions.width, dimensions.height);
@@ -83,11 +100,11 @@ export const AudioVisualizerWidget = (props: AudioVisualizerWidgetProps) => {
                 cancelAnimationFrame(requestId);
             }
         }
-    }, [dimensions]);
+    }, [dimensions, analyser.current]);
 
 
     return (
-        <div className="audio-visualizer resizable" ref={resizeRef}>
+        <div className="audio-visualizer" ref={resizeRef}>
             <div className="visualizer-container">
                 <canvas ref={(c) => {
                     canvasRef.current = c;

@@ -57,7 +57,7 @@ export const useIntersectionSpaceHandler = () => {
 
         const options: IntersectionObserverInit = {
             root: null,
-            rootMargin: '0px',
+            rootMargin: '-100px',
             threshold: Array.from({ length: 101 }, (_, i) => i / 100),
         };
 

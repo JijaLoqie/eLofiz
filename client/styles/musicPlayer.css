@@ -2,10 +2,9 @@
     --info-color: #898989;
     --navigation-color: #1beb9e;
     --controls-color: #b462ff;
+    font-family: "monospace";
     color: #898989;
     background-color: #1a1a1a;
-    font-size: 1em;
-
     padding: 8px;
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
@@ -20,15 +19,19 @@
 
 /* Info Section */
 .music-player .info {
-    display: flex;
-    justify-content: center;
-    gap: 80px;
+    padding: 6px 15px;
     color: var(--info-color);
     border-bottom: 1px solid rgba(137, 137, 137, 0.2);
-    padding: 6px 0;
+}
+.music-player .info .button {
+    &:hover {
+        background-color: var(--info-color);
+    }
 }
 
 .music-player .info .title {
+    overflow: hidden;
+    text-wrap: nowrap;
     font-size: 1.4em;
     font-weight: 600;
 }
@@ -39,16 +42,30 @@
     --button-hover-bg: var(--info-color);
 }
 
+
 /* Navigation Section */
+
+.music-player .navigation {
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 15px;
+}
 
 .music-player .navigation .button {
     color: var(--navigation-color);
-    --button-hover-bg: var(--navigation-color);
+    &:hover {
+        background-color: var(--navigation-color);;
+    }
 }
 
 
 /* Controls Section */
 .music-player .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0;
+    padding-inline: 15px;
     border-top: 1px solid rgba(180, 98, 255, 0.2);
 }
 
@@ -81,7 +98,6 @@
     border: none;
     background-color: transparent;
     cursor: pointer;
-    font-size: 0.95em;
     border-radius: 0;
     outline: none;
 }
@@ -99,3 +115,4 @@
     color: var(--info-color);
     --button-hover-bg: transparent;
 }
+

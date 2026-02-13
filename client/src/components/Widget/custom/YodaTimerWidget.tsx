@@ -1,0 +1,119 @@
+import { type FC, useEffect, useEffectEvent, useState } from "react";
+import { useDispatch } from "react-redux";
+import { playBeep } from "@/actions.ts";
+
+interface YodaTimerWidgetProps {
+    spaceId: string;
+}
+
+const defaultTime = 60 * 5;
+
+export const YodaTimerWidget: FC<YodaTimerWidgetProps> = () => {
+    const dispatch = useDispatch();
+    const [hover, setHover] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(defaultTime);
+    const [ringing, setRinging] = useState(false);
+
+    useEffect(() => {
+        if (!isPlaying) return;
+        const id = setInterval(() => {
+            setTimeLeft(old => old - 1)
+        }, 1000);
+        return () => {
+            clearInterval(id);
+        }
+    }, [isPlaying]);
+
+    useEffect(() => {
+        if (timeLeft <= 0) {
+            setRinging(true);
+        } else {
+            setRinging(false);
+        }
+    }, [timeLeft]);
+
+    useEffect(() => {
+        if (!ringing) return;
+        const id = setInterval(() => {
+            dispatch(playBeep());
+        }, 500);
+        return () => {
+            clearInterval(id);
+        }
+    }, [ringing, dispatch])
+
+
+    const handleReset = useEffectEvent(() => {
+        setIsPlaying(false);
+        setTimeLeft(defaultTime);
+    });
+
+    return (<div onMouseOver={() => setHover(true)} onMouseOut={() => setHover(false)} className={`
+        w-[330px] h-[330px] 
+        bg-transparent 
+        hover:bg-black/40
+        transition-all
+        rounded-2xl
+        flex justify-center
+        items-center
+        text-center
+        flex-col
+        text-white
+        overflow-hidden
+        `}
+    >
+        <div className={`
+        backdrop-blur-sm
+            w-[80%] aspect-square
+            flex justify-center
+            flex-col
+            rounded-full
+            border-4 
+            text-6xl
+            text-amber
+            border-peacock
+            border-dotted
+            outline-8
+            outline-midnight
+            animate-spin
+            [animation-duration:60s]
+            after:content-[''] after:absolute after:top-[-7px] after:left-1/2 after:w-2.5 after:h-2.5 ${isPlaying ? "after:bg-red-400" : "after:bg-white"} after:rounded-full after:shadow-[0_0_15px_#f00] after:-translate-x-1/2
+            `}
+        >
+            <span className={`
+            `} style={{
+                animation: "no-spin 60s linear infinite",
+                textShadow: "0 0 5px var(--color-amber), 0 0 10px var(--color-midnight), 0 0 20px var(--color-midnight)"
+            }}>
+                <div className="flex justify-center h-0">
+                    {hover ? (<>
+                            <span
+                                className={`button timer`}
+                                onClick={() => setIsPlaying(old => !old)}
+                            >{isPlaying ? "Stop" : "Start"}</span>
+                    </>) : null}
+                </div>
+                {Math.floor(timeLeft / 60).toString().padStart(2, "0")}:{(timeLeft % 60).toString().padStart(2, "0")}
+                <p className={`
+                text-lg
+                    `}
+                >
+                    Do, or do not. <br/>There is no try
+                </p>
+
+                <div className="flex justify-center h-0">
+                {hover && (isPlaying || timeLeft !== defaultTime) ? (<span
+                    className={`button timer relative top-[20px]`}
+                    onClick={handleReset}
+                >Reset</span>) : null}
+                </div>
+            </span>
+        </div>
+        <div className={``}
+        >
+        </div>
+    </div>);
+
+
+};

@@ -17,6 +17,7 @@ const defaultItem: IStream = {
     audios: [],
     breakpoints: [],
     cover: "",
+    description: "",
 };
 
 interface StreamEditorProps {
@@ -54,6 +55,10 @@ export const StreamEditor: FC<StreamEditorProps> = ({streamId}) => {
         },
         []
     );
+
+    const handleDescriptionChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setStreamProperty("description", e.target.value);
+    }, [])
 
     const handleSave = useCallback(() => {
         if (!changedItem) return;
@@ -114,11 +119,11 @@ export const StreamEditor: FC<StreamEditorProps> = ({streamId}) => {
                         </label>
                     </div>)}
 
-                    <div className="text-field" data-type="description">
+                    {changedItem?.description !== undefined && (<div className="text-field" data-type="description">
                         <label>
-                            <textarea placeholder="Добавьте описание"></textarea>
+                            <textarea placeholder="Добавьте описание" value={changedItem.description} onChange={handleDescriptionChange}></textarea>
                         </label>
-                    </div>
+                    </div>)}
 
                     {/* Action Buttons */}
                     <div className="stream-editor__actions">

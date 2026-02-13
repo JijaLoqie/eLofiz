@@ -7,6 +7,7 @@ export enum WidgetType {
     MUSIC = "Музыка",
     BACKGROUND = "Задний фон",
     AUDIO_VISUALIZER = "Аудио полоски",
+    TIMER = "Таймер"
 }
 
 
@@ -57,7 +58,7 @@ export interface IStream extends IObject {
     audios: string[];
     breakpoints: number[];
     cover: string;
-    duration?: number;
+    description: string;
 }
 
 

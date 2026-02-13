@@ -6,7 +6,6 @@ import { ensureElement } from "@/utils";
 type AudioItem = {
     mediaElement: MediaElementAudioSourceNode,
     gainNode: GainNode,
-    analyzer: AnalyserNode
 
 }
 
@@ -35,19 +34,15 @@ export const AudioMiddleware: Middleware = (store) => {
             // Create new source
             const mediaElementSource = audioState.audioContext.createMediaElementSource(htmlAudio);
             const gainNode = audioState.audioContext.createGain();
-            const analyser = audioState.audioContext.createAnalyser();
-            analyser.fftSize = 256;
 
-            // Connect audio graph: source -> gainNode -> analyser -> destination
+            // Connect audio graph: source -> gainNode -> destination
             mediaElementSource.connect(gainNode);
-            gainNode.connect(analyser);
-            analyser.connect(audioState.audioContext.destination);
+            gainNode.connect(audioState.audioContext.destination)
 
             // Store in maps
             audioState.items[spaceId] = {
                 mediaElement: mediaElementSource,
                 gainNode: gainNode,
-                analyzer: analyser,
             }
         }
         if (setVolume.match(action)) {

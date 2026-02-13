@@ -1,14 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/index.tsx";
-import { type WidgetInstance, WidgetType } from "@/types.ts";
-import { useCallback, useRef } from "react";
-import { selectWidget } from "@/slices/WidgetSlice.ts";
+import { type WidgetInstance } from "@/types.ts";
+import { type JSX, useCallback, useMemo, useRef } from "react";
 import { useDragHandler } from "@/components/hooks/useDragHandler.ts";
 import { removeWidget } from "@/slices/SpaceSlice.ts";
 import { selectCurrentSpace } from "@/slices/IntersectionSlice.ts";
 import { BackgroundWidget } from "@/components/Widget/custom/BackgroundWidget/BackgroundWidget.tsx";
 import { PlayerWidget } from "@/components/Widget/custom/PlayerWidget.tsx";
-import { AudioVisualizerWidget } from "@/components/Widget/custom/AudioVisualizerWidget.tsx";
+import { AudioVisualizerWidget } from "@/components/Widget/custom/AudioVisualizers/AudioVisualizerWidget.tsx";
+import { CircleAudioVisualizerWidget } from "@/components/Widget/custom/AudioVisualizers/CircleAudioVisualizerWidget.tsx";
+import { TextAudioVisualizerWidget } from "@/components/Widget/custom/AudioVisualizers/TextAudioVisualizerWidget.tsx";
+import { YodaTimerWidget } from "@/components/Widget/custom/YodaTimerWidget.tsx";
 
 
 
@@ -20,10 +22,9 @@ interface WidgetProps {
 export const Widget = (props: WidgetProps) => {
     const {widgetId, spaceId} = props.widgetInstance;
     const currentSpace = useSelector((state: RootState) => selectCurrentSpace(state));
-    const widgetInfo = useSelector((state: RootState) => selectWidget(state, widgetId));
+    // const widgetInfo = useSelector((state: RootState) => selectWidget(state, widgetId));
     const headerRef = useRef<HTMLDivElement>(null);
     const rootRef = useRef<HTMLDivElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
 
     useDragHandler(
@@ -36,17 +37,20 @@ export const Widget = (props: WidgetProps) => {
             }
         }
     );
+    const widgets = useMemo<Record<string, JSX.Element>>(() => {
+        return {
+            "basic player": (<PlayerWidget spaceId={spaceId}/>),
+            "basic redactor": <BackgroundWidget spaceId={spaceId}/>,
+            "basic visualizer": <AudioVisualizerWidget spaceId={spaceId}/>,
+            "circle visualizer": <CircleAudioVisualizerWidget spaceId={spaceId}/>,
+            "text visualizer": <TextAudioVisualizerWidget spaceId={spaceId}/>,
+            "yoda timer": <YodaTimerWidget spaceId={spaceId}/>,
+        }
+    }, [spaceId])
 
     const renderWidget = useCallback(() => {
-        switch (widgetInfo.type) {
-            case WidgetType.BACKGROUND:
-                return <BackgroundWidget spaceId={spaceId} />
-            case WidgetType.MUSIC:
-                return <PlayerWidget spaceId={spaceId} />
-            case WidgetType.AUDIO_VISUALIZER:
-                return <AudioVisualizerWidget spaceId={spaceId} />
-        }
-    }, [widgetInfo.type, widgetInfo.id]);
+        return widgets[widgetId]
+    }, [widgets, widgetId]);
 
     const handleClose = useCallback(() => {
         dispatch(removeWidget({
@@ -62,7 +66,9 @@ export const Widget = (props: WidgetProps) => {
                         className="button"
                         data-type="close"
                         aria-label="Close widget"
-                        onClick={handleClose}>
+                        onClick={handleClose}
+                        style={{display: "inline", paddingInline: "4px"}}
+                >
                     &times;
                 </button>
             </div>

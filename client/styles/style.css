@@ -29,4 +29,42 @@
     background-attachment: fixed;
 }
 
+.side-space {
+}
 
+@theme {
+    --color-midnight: #1a2744;
+    --color-oxblood: #7c1e2e;
+    --color-eucalyptus: #2d5e4a;
+    --color-amber: #b5692a;
+    --color-damson: #582968;
+    --color-peacock: #1b6474;
+    --color-lampblack: #2a2a2e;
+}
+
+@keyframes no-spin {
+    from {
+        transform: rotate(360deg);
+    } to {
+          transform: rotate(0deg);
+      }
+}
+
+.button.timer {
+    position: relative;
+    bottom: 40px;
+    --color-button-timer: #CF0000;
+    color: var(--color-button-timer);
+    &:hover {
+        color: var(--color-lampblack);
+        text-shadow: none;
+        background-color: var(--color-button-timer);
+    };
+    text-shadow: 0 0 5px var(--color-button-timer), 0 0 10px var(--color-button-timer), 0 0 20px var(--color-button-timer);
+    font-size: 22px;
+    padding: 2px;
+    border-radius: 0;
+    text-align: center;
+    height: fit-content;
+    box-shadow: 0 2px 4px var(--color-button-timer);
+}
