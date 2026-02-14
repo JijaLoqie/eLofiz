@@ -11,6 +11,7 @@ import { AudioVisualizerWidget } from "@/components/Widget/custom/AudioVisualize
 import { CircleAudioVisualizerWidget } from "@/components/Widget/custom/AudioVisualizers/CircleAudioVisualizerWidget.tsx";
 import { TextAudioVisualizerWidget } from "@/components/Widget/custom/AudioVisualizers/TextAudioVisualizerWidget.tsx";
 import { YodaTimerWidget } from "@/components/Widget/custom/YodaTimerWidget.tsx";
+import { PomodoroTimerWidget } from "@/components/Widget/custom/PomodoroTimerWidget.tsx";
 
 
 
@@ -45,6 +46,7 @@ export const Widget = (props: WidgetProps) => {
             "circle visualizer": <CircleAudioVisualizerWidget spaceId={spaceId}/>,
             "text visualizer": <TextAudioVisualizerWidget spaceId={spaceId}/>,
             "yoda timer": <YodaTimerWidget spaceId={spaceId}/>,
+            "pomodoro timer": <PomodoroTimerWidget spaceId={spaceId}/>,
         }
     }, [spaceId])
 

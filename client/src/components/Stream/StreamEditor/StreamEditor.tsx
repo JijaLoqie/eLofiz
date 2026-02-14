@@ -82,7 +82,7 @@ export const StreamEditor: FC<StreamEditorProps> = ({streamId}) => {
     return (
         <div className="stream-editor">
             <div className="main_control">
-                <div className="editor-section" data-type="main-view">
+                <div data-type="main-view">
 
                     {changedItem?.name && (<div className="text-field" data-type="title">
                         <label>
@@ -144,20 +144,16 @@ export const StreamEditor: FC<StreamEditorProps> = ({streamId}) => {
                     </div>
                 </div>
             </div>
-
             <div className="stream_control">
-                <div className="editor-section" data-type="stream-parts">
+                {/* Stream Parts */}
+                <div data-type="stream-parts">
                     <div className="stream-editor__audio-label">
                         Составные части
                     </div>
-                    <div
-                        className="items-list-wrapper"
-                        data-type="stream-parts"
-                    >
-                        {streamId && <StreamCardPartList streamId={streamId} />}
-                    </div>
+                    {streamId && <StreamCardPartList streamId={streamId} />}
                 </div>
 
+                {/* Timeline with breakpoints */}
                 <div className="stream-editor__timeline-section editor-section">
                     <div className="stream-editor__timeline-label">
                         Timeline & Breakpoints

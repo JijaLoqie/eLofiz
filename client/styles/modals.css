@@ -1,6 +1,4 @@
 .modal {
-    display: flex;
-    flex-direction: column;
     z-index: 100;
     position: fixed;
     right: 10px;
@@ -24,7 +22,7 @@
 }
 
 .modal.edit {
-    width: calc(100vw - 20px);
+    width: 400px;
 }
 
 .header {

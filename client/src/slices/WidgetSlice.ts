@@ -47,6 +47,12 @@ const initialState: WidgetSliceState = {
             preview: "preview/background_setting.png",
             type: WidgetType.TIMER,
         },
+        "pomodoro timer": {
+            id: "pomodoro timer",
+            title: "Pomodoro таймер",
+            preview: "preview/background_setting.png",
+            type: WidgetType.TIMER,
+        },
     },
 }
 

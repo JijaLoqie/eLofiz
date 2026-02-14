@@ -26,12 +26,12 @@ export const YodaTimerWidget: FC<YodaTimerWidgetProps> = () => {
     }, [isPlaying]);
 
     useEffect(() => {
-        if (timeLeft <= 0) {
+        if (timeLeft <= 0 && isPlaying) {
             setRinging(true);
         } else {
             setRinging(false);
         }
-    }, [timeLeft]);
+    }, [timeLeft, isPlaying]);
 
     useEffect(() => {
         if (!ringing) return;
@@ -52,12 +52,12 @@ export const YodaTimerWidget: FC<YodaTimerWidgetProps> = () => {
     return (<div onMouseOver={() => setHover(true)} onMouseOut={() => setHover(false)} className={`
         w-[330px] h-[330px] 
         bg-transparent 
-        hover:bg-black/40
         transition-all
         rounded-2xl
         flex justify-center
         items-center
         text-center
+        ${!isPlaying ? "hover:bg-black/40" : ""}
         flex-col
         text-white
         overflow-hidden

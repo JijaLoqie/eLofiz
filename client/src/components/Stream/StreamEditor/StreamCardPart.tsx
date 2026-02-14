@@ -15,8 +15,8 @@ export const StreamCardPart = (props: {parentId: string, id: string}) => {
     }, [dispatch, parentId, id]);
 
     return (
-        <div className="stream-card-part" data-id={id}>
-            <div className="title">{title}</div>
+        <div className="stream-card-part p-2" data-id={id}>
+            <div className="title text-3xl text-white">{title}</div>
             <div className="cover"></div>
             <div className="information">
                 <div className="type">{type}</div>

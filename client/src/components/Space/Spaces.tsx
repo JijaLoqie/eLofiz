@@ -3,7 +3,6 @@ import type { RootState } from "@/index.tsx";
 import type { ISpace, IWidget } from "@/types.ts";
 import { Space } from "@/components/Space/Space.tsx";
 import { selectSpaces } from "@/slices/SpaceSlice.ts";
-import { RightModal } from "@/components/Modal/RightModal.tsx";
 
 export const Spaces = () => {
     const spaces = useSelector((state: RootState): ISpace[] => selectSpaces(state))

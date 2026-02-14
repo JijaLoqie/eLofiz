@@ -7,9 +7,10 @@ import { StreamCardPart } from "@/components/Stream/StreamEditor/StreamCardPart.
 export const StreamCardPartList = (props: {streamId: string}) => {
     const {streamId} = props;
     const streamParts = useSelector((state: RootState): string[] => selectStreamParts(state, streamId));
-    return (
-        <>
-            {streamParts.map(streamPartId => <StreamCardPart key={streamPartId} parentId={streamId} id={streamPartId} />)}
-        </>
-    )
+    return (<div
+            className="items-list-wrapper"
+        >
+            {streamParts.map(streamPartId => <StreamCardPart key={streamPartId} parentId={streamId}
+                                                             id={streamPartId}/>)}
+        </div>)
 }
