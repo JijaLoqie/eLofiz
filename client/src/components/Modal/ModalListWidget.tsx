@@ -6,10 +6,12 @@ import { StreamCardList } from "@/components/Stream/StreamCardList.tsx";
 import { PresetCardList } from "@/components/Preset/PresetCardList.tsx";
 import { WidgetCardList } from "@/components/Widget/WidgetCardList.tsx";
 import { selectCurrentSpace } from "@/slices/IntersectionSlice.ts";
+import { selectSpace } from "@/slices/SpaceSlice.ts";
 
 export const ModalListWidget = () => {
     const entityType = useSelector((state: RootState) => state.modal.entityType);
-    const currentSpace = useSelector((state: RootState) => selectCurrentSpace(state));
+    const currentSpaceId = useSelector((state: RootState) => selectCurrentSpace(state));
+    const currentSpace = useSelector((state: RootState) => selectSpace(state, currentSpaceId));
 
     const renderList = () => {
         switch (entityType) {
@@ -34,7 +36,7 @@ export const ModalListWidget = () => {
             <div className="header">
                 <div className="modal__currentSpace-info">
                     <span className="modal__currentSpace-label">Текущее пространство: </span>
-                    <span className="modal_currentSpace-name">{currentSpace}</span>
+                    <span className="modal_currentSpace-name">{currentSpace.name}</span>
                 </div>
             </div>
             <div style={{paddingTop: "16px"}}>

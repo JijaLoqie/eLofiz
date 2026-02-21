@@ -87,12 +87,12 @@ export const YodaTimerWidget: FC<YodaTimerWidgetProps> = () => {
                 textShadow: "0 0 5px var(--color-amber), 0 0 10px var(--color-midnight), 0 0 20px var(--color-midnight)"
             }}>
                 <div className="flex justify-center h-0">
-                    {hover ? (<>
-                            <span
-                                className={`button timer`}
-                                onClick={() => setIsPlaying(old => !old)}
-                            >{isPlaying ? "Stop" : "Start"}</span>
-                    </>) : null}
+                    {!hover ? null : (
+                        <span
+                            className={`button timer`}
+                            onClick={!isPlaying ? () => setIsPlaying(true) : handleReset}
+                        >{isPlaying ? "Reset" : "Start"}
+                        </span>)}
                 </div>
                 {Math.floor(timeLeft / 60).toString().padStart(2, "0")}:{(timeLeft % 60).toString().padStart(2, "0")}
                 <p className={`
@@ -101,13 +101,6 @@ export const YodaTimerWidget: FC<YodaTimerWidgetProps> = () => {
                 >
                     Do, or do not. <br/>There is no try
                 </p>
-
-                <div className="flex justify-center h-0">
-                {hover && (isPlaying || timeLeft !== defaultTime) ? (<span
-                    className={`button timer relative top-[20px]`}
-                    onClick={handleReset}
-                >Reset</span>) : null}
-                </div>
             </span>
         </div>
         <div className={``}

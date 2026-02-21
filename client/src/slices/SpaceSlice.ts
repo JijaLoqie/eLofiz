@@ -1,42 +1,39 @@
 import { createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { EntityType, type ISpace, type WidgetInstance } from "@/types.ts";
+import { type ImageInfo, type ISpace, type SpaceParams, type WidgetInstance } from "@/types.ts";
 import type { RootState } from "@/index.tsx";
 import { uuid } from "@/utils";
 
 interface SpaceSliceState {
     items: ISpace[];
-    widgetsOnSpace: Record<string, WidgetInstance[]>
 
 }
 
 const initialState: SpaceSliceState = {
     items: [
-        {id: "space-1", name: "main", currentBackground: 'start', fixed: false, widgets: [], images: {"start": {
-            id: "start", imageUrl:"/images/startBackground.jpeg"
-                }}, streamId: "stream-link1",
-        },
-        {id: "space-2", name: "ambient", currentBackground: 'start', fixed: true, widgets: [], images: {"start": {
-            id: "start", imageUrl:"/images/back4.gif"
-                }}, streamId: "stream-link4",
-        },
-        {id: "space-3", name: "work", currentBackground: 'start', fixed: true, widgets: [], images: {"start": {
-            id: "start", imageUrl:"/images/startWorkBackground.gif"
-                }}, streamId: "stream-link3",
-        },
-        {id: "space-4", name: "Dark", currentBackground: 'start', fixed: false, widgets: [], images: {"start": {
-            id: "start", imageUrl:"/images/back6.png"
-                }}, streamId: "stream1",
-        },
-        {id: "space-5", name: "Phonk", currentBackground: 'start', fixed: true, widgets: [], images: {"start": {
-            id: "start", imageUrl:"/images/back3.jpg"
-                }}, streamId: "stream-link2",
-        },
-        {id: "space-6", name: "Knight", currentBackground: 'start', fixed: true, widgets: [], images: {"start": {
-            id: "start", imageUrl:"/images/back5.jpg"
-                }}, streamId: "stream-link3",
-        },
     ],
-    widgetsOnSpace: {},
+}
+
+const createDefaultSpace = (params: SpaceParams) => {
+    let currentBackground: string;
+    const images: Record<string, ImageInfo> = Object.fromEntries(
+        params.images.map((imageUrl, index): [string, ImageInfo] => {
+            const id = uuid();
+            if (index == 0) {
+                currentBackground = id;
+            }
+            return [id, {id, imageUrl}]
+        })
+    );
+    const space: ISpace = {
+        id: uuid(),
+        name: params.name,
+        currentBackground: currentBackground!,
+        images: images,
+        streamId: params.streamId,
+        fixed: params.fixed || false,
+        widgets: params.widgets,
+    };
+    return space;
 }
 
 export const SpaceSlice = createSlice({
@@ -45,13 +42,7 @@ export const SpaceSlice = createSlice({
     reducers: {
         addWidget: (state,
                     action: PayloadAction<{spaceId: string, widgetId: string}>) => {
-            let x = 1;
             const {spaceId, widgetId} = action.payload;
-            if (!state.widgetsOnSpace[spaceId]) {
-                console.log("creating first time");
-                state.widgetsOnSpace[ spaceId ] = []
-                x = 2;
-            }
 
             const widgetInstance: WidgetInstance = {
                 id: uuid(),
@@ -59,14 +50,20 @@ export const SpaceSlice = createSlice({
                 widgetId: widgetId,
                 position: {x: 10, y: 10}
             }
-            state.widgetsOnSpace[spaceId].push(widgetInstance);
+            const space = state.items.find(item => item.id === spaceId)
+            if (space) {
+                space.widgets.push(widgetInstance);
+            }
         },
         removeWidget: (state,
                        action: PayloadAction<{spaceId: string, widgetInstanceId: string}>) => {
             const {spaceId, widgetInstanceId} = action.payload;
-            state.widgetsOnSpace[spaceId] = state.widgetsOnSpace[spaceId].filter(widget => {
-                return widget.id !== widgetInstanceId;
-            });
+            const space = state.items.find(item => item.id === spaceId)
+            if (space) {
+                space.widgets = space.widgets.filter(widget => {
+                    return widget.id !== widgetInstanceId;
+                });
+            }
         },
         updateSpace: (state, action: PayloadAction<{spaceId: string, props: Partial<ISpace>}>) => {
             const { spaceId, props } = action.payload;
@@ -74,14 +71,20 @@ export const SpaceSlice = createSlice({
             if (space) {
                 Object.assign(space, props);
             }
-        }
+        },
+
+        createSpace: (state, action: PayloadAction<SpaceParams>) => {
+            const props = action.payload;
+            const space: ISpace = createDefaultSpace(props);
+            state.items.push(space);
+        },
     },
     selectors: {
         selectSpaces: (state) => state.items,
     }
 })
 
-export const { addWidget, removeWidget, updateSpace } = SpaceSlice.actions;
+export const { addWidget, removeWidget, updateSpace, createSpace } = SpaceSlice.actions;
 export const { selectSpaces } = SpaceSlice.selectors;
 
 export const selectSpace = createSelector(
@@ -104,10 +107,10 @@ export const selectImageInfo = createSelector(
     })
 );
 export const selectWidgetsOnSpace = createSelector([
-        (state: RootState) => state.spaces.widgetsOnSpace,
+        (state: RootState) => state.spaces.items,
         (_state: RootState, id: string) => id
     ],
-    (widgetsOnSpace, id) => widgetsOnSpace[id] || []
+    (spaces, id) =>  spaces.find(space => space.id === id)?.widgets  || []
 );
 
 

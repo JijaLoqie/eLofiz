@@ -21,9 +21,26 @@ export interface ISpace extends IObject {
     name: string;
     currentBackground: string;
     images: Record<string, ImageInfo>
-    fixed: boolean;
-    widgets: string[];
     streamId: string;
+    fixed: boolean;
+    widgets: WidgetInstance[];
+}
+
+export interface IPreset extends IObject {
+    tags: string[];
+    spaceProps: SpaceParams
+
+    description: string;
+    color: string;
+}
+
+
+export interface IStream extends IObject {
+    name: string;
+    audios: string[];
+    breakpoints: number[];
+    cover: string;
+    description: string;
 }
 
 export enum EntityType {
@@ -53,38 +70,13 @@ export interface IModalEditWidget extends IModalWidget {
 }
 
 
-export interface IStream extends IObject {
-    name: string;
-    audios: string[];
-    breakpoints: number[];
-    cover: string;
-    description: string;
-}
+
 
 
 export interface IObject {
     id: string;
 }
-export interface IPreset extends IObject {
-    title: string
-    streamId: string;
-    images: string[];
-    tags: string[];
-}
 
-export interface IFieldBase {
-    value: string;
-}
-export interface IButtonGroup extends IFieldBase {
-    items: string[];
-}
-export interface ISearchField extends IFieldBase {
-}
-
-export enum FieldType {
-    BUTTON_GROUP = "button-group",
-    SEARCH = "search",
-}
 
 
 export enum StreamType {
@@ -100,4 +92,27 @@ export interface WidgetInstance extends IObject {
     spaceId: string;
     widgetId: string;
     position: { x: number; y: number };
+}
+
+export interface SpaceParams {
+    name: string;
+    streamId: string;
+    images: string[];
+    fixed?: boolean;
+    widgets: WidgetInstance[];
+}
+
+export interface ParticleConfig {
+    particleNum: number;
+    particleSize: number;
+    walkForce: number;
+    attractRadius: number;
+    attractForce: number;
+    returnMaxSpeed: number;
+    returnMaxForce: number;
+    returnRange: number;
+    velocityDamping: number;
+    backgroundColor: [number, number, number];
+    particleColor: [number, number, number];
+    accentColor: string;
 }

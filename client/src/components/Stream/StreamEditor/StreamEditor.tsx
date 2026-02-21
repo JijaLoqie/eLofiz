@@ -1,7 +1,6 @@
 import React, { useCallback, type FC, useEffect, createContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    selectStream,
     selectEditingStream,
     updateEditingStream,
     saveStream, setEditingStream
@@ -83,76 +82,18 @@ export const StreamEditor: FC<StreamEditorProps> = ({streamId}) => {
         <div className="stream-editor">
             <div className="main_control">
                 <div data-type="main-view">
-
-                    {changedItem?.name && (<div className="text-field" data-type="title">
-                        <label>
-                            <input
-                                type="text"
-                                className="stream-editor__name-input"
-                                placeholder="Stream name"
-                                value={changedItem.name}
-                                onChange={handleNameChange}
-                            />
-                        </label>
-                    </div>)}
-
-                    {changedItem?.cover && (<div className="image-cover">
+                    {changedItem?.cover && (
+                    <div className="image-cover">
                         <img
-                            className="stream-editor__cover-preview"
+                            className="shadow-"
                             src={changedItem.cover}
                             alt="Stream cover"
                         />
-                        <label>
-                            <input
-                                type="file"
-                                className="stream-editor__cover-input"
-                                accept="image/*"
-                                style={{display: "none"}}
-                                onChange={handleCoverChange}
-                            />
-                            <div
-                                className="button stream-editor__cover-button"
-                                data-type="change-cover"
-                            >
-                                Change Cover
-                            </div>
-                        </label>
-                    </div>)}
-
-                    {changedItem?.description !== undefined && (<div className="text-field" data-type="description">
-                        <label>
-                            <textarea placeholder="Добавьте описание" value={changedItem.description} onChange={handleDescriptionChange}></textarea>
-                        </label>
-                    </div>)}
-
-                    {/* Action Buttons */}
-                    <div className="stream-editor__actions">
-                        <div
-                            className="button stream-editor__action-save"
-                            data-type="save"
-                            onClick={handleSave}
-                        >
-                            Save
-                        </div>
-                        <div
-                            className="button stream-editor__action-cancel"
-                            data-type="cancel"
-                            onClick={handleCancel}
-                        >
-                            Cancel
-                        </div>
                     </div>
+                    )}
                 </div>
             </div>
             <div className="stream_control">
-                {/* Stream Parts */}
-                <div data-type="stream-parts">
-                    <div className="stream-editor__audio-label">
-                        Составные части
-                    </div>
-                    {streamId && <StreamCardPartList streamId={streamId} />}
-                </div>
-
                 {/* Timeline with breakpoints */}
                 <div className="stream-editor__timeline-section editor-section">
                     <div className="stream-editor__timeline-label">

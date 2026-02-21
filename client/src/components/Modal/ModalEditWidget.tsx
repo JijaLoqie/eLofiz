@@ -46,29 +46,28 @@ export const ModalEditWidget: React.FC<ModalEditWidgetProps> = () => {
 
     return (
         <div
-            id="modal-edit"
-            className={`modal edit ${isOpen ? "open" : ""}`}
+            className={`
+            absolute
+            flex flex-col
+            top-0 right-0
+            max-w-[500px]
+            bg-black
+            ${isOpen ? "open" : ""}
+            `}
             style={{ display: isOpen ? "block" : "none", zIndex: 1000 }}
         >
-            <span
-                className={`
-                absolute 
-                top-5 
-                right 4 
-                rounded-full 
-                bg-red-300
-                flex 
-                aspect-square 
-                h-4 justify-center 
-                items-center
-                shadow-[2px_2px_4px_#f00,-2px_-2px_4px_#f00]
-                `}
-                onClick={handleCloseClick}
-            >
-            </span>
-            <div className="wrapper">
-                {renderEditor()}
+            <div className="relative h-fit min-h-12 flex">
+                <div
+                    className={
+                    `h-12 aspect-square border-gray-500 text-white border-[1px] cursor-pointer flex justify-center items-center text-center`
+                } onClick={handleCloseClick}
+                >
+                    &times;
+                </div>
             </div>
+
+            {renderEditor()}
+
             <div className="wrapper" data-type="modal-actions"></div>
         </div>
     );

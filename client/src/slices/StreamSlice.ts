@@ -1,53 +1,67 @@
 import { createAsyncThunk, createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { type IStream, StreamType } from "@/types.ts";
 import type { RootState } from "@/index.tsx";
-import { getAudioDuration } from "@/modules/StreamEditor";
 
 interface StreamSliceState {
     items: Record<string, IStream>,
     editingStream: IStream | null
 }
-
 const initialSlice: StreamSliceState = {
     items: {
-        "stream1": {
-            id: "stream1",
+        "composite-stream": {
+            id: "composite-stream",
             name: "composite stream",
-            audios: ["stream-link1", "stream-link2", "stream-link3"],
-            breakpoints: [10000,20000,30000,40000],
+            audios: ["snowy-weather", "dead-house", "knights-welcome"],
+            breakpoints: [10000, 20000, 30000, 40000],
+            cover: "images/startBackground.jpeg",
+            description: "",
+        },
+        "snowy-weather": {
+            id: "snowy-weather",
+            name: "snowy-weather",
+            audios: ["audio/ambient.m4a"],
+            breakpoints: [10000, 20000, 30000, 40000],
+            cover: "images/back7.jpeg",
+            description: "",
+        },
+        "dead-house": {
+            id: "dead-house",
+            name: "dead-house",
+            audios: ["audio/dark.m4a"],
+            breakpoints: [10, 20, 30, 40],
+            cover: "images/back6.png",
+            description: "",
+        },
+        "knights-welcome": {
+            id: "knights-welcome",
+            name: "knights-welcome",
+            audios: ["audio/knight.m4a"],
+            breakpoints: [10, 20, 30, 40],
             cover: "images/back3.jpg",
             description: "",
         },
-        "stream-link1": {
-            id: "stream-link1",
-            name: "stream 1",
-            audios: ["audio/ambient.m4a"],
-            breakpoints: [10000,20000,30000,40000],
+        "elofiz-studio": {
+            id: "elofiz-studio",
+            name: "elofiz-studio",
+            audios: ["audio/datassette_1.mp3"],
+            breakpoints: [10000, 20000, 30000, 40000],
+            cover: "images/startBackground.jpeg",
+            description: "",
+        },
+        "electronic-hip-hop": {
+            id: "electronic-hip-hop",
+            name: "electronic-hip-hop",
+            audios: ["audio/song1.mp3"],
+            breakpoints: [10000, 20000, 30000, 40000],
             cover: "images/back4.gif",
             description: "",
         },
-        "stream-link2": {
-            id: "stream-link2",
-            name: "stream 2",
-            audios: ["audio/dark.m4a"],
-            breakpoints: [10,20,30,40],
-            cover: "images/back5.jpg",
-            description: "",
-        },
-        "stream-link3": {
-            id: "stream-link3",
-            name: "stream 3",
-            audios: ["audio/knight.m4a"],
-            breakpoints: [10,20,30,40],
-            cover: "images/back6.png",
-            description: "",
-        },
-        "stream-link4": {
-            id: "stream-link4",
-            name: "stream 4",
-            audios: ["audio/datassette_1.mp3"],
-            breakpoints: [10000,20000,30000,40000],
-            cover: "images/back6.png",
+        "snowy-town": {
+            id: "snowy-town",
+            name: "snowy-town",
+            audios: ["audio/song2.mp3"],
+            breakpoints: [10000, 20000, 30000, 40000],
+            cover: "images/back8.jpeg",
             description: "",
         }
     },
