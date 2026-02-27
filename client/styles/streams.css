@@ -12,12 +12,6 @@
     position: relative;
 }
 
-.widget-card {
-    width: 300px;
-    height: 360px;
-}
-
-
 
 .stream-card:hover {
     background-color: #252525;

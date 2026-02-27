@@ -1,14 +1,9 @@
 .items-list {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+    column-count: 4;
+    padding-top: 16px;
 }
 
-
-
-.items-list [data-type='items'] {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    padding-top: 16px;
+.items-list > * {
+    break-inside: avoid; /* Prevent items from breaking across columns */
+    margin-bottom: 16px; /* Space between items vertically */
 }

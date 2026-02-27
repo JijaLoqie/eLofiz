@@ -4,7 +4,7 @@ import { selectSpace } from "@/slices/SpaceSlice.ts";
 import { useAudioNode } from "@/components/hooks/useAudioNode.ts";
 import type { IStream } from "@/types.ts";
 import { selectStream } from "@/slices/StreamSlice.ts";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { use, useCallback, useEffect, useMemo, useState } from "react";
 import { formatDuration } from "@/modules/StreamEditor";
 import { playBeep } from "@/actions.ts";
 import { useDurationQuery } from "@/api/StreamApi.ts";

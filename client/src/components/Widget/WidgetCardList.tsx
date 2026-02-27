@@ -8,11 +8,9 @@ export const WidgetCardList = () => {
     const widgets = useSelector((state: RootState): Record<string, IWidget> => selectWidgets(state));
     return (
         <div className="items-list">
-            <div data-type="items">
-                {Object.keys(widgets).map((widgetId) => (
-                    <WidgetCard key={widgetId} widgetCardId={widgetId} />
-                ))}
-            </div>
+            {Object.keys(widgets).map((widgetId) => (
+                <WidgetCard key={widgetId} widgetCardId={widgetId} />
+            ))}
         </div>
     );
 }

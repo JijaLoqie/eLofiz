@@ -2,18 +2,18 @@
     z-index: 100;
     position: fixed;
     right: 10px;
-    top: 16px;
+    top: 10px;
 
     border-radius: 16px;
     padding: 24px;
-    width: 30vw;
+    width: calc(100vw - 20px);
     height: calc(100vh - 20px);
     overflow: auto;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
     background-image: linear-gradient(#ff6b6b99, #00000099);
     color: black;
-    animation: slideIn 0.3s ease-out;
+    animation: fadeIn 0.3s ease-out;
     backdrop-filter: blur(3px);
     filter: url(#glass-distortion);
     outline: solid rgba(255, 255, 255, 0.2);
