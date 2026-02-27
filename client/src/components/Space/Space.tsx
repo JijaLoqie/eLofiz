@@ -3,7 +3,7 @@ import type { ISpace, WidgetInstance } from "@/types.ts";
 import type { RootState } from "@/index.tsx";
 import { selectSpace, selectWidgetsOnSpace } from "@/slices/SpaceSlice.ts";
 import { Widget } from "@/components/Widget/Widget.tsx";
-import { useCallback, useEffect, useRef } from "react";
+import { createContext, useCallback, useEffect, useRef } from "react";
 import { registerAudio } from "@/actions.ts";
 import { selectIntersectionMetrics } from "@/slices/IntersectionSlice.ts";
 import { setVolume } from "@/middlewares/AudioMiddleware.ts";
@@ -12,6 +12,9 @@ import { trailingThrottle } from "@/utils/utils.ts";
 interface SpaceProps {
     spaceId: string;
 }
+
+
+export const SpaceContext = createContext<string>("");
 
 
 export const Space = (props: SpaceProps) => {
@@ -46,13 +49,15 @@ export const Space = (props: SpaceProps) => {
 
     const { id, currentBackground, images, fixed } = spaceInfo;
     return (
-        <div
-            id={`${id}`}
-            className={`space ${fixed ? "space--fixed" : ""}`}
-            style={{backgroundImage:`url('${images[currentBackground].imageUrl}')`}}
-        >
-            <audio ref={htmlAudio} className="space__music">NaN</audio>
-            {widgets.map((widInst) => <Widget widgetInstance={widInst} key={widInst.id} />)}
-        </div>
+        <SpaceContext.Provider value={spaceId}>
+            <div
+                id={`${id}`}
+                className={`space ${fixed ? "space--fixed" : ""}`}
+                style={{backgroundImage:`url('${images[currentBackground].imageUrl}')`}}
+            >
+                <audio ref={htmlAudio} className="space__music">NaN</audio>
+                {widgets.map((widInst) => <Widget key={widInst.id} widgetInfoId={widInst.widgetId} widgetInstance={widInst} />)}
+            </div>
+        </SpaceContext.Provider>
     );
 }

@@ -7,11 +7,9 @@ export const PresetCardList = () => {
     const presets = useSelector((state: RootState) => selectPresets(state));
     return (
         <div className="items-list">
-            <div data-type="items">
-                {Object.keys(presets).map((presetId) => (
-                    <PresetCard key={presetId} presetId={presetId} />
-                ))}
-            </div>
+            {Object.keys(presets).map((presetId) => (
+                <PresetCard key={presetId} presetId={presetId} />
+            ))}
         </div>
     );
 }
