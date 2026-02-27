@@ -4,10 +4,10 @@ export type ImageInfo = {
 }
 
 export enum WidgetType {
-    MUSIC = "Музыка",
-    BACKGROUND = "Задний фон",
-    AUDIO_VISUALIZER = "Аудио полоски",
-    TIMER = "Таймер"
+    MUSIC = "music",
+    BACKGROUND = "background",
+    AUDIO_VISUALIZER = "audio-visualiser",
+    TIMER = "timer"
 }
 
 

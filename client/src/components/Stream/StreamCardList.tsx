@@ -8,11 +8,9 @@ export const StreamCardList = () => {
     const streams = useSelector((state: RootState): Record<string, IStream> => selectStreams(state));
     return (
         <div className="items-list">
-            <div data-type="items">
-                {Object.keys(streams).map((streamId) => (
-                    <StreamCard key={streamId} streamId={streamId} />
-                ))}
-            </div>
+            {Object.keys(streams).map((streamId) => (
+                <StreamCard key={streamId} streamId={streamId} />
+            ))}
         </div>
     );
 };

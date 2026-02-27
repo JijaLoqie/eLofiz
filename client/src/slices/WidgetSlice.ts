@@ -11,46 +11,46 @@ const initialState: WidgetSliceState = {
         "basic player": {
             id: "basic player",
             title: "Базовый аудио плеер",
-            preview: "preview/music_player.png",
+            preview: "preview/player.png",
             type: WidgetType.MUSIC,
 
         },
         "basic redactor": {
             id: "basic redactor",
             title: "Базовый редактор фона",
-            preview: "preview/background_setting.png",
+            preview: "preview/background.png",
             type: WidgetType.BACKGROUND,
         },
         "basic visualizer": {
             id: "basic visualizer",
             title: "Базовый визуализатор",
-            preview: "preview/audio_visualizer.png",
+            preview: "preview/visualiser.png",
             type: WidgetType.AUDIO_VISUALIZER,
 
         },
         "circle visualizer": {
             id: "circle visualizer",
             title: "Круговой аудиовизуализатор",
-            preview: "preview/audio_visualizer.png",
+            preview: "preview/circle-visualiser.png",
             type: WidgetType.AUDIO_VISUALIZER,
 
         },
         "text visualizer": {
             id: "text visualizer",
             title: "Текстовый аудиовизуализатор",
-            preview: "preview/audio_visualizer.png",
+            preview: "preview/text-visualiser.png",
             type: WidgetType.AUDIO_VISUALIZER,
         },
         "yoda timer": {
             id: "yoda timer",
             title: "Йода таймер",
-            preview: "preview/background_setting.png",
+            preview: "preview/yoda-timer.png",
             type: WidgetType.TIMER,
         },
         "pomodoro timer": {
             id: "pomodoro timer",
             title: "Pomodoro таймер",
-            preview: "preview/background_setting.png",
+            preview: "preview/pomodoro-timer.png",
             type: WidgetType.TIMER,
         },
     },
