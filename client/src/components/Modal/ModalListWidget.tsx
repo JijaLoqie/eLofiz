@@ -1,5 +1,5 @@
 import { EntityType } from "@/types.ts";
-import React, { useCallback, useState } from "react";
+import React, { use, useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/index.tsx";
 import { StreamCardList } from "@/components/Stream/StreamCardList.tsx";
@@ -7,9 +7,11 @@ import { PresetCardList } from "@/components/Preset/PresetCardList.tsx";
 import { WidgetCardList } from "@/components/Widget/WidgetCardList.tsx";
 import { selectCurrentSpace } from "@/slices/IntersectionSlice.ts";
 import { selectSpace } from "@/slices/SpaceSlice.ts";
+import { ModalContext } from "@/components/Modal/ModalProvider.tsx";
 
 export const ModalListWidget = () => {
-    const entityType = useSelector((state: RootState) => state.modal.entityType);
+    const modalData = use(ModalContext);
+    const entityType = modalData?.value;
     const currentSpaceId = useSelector((state: RootState) => selectCurrentSpace(state));
     const currentSpace = useSelector((state: RootState) => selectSpace(state, currentSpaceId));
 
