@@ -7,6 +7,7 @@ import { toggleItemsList } from "@/slices/ModalSlice.ts";
 import { selectCurrentSpace } from "@/slices/IntersectionSlice.ts";
 import { addWidget } from "@/slices/SpaceSlice.ts";
 import { ModalContext } from "@/components/Modal/ModalProvider.tsx";
+import { NotificationContext } from "@/components/Notifications/NotificationProvider.tsx";
 
 interface WidgetCardProps {
     widgetCardId: string;
@@ -30,6 +31,7 @@ const WIDGET_COLOR_MAP: Record<string, { border: string; bg: string; line: strin
 
 export const WidgetCard = (props: WidgetCardProps) => {
     const modalData = use(ModalContext);
+    const notificationData = use(NotificationContext);
     const currentSpace = useSelector((state: RootState) => selectCurrentSpace(state));
     const widgetInfo = useSelector((state: RootState): IWidget => selectWidget(state, props.widgetCardId));
     const dispatch = useDispatch();
@@ -37,6 +39,8 @@ export const WidgetCard = (props: WidgetCardProps) => {
     const handleAddWidget = useCallback(() => {
         dispatch(addWidget({ spaceId: currentSpace, widgetId: widgetInfo.id }));
         modalData?.setValue?.("");
+        notificationData?.setValue?.("Создан новый виджет!");
+
 
     }, [widgetInfo.id, currentSpace]);
 
@@ -46,7 +50,6 @@ export const WidgetCard = (props: WidgetCardProps) => {
     return (
         <div
             className="
-                w-[300px]
                 rounded-lg overflow-hidden
                 cursor-pointer
                 bg-[#000000AA] hover:bg-[#000000DD]

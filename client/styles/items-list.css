@@ -7,3 +7,24 @@
     break-inside: avoid; /* Prevent items from breaking across columns */
     margin-bottom: 16px; /* Space between items vertically */
 }
+
+/* Tablets - 3 columns */
+@media (max-width: 1200px) {
+    .items-list {
+        column-count: 3;
+    }
+}
+
+/* Small tablets - 2 columns */
+@media (max-width: 768px) {
+    .items-list {
+        column-count: 2;
+    }
+}
+
+/* Mobile - 1 column */
+@media (max-width: 480px) {
+    .items-list {
+        column-count: 1;
+    }
+}

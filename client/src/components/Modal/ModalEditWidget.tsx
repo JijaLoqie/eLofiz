@@ -1,47 +1,15 @@
-import React, { useState, useCallback, useRef, useEffect, createContext } from "react";
-import { EntityType, type IModalEditWidget, type IPreset, type IStream, type IWidget } from "@/types.ts";
+import React, { use, useEffect } from "react";
 import StreamEditor from "@/components/Stream/StreamEditor/StreamEditor.tsx";
-import { useDispatch, useSelector } from "react-redux";
-import { closeEditor } from "@/slices/ModalSlice.ts";
-import type { RootState } from "@/index.tsx";
-import { selectStream, setEditingStream } from "@/slices/StreamSlice.ts";
+import { EditorContext } from "@/components/Modal/EditorProvider.tsx";
 
 interface ModalEditWidgetProps {
 }
 
 export const ModalEditWidget: React.FC<ModalEditWidgetProps> = () => {
-    const isOpen = useSelector((state: RootState) => state.modal.isOpen);
-    const currentType = useSelector((state: RootState) => state.modal.entityType);
-    const currentEntityId = useSelector((state: RootState) => state.modal.currentEntityId)
-    const dispatch = useDispatch();
+    const editorContext = use(EditorContext);
 
-    const stream = useSelector((state: RootState) =>
-        selectStream(state, currentEntityId)
-    );
-
-    useEffect(() => {
-        if (stream !== undefined) {
-            dispatch(setEditingStream(stream))
-        }
-    }, [dispatch, stream]);
-
-    const handleCloseClick = useCallback(() => {
-        dispatch(closeEditor());
-    }, [dispatch]);
-
-    const renderEditor = () => {
-        switch (currentType) {
-            case EntityType.WIDGETS:
-            case EntityType.PRESETS:
-            case EntityType.STREAMS:
-                return (
-                    <StreamEditor
-                        streamId={currentEntityId}
-                    />
-                );
-            default:
-                return null;
-        }
+    const handleCloseClick = () => {
+        editorContext?.handleClose();
     };
 
     return (
@@ -52,9 +20,8 @@ export const ModalEditWidget: React.FC<ModalEditWidgetProps> = () => {
             top-0 right-0
             max-w-[500px]
             bg-black
-            ${isOpen ? "open" : ""}
+            z-[100]
             `}
-            style={{ display: isOpen ? "block" : "none", zIndex: 1000 }}
         >
             <div className="relative h-fit min-h-12 flex">
                 <div
@@ -66,7 +33,7 @@ export const ModalEditWidget: React.FC<ModalEditWidgetProps> = () => {
                 </div>
             </div>
 
-            {renderEditor()}
+            {editorContext?.stream && <StreamEditor streamId={editorContext?.stream.id} />}
 
             <div className="wrapper" data-type="modal-actions"></div>
         </div>

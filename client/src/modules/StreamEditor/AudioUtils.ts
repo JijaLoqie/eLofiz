@@ -35,7 +35,6 @@ export function formatDuration(ms: number): string {
 }
 
 export function getFileNameFromPath(filePath: string): string {
-    console.log("GETTING FILENAME:", filePath);
     if (filePath) {
         const startIndex = (filePath.indexOf('\\') >= 0 ? filePath.lastIndexOf('\\') : filePath.lastIndexOf('/'));
         let filename = filePath.substring(startIndex);

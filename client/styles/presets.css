@@ -8,10 +8,10 @@
     height: 150px;
     border-radius: 10px;
     overflow: hidden;
-    width: 300px;
 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     transition: box-shadow 0.3s;
+    cursor: pointer;
 }
 
 .preset-card:hover {

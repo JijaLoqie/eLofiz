@@ -1,27 +1,20 @@
-import React, { type FC, useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
+import React, { type FC, use, useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
 import { formatDuration } from "@/modules/StreamEditor";
 import { useDurationQuery } from "@/api/StreamApi.ts";
 import { useDragHandler } from "@/components/hooks/useDragHandler.ts";
-import type { IStream } from "@/types.ts";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "@/index.tsx";
-import { selectEditingStream, updateEditingStream } from "@/slices/StreamSlice.ts";
+import { EditorContext } from "@/components/Modal/EditorProvider.tsx";
 
 interface StreamTimelineProps {
 }
 
 export const StreamTimeline: FC<StreamTimelineProps> = () => {
-    const stream = useSelector((state: RootState) => selectEditingStream(state));
+    const stream = use(EditorContext)?.stream;
 
     const {data: duration = 0, isLoading} = useDurationQuery(stream?.id || "");
 
     const breakpoints = useMemo(() => {
         return stream?.breakpoints || []
     }, [stream?.breakpoints]);
-
-
-
-    // const audios = stream?.audios || [];
 
     return (
         <>
@@ -43,9 +36,11 @@ export const StreamTimeline: FC<StreamTimelineProps> = () => {
 }
 
 export const Breakpoint: FC<{time: number, duration: number}> = (props) => {
-    const dispatch = useDispatch();
+    const editorData = use(EditorContext);
+    const stream = editorData?.stream;
+    const handleUpdate = editorData?.handleUpdate;
+
     const { duration } = props;
-    const stream = useSelector((state: RootState) => selectEditingStream(state));
     const breakpointRef = useRef<HTMLDivElement>(null);
 
     const [currentTime, setCurrentTime] = useState(props.time);
@@ -63,8 +58,7 @@ export const Breakpoint: FC<{time: number, duration: number}> = (props) => {
                 return breakpoint;
             }
         }).sort();
-        console.log({newBreakpoints})
-        dispatch(updateEditingStream({breakpoints: newBreakpoints}));
+        handleUpdate?.({breakpoints: newBreakpoints});
     });
 
     useDragHandler({

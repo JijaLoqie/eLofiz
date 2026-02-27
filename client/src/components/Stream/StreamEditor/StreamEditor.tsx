@@ -1,13 +1,6 @@
-import React, { useCallback, type FC, useEffect, createContext, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-    selectEditingStream,
-    updateEditingStream,
-    saveStream, setEditingStream
-} from "@/slices/StreamSlice.ts";
-import { StreamCardPartList } from "@/components/Stream/StreamEditor/StreamCardPartList.tsx";
-import type { RootState } from "@/index.tsx";
+import React, { useCallback, type FC, useEffect, createContext, useState, use } from "react";
 import type { IStream } from "@/types.ts";
+import { EditorContext } from "@/components/Modal/EditorProvider.tsx";
 import { StreamTimeline } from "@/components/Stream/StreamEditor/StreamTimeline.tsx";
 
 const defaultItem: IStream = {
@@ -25,13 +18,14 @@ interface StreamEditorProps {
 
 
 export const StreamEditor: FC<StreamEditorProps> = ({streamId}) => {
-    const dispatch = useDispatch();
-    const changedItem = useSelector((state: RootState) => selectEditingStream(state));
+    const editorContext = use(EditorContext);
+    const changedItem = editorContext?.stream;
+
 
 
 
     const setStreamProperty = useCallback(<K extends keyof IStream>(key: K, value: IStream[K]) => {
-        dispatch(updateEditingStream({[key]: value}));
+        editorContext?.handleUpdate({[key]: value});
     }, []);
 
 
@@ -71,11 +65,11 @@ export const StreamEditor: FC<StreamEditorProps> = ({streamId}) => {
             return;
         }
 
-        dispatch(saveStream());
-    }, [changedItem, dispatch]);
+        editorContext?.handleSave();
+    }, [changedItem]);
 
     const handleCancel = useCallback(() => {
-        dispatch(setEditingStream(null));
+        editorContext?.handleClose();
     }, []);
 
     return (
@@ -105,8 +99,11 @@ export const StreamEditor: FC<StreamEditorProps> = ({streamId}) => {
                     </div>
                 </div>
             </div>
-        </div>
-    );
+            <div>
+                <div className="button" onClick={handleSave}>Save</div>
+                <div className="button" onClick={handleCancel}>Close</div>
+            </div>
+        </div>);
 };
 
 export default StreamEditor;

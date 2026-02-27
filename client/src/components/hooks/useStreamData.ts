@@ -1,26 +1,19 @@
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "@/index.ts";
 import { selectStream } from "@/slices/StreamSlice.ts";
-import { openEditor } from "@/slices/ModalSlice.ts";
-import { EntityType } from "@/types.ts";
-import { useCallback } from "react";
+import { use, useCallback, useEffect } from "react";
+import { EditorContext } from "@/components/Modal/EditorProvider.tsx";
 
 export const useStreamData = (streamId: string) => {
-    const dispatch = useDispatch();
+    const editorContext = use(EditorContext);
+    const stream = useSelector((state: RootState) => selectStream(state, streamId));
 
-    // Get stream from store by ID
-    const stream = useSelector((state: RootState) =>
-        selectStream(state, streamId)
-    );
 
     const handleOpenEditor = useCallback(() => {
-        dispatch(
-            openEditor({
-                entityType: EntityType.STREAMS,
-                entityId: streamId,
-            })
-        );
-    }, [dispatch, streamId]);
+        if (stream) {
+            editorContext?.handleOpen(stream);
+        }
+    }, [stream]);
 
     return { stream, handleOpenEditor };
 };

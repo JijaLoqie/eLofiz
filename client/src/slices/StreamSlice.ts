@@ -1,10 +1,9 @@
-import { createAsyncThunk, createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { type IStream, StreamType } from "@/types.ts";
 import type { RootState } from "@/index.tsx";
 
 interface StreamSliceState {
     items: Record<string, IStream>,
-    editingStream: IStream | null
 }
 const initialSlice: StreamSliceState = {
     items: {
@@ -65,17 +64,14 @@ const initialSlice: StreamSliceState = {
             description: "",
         }
     },
-    editingStream: null
 }
 
 export const StreamSlice = createSlice({
     name: "stream",
     initialState: initialSlice,
     reducers: {
-        saveStream: (state) => {
-            if (!state.editingStream) return;
-            Object.assign(state.items[ state.editingStream.id ], state.editingStream);
-            state.editingStream = null;
+        saveStream: (state, action: PayloadAction<IStream>) => {
+            Object.assign(state.items[ action.payload.id ], action.payload);
         },
         removeStreamParts: (state, action: PayloadAction<{ streamId: string, partId: string }>) => {
             const {
@@ -84,24 +80,14 @@ export const StreamSlice = createSlice({
             } = action.payload;
             state.items[ streamId ].audios = state.items[ streamId ].audios.filter(audioLink => audioLink !== partId);
         },
-        setEditingStream: (state, action: PayloadAction<IStream | null>) => {
-            state.editingStream = action.payload;
-        },
-        updateEditingStream: (state, action: PayloadAction<Partial<IStream>>) => {
-            if (!state.editingStream) return;
-            // All checks passed, update the property
-            const newEditingSteamProps = action.payload;
-            Object.assign(state.editingStream, newEditingSteamProps);
-        }
     },
     selectors: {
         selectStreams: (state) => state.items,
-        selectEditingStream: (state) => state.editingStream,
     }
 })
 
-export const { saveStream, removeStreamParts, setEditingStream, updateEditingStream } = StreamSlice.actions
-export const { selectStreams, selectEditingStream } = StreamSlice.selectors
+export const { saveStream, removeStreamParts } = StreamSlice.actions
+export const { selectStreams } = StreamSlice.selectors
 
 
 
