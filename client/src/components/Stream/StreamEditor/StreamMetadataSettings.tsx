@@ -39,7 +39,7 @@ export const StreamMetadataSettings: FC = () => {
     const isTitleEmpty = !changedItem?.name.trim();
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 h-full">
             {/* Title Input */}
             <div className="group">
                 <div className="flex items-center justify-between mb-3">
@@ -87,11 +87,10 @@ export const StreamMetadataSettings: FC = () => {
                 <div className="px-4 py-3 bg-white/0 group-hover:bg-white/5 group-focus-within:bg-white/[0.08] transition-all duration-300 rounded-lg">
                     <textarea
                         ref={textareaRef}
-                        className="w-full bg-transparent text-white text-sm placeholder-white/40 resize-none transition-all duration-300 focus:outline-none break-words overflow-hidden"
+                        className="w-full h-full inset-0 bg-transparent text-white text-sm placeholder-white/40 resize-none transition-all duration-300 focus:outline-none break-words overflow-hidden"
                         placeholder="Enter your stream description..."
                         value={changedItem?.description || ""}
                         onChange={handleDescriptionChange}
-                        rows={1}
                     />
                 </div>
                 <div className="h-px w-0 bg-gradient-to-r from-blue-500/50 to-transparent group-focus-within:w-full transition-all duration-300"></div>

@@ -5,25 +5,15 @@ import { StreamMetadataSettings } from "@/components/Stream/StreamEditor/StreamM
 import { StreamTimelineSettings } from "@/components/Stream/StreamEditor/StreamTimelineSettings.tsx";
 import { StreamPlaylistSettings } from "@/components/Stream/StreamEditor/StreamPlaylist/StreamPlaylistSettings.tsx";
 
-const defaultItem: IStream = {
-    id: "",
-    name: "",
-    audios: [],
-    breakpoints: [],
-    cover: "",
-    description: "",
-};
-
 interface StreamEditorProps {
-    streamId: string;
 }
 
 type TabType = "metadata" | "timeline" | "playlist";
 
-export const StreamEditor: FC<StreamEditorProps> = ({streamId}) => {
+export const StreamEditor: FC<StreamEditorProps> = () => {
     const editorContext = use(EditorContext);
     const changedItem = editorContext?.stream;
-    const [activeTab, setActiveTab] = useState<TabType>("metadata");
+    const [activeTab, setActiveTab] = useState<TabType>("playlist");
 
     const handleCoverChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +37,7 @@ export const StreamEditor: FC<StreamEditorProps> = ({streamId}) => {
     ];
 
     return (
-        <div className="stream-editor space-y-6">
+        <div className="h-full space-y-6">
             {/* Cover Image Settings */}
             {changedItem?.cover && (
                 <div className="relative group">

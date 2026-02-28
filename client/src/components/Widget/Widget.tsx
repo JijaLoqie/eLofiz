@@ -5,7 +5,7 @@ import { useDragHandler } from "@/components/hooks/useDragHandler.ts";
 import { removeWidget } from "@/slices/SpaceSlice.ts";
 import { selectCurrentSpace } from "@/slices/IntersectionSlice.ts";
 import { BackgroundWidget } from "@/components/Widget/custom/BackgroundWidget/BackgroundWidget.tsx";
-import { PlayerWidget } from "@/components/Widget/custom/PlayerWidget.tsx";
+import { PlayerWidget } from "@/components/Widget/custom/PlayerWidget/PlayerWidget.tsx";
 import { AudioVisualizerWidget } from "@/components/Widget/custom/AudioVisualizers/AudioVisualizerWidget.tsx";
 import { CircleAudioVisualizerWidget } from "@/components/Widget/custom/AudioVisualizers/CircleAudioVisualizerWidget.tsx";
 import { TextAudioVisualizerWidget } from "@/components/Widget/custom/AudioVisualizers/TextAudioVisualizerWidget.tsx";

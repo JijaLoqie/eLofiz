@@ -1,4 +1,7 @@
 import React, { use, useCallback } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/index.tsx";
+import { selectStream } from "@/slices/StreamSlice.ts";
 import StreamEditor from "@/components/Stream/StreamEditor/StreamEditor.tsx";
 import { EditorContext } from "@/components/Modal/EditorProvider.tsx";
 
@@ -7,6 +10,7 @@ interface ModalEditWidgetProps {
 
 export const ModalEditWidget: React.FC<ModalEditWidgetProps> = () => {
     const editorContext = use(EditorContext);
+    const stream = useSelector((state: RootState) => selectStream(state, editorContext?.stream?.id || ""));
 
     const handleCloseClick = useCallback(() => {
         editorContext?.handleClose();
@@ -35,16 +39,20 @@ export const ModalEditWidget: React.FC<ModalEditWidgetProps> = () => {
         <>
             {/* Backdrop */}
             <div
-                className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[99]"
+                className="fixed inset-0 bg-black/30 z-[99]"
                 onClick={handleCloseClick}
             />
 
             {/* Modal */}
-            <div className="fixed top-0 right-0 w-[500px] h-screen bg-black/95 backdrop-blur-md border-l border-white/10 z-[100] flex flex-col">
+            <div className="fixed top-0 right-0 w-[500px] h-screen bg-black/95 backdrop-blur-md border-l border-white/10 z-[100] flex flex-col"
+                 style={{
+                     animation: "slideIn 0.3s ease-out",
+                 }}
+            >
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
                     <h2 className="text-sm font-semibold uppercase tracking-widest text-white/80">
-                        {editorContext?.stream?.name || "New Stream"}
+                        {stream?.name || "Stream Name"}
                     </h2>
                     <button
                         onClick={handleCloseClick}
@@ -56,7 +64,7 @@ export const ModalEditWidget: React.FC<ModalEditWidgetProps> = () => {
 
                 {/* Content */}
                 <div className="flex-1 overflow-y-auto px-6 py-4">
-                    {editorContext?.stream && <StreamEditor streamId={editorContext?.stream.id} />}
+                    {editorContext?.stream && <StreamEditor />}
                 </div>
 
                 {/* Action Buttons */}
