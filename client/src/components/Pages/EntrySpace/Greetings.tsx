@@ -1,12 +1,24 @@
+import { createSpace } from "@/slices/SpaceSlice.ts";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/index.tsx";
+import { useMemo } from "react";
+
 export const Greetings = () => {
-    const handleLogin = () => {
-        console.log("Login");
-        // Add your login logic here
-    };
+    const dispatch = useDispatch();
+    const presetsRecord = useSelector((state: RootState) => state.presets.items);
+    const presets = useMemo(() => Object.values(presetsRecord), [presetsRecord]);
+
+
+    const {spaceProps: randomSpaceProps} = presets[Math.floor(Math.random()*presets.length)];
+
+
+    // const handleLogin = () => {
+    //     console.log("Login");
+    //     // Add your login logic here
+    // };
 
     const handleGuest = () => {
-        console.log("Guest access");
-        // Add your guest access logic here
+        dispatch(createSpace(randomSpaceProps));
     };
 
 
@@ -24,7 +36,7 @@ export const Greetings = () => {
 
             {/* Buttons */}
             <div className="flex gap-6 pt-4">
-                <div className="button">Enter as a Guest</div>
+                <div className="button" onClick={handleGuest}>Enter as a Guest</div>
                 <div className="button">Log in</div>
             </div>
         </div>)

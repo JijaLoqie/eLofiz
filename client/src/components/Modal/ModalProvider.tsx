@@ -1,5 +1,8 @@
 import { createContext, type ReactNode, useCallback, useEffect, useEffectEvent, useState } from "react";
-import { EntityType } from "@/types.ts";
+import { EntityType, type ISpace } from "@/types.ts";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/index.tsx";
+import { selectSpaces } from "@/slices/SpaceSlice.ts";
 
 interface ModalContextType {
     value: EntityType | "";
@@ -13,10 +16,11 @@ export const ModalContext = createContext<ModalContextType | undefined>(undefine
 
 
 export const ModalProvider = (props: {children: ReactNode}) => {
+    const spaces = useSelector((state: RootState): ISpace[] => selectSpaces(state))
     const [type, setType] = useState<EntityType | "">("");
 
     const toggleItemsList = useEffectEvent((newType: EntityType) => {
-        if (type !== newType) {
+        if (type !== newType && spaces.length !== 0) {
             setType(newType)
         } else {
             setType("");
@@ -43,7 +47,7 @@ export const ModalProvider = (props: {children: ReactNode}) => {
         return () => {
             document.body.removeEventListener("keypress", handleKeyPress);
         }
-    }, [type]);
+    }, [type, spaces]);
 
 
 
