@@ -1,23 +1,18 @@
 import { useState, useEffect, useCallback } from "react";
 import { getAudioDuration } from "@/modules/StreamEditor";
-
-export interface Track {
-    path: string;
-    duration: number;
-}
+import type { IAudio } from "@/types.ts";
 
 export const useResolveAudioTracks = (
-    audioPaths: string[] | undefined,
-    isAudioFile: (path: string) => boolean
+    audios: IAudio[] | undefined
 ) => {
-    const [tracks, setTracks] = useState<Track[]>([]);
+    const [tracks, setTracks] = useState<IAudio[]>([]);
     const [totalDuration, setTotalDuration] = useState<number>(0);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
-        // Guard against undefined or empty paths
-        if (!audioPaths || audioPaths.length === 0) {
+        // Guard against undefined or empty audios
+        if (!audios || audios.length === 0) {
             setTracks([]);
             setTotalDuration(0);
             return;
@@ -26,35 +21,40 @@ export const useResolveAudioTracks = (
         setIsLoading(true);
         setError(null);
 
-        const resolveRecursively = async (
-            paths: string[],
-            visited = new Set<string>()
-        ): Promise<Track[]> => {
-            const result: Track[] = [];
+        const resolveAudioTracks = async (): Promise<IAudio[]> => {
+            const result: IAudio[] = [];
+            const visited = new Set<string>();
 
-            for (const audioPath of paths) {
+            for (const audio of audios) {
                 // Safety checks
-                if (!audioPath || typeof audioPath !== "string") {
-                    console.warn("Invalid audio path:", audioPath);
+                if (!audio || typeof audio !== "object" || !audio.id) {
+                    console.warn("Invalid audio object:", audio);
                     continue;
                 }
 
-                if (visited.has(audioPath)) continue;
-                visited.add(audioPath);
+                if (visited.has(audio.id)) continue;
+                visited.add(audio.id);
 
-                if (isAudioFile(audioPath)) {
-                    try {
-                        const duration = await getAudioDuration(audioPath);
-                        result.push({
-                            path: audioPath,
-                            duration,
-                        });
-                    } catch (err) {
-                        console.warn(
-                            `Failed to get duration for ${audioPath}:`,
-                            err
-                        );
-                    }
+                // If duration is already set, use it
+                if (audio.duration > 0) {
+                    result.push(audio);
+                    continue;
+                }
+
+                // Otherwise, fetch the duration
+                try {
+                    const duration = await getAudioDuration(audio.url);
+                    result.push({
+                        ...audio,
+                        duration,
+                    });
+                } catch (err) {
+                    console.warn(
+                        `Failed to get duration for ${audio.name}:`,
+                        err
+                    );
+                    // Add audio with duration 0 if fetching fails
+                    result.push(audio);
                 }
             }
 
@@ -63,10 +63,10 @@ export const useResolveAudioTracks = (
 
         (async () => {
             try {
-                const resolved = await resolveRecursively(audioPaths);
+                const resolved = await resolveAudioTracks();
                 setTracks(resolved);
                 setTotalDuration(
-                    resolved.reduce((sum, t) => sum + t.duration, 0)
+                    resolved.reduce((sum, audio) => sum + audio.duration, 0)
                 );
             } catch (err) {
                 const error = err instanceof Error ? err : new Error(String(err));
@@ -76,7 +76,7 @@ export const useResolveAudioTracks = (
                 setIsLoading(false);
             }
         })();
-    }, [audioPaths, isAudioFile]);
+    }, [audios]);
 
     return { tracks, totalDuration, isLoading, error };
 };

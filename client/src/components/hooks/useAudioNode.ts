@@ -19,7 +19,7 @@ export const useAudioNode = (props: {spaceId: string, streamId: string}) => {
 
     useEffect(() => {
         if (!audioNode.current || audioNode.current.src) return;
-        audioNode.current.src = stream?.audios[0]!
+        audioNode.current.src = stream?.audios[0]!.url
     }, [audioNode.current, stream?.audios]);
 
 

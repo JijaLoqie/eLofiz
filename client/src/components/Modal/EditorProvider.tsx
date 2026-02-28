@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { saveStream } from "@/slices/StreamSlice.ts";
 import { NotificationContext } from "@/components/Notifications/NotificationProvider.tsx";
 
-interface EditorContextType {
+export interface EditorContextType {
     stream: IStream | null;
     handleUpdate: (item: Partial<IStream>) => void,
     handleOpen: (item: IStream) => void,

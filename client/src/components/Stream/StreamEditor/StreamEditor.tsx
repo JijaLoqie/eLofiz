@@ -1,7 +1,9 @@
-import React, { useCallback, type FC, useEffect, createContext, useState, use } from "react";
+import React, { useCallback, type FC, useState, use } from "react";
 import type { IStream } from "@/types.ts";
 import { EditorContext } from "@/components/Modal/EditorProvider.tsx";
-import { StreamTimeline } from "@/components/Stream/StreamEditor/StreamTimeline.tsx";
+import { StreamMetadataSettings } from "@/components/Stream/StreamEditor/StreamMetadataSettings.tsx";
+import { StreamTimelineSettings } from "@/components/Stream/StreamEditor/StreamTimelineSettings.tsx";
+import { StreamPlaylistSettings } from "@/components/Stream/StreamEditor/StreamPlaylist/StreamPlaylistSettings.tsx";
 
 const defaultItem: IStream = {
     id: "",
@@ -16,23 +18,12 @@ interface StreamEditorProps {
     streamId: string;
 }
 
+type TabType = "metadata" | "timeline" | "playlist";
 
 export const StreamEditor: FC<StreamEditorProps> = ({streamId}) => {
     const editorContext = use(EditorContext);
     const changedItem = editorContext?.stream;
-
-
-
-
-    const setStreamProperty = useCallback(<K extends keyof IStream>(key: K, value: IStream[K]) => {
-        editorContext?.handleUpdate({[key]: value});
-    }, []);
-
-
-    const handleNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        setStreamProperty("name", e.target.value);
-    }, []);
-
+    const [activeTab, setActiveTab] = useState<TabType>("metadata");
 
     const handleCoverChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,69 +32,67 @@ export const StreamEditor: FC<StreamEditorProps> = ({streamId}) => {
                 const reader = new FileReader();
                 reader.onload = (event) => {
                     const dataUrl = event.target?.result as string;
-                    setStreamProperty("cover", dataUrl);
+                    editorContext?.handleUpdate({cover: dataUrl});
                 };
                 reader.readAsDataURL(file);
             }
         },
-        []
+        [editorContext]
     );
 
-    const handleDescriptionChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setStreamProperty("description", e.target.value);
-    }, [])
-
-    const handleSave = useCallback(() => {
-        if (!changedItem) return;
-        if (!changedItem.name.trim()) {
-            alert("Please enter a stream name");
-            return;
-        }
-
-        if (changedItem.audios.length === 0) {
-            alert("Please add at least one audio file");
-            return;
-        }
-
-        editorContext?.handleSave();
-    }, [changedItem]);
-
-    const handleCancel = useCallback(() => {
-        editorContext?.handleClose();
-    }, []);
+    const tabs: { id: TabType; label: string; icon: string }[] = [
+        { id: "metadata", label: "Metadata", icon: "fas fa-info-circle" },
+        { id: "timeline", label: "Timeline", icon: "fas fa-bars" },
+        { id: "playlist", label: "Playlist", icon: "fas fa-music" },
+    ];
 
     return (
-        <div className="stream-editor">
-            <div className="main_control">
-                <div data-type="main-view">
-                    {changedItem?.cover && (
-                    <div className="image-cover">
-                        <img
-                            className="shadow-"
-                            src={changedItem.cover}
-                            alt="Stream cover"
+        <div className="stream-editor space-y-6">
+            {/* Cover Image Settings */}
+            {changedItem?.cover && (
+                <div className="relative group">
+                    <img
+                        className="group rounded-lg w-full h-48 object-cover"
+                        src={changedItem.cover}
+                        alt="Stream cover"
+                    />
+                    <label className="absolute bottom-2 right-2 aspect-square bg-black/60 group-hover:bg-black/80 p-3 transition-all cursor-pointer hover:scale-105 rounded-lg flex items-center justify-center">
+                        <input
+                            type="file"
+                            className="hidden"
+                            onChange={handleCoverChange}
                         />
-                    </div>
-                    )}
+                        <i className="fas fa-pen text-white"></i>
+                    </label>
                 </div>
+            )}
+
+            {/* Tab Navigation */}
+            <div className="flex gap-1 border-b border-white/10">
+                {tabs.map((tab) => (
+                    <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`flex items-center gap-2 px-3 py-3 text-xs font-semibold uppercase tracking-widest transition-all duration-300 border-b-2 ${
+                            activeTab === tab.id
+                                ? "text-white border-blue-500/50"
+                                : "text-white/50 border-transparent hover:text-white/70"
+                        }`}
+                    >
+                        <i className={tab.icon}></i>
+                        {tab.label}
+                    </button>
+                ))}
             </div>
-            <div className="stream_control">
-                {/* Timeline with breakpoints */}
-                <div className="stream-editor__timeline-section editor-section">
-                    <div className="stream-editor__timeline-label">
-                        Timeline & Breakpoints
-                    </div>
-                    <StreamTimeline />
-                    <div className="stream-editor__timeline-hint">
-                        Left click to add • Right click to remove • Drag to move
-                    </div>
-                </div>
+
+            {/* Tab Content */}
+            <div className="space-y-6">
+                {activeTab === "metadata" && <StreamMetadataSettings />}
+                {activeTab === "timeline" && <StreamTimelineSettings />}
+                {activeTab === "playlist" && <StreamPlaylistSettings />}
             </div>
-            <div>
-                <div className="button" onClick={handleSave}>Save</div>
-                <div className="button" onClick={handleCancel}>Close</div>
-            </div>
-        </div>);
+        </div>
+    );
 };
 
 export default StreamEditor;

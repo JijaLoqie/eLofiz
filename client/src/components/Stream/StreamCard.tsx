@@ -8,11 +8,10 @@ interface StreamCardProps {
 
 export const StreamCard: React.FC<StreamCardProps> = ({ streamId }) => {
     const { stream, handleOpenEditor } = useStreamData(streamId);
-    const { isAudioFile, extractFileName, formatDuration } =
+    const { formatDuration } =
         useAudioFileUtils();
     const { tracks, totalDuration } = useResolveAudioTracks(
         stream?.audios || [],
-        isAudioFile
     );
 
     if (!stream) {
@@ -57,7 +56,7 @@ export const StreamCard: React.FC<StreamCardProps> = ({ streamId }) => {
                                 {tracks.map((track, index) => (
                                     <div key={index} className="track-item">
                                         <span className="track-name">
-                                            {extractFileName(track.path)}
+                                            {track.name}
                                         </span>
                                         <span className="track-duration">
                                             {formatDuration(track.duration)}

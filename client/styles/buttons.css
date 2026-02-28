@@ -45,7 +45,6 @@
 
 .button svg {
     height: var(--button-icon-size, 1.2cap);
-    width: auto;
     flex: none;
 }
 

@@ -35,9 +35,16 @@ export interface IPreset extends IObject {
 }
 
 
+export interface IAudio {
+    id: string;
+    name: string;
+    url: string;
+    duration: number;
+}
+
 export interface IStream extends IObject {
     name: string;
-    audios: string[];
+    audios: IAudio[];
     breakpoints: number[];
     cover: string;
     description: string;

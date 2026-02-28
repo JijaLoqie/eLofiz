@@ -22,7 +22,7 @@ const StreamApi = baseApi.injectEndpoints({
                         return rejectWithValue('Stream not found');
                     }
 
-                    const audioLinks: string[] = stream?.audios || [];
+                    const audioLinks: string[] = (stream?.audios || []).map(audio => audio.url);
                     const durations = await Promise.all(
                         audioLinks.map(audioLink => getAudioDuration(audioLink))
                     );
