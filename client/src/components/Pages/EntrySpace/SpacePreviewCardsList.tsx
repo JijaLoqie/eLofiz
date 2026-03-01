@@ -10,7 +10,7 @@ export const SpacePreviewCardsList= () => {
 
     return (<>
             <div
-                className="absolute inset-0 z-0 transition-opacity duration-300"
+                className="absolute inset-0 transition-opacity duration-300 z-1023"
                 style={{
                     backgroundImage: background ? `url(${background})` : undefined,
                     backgroundSize: 'cover',
@@ -19,8 +19,14 @@ export const SpacePreviewCardsList= () => {
                     opacity: opacity,
                 }}
             ></div>
-            <div className="fixed top-0 w-[100%] h-screen p-10 overflow-y-scroll z-11">
+            <div className="fixed top-0 w-[100%] h-screen p-10 overflow-y-scroll z-1023">
                 <div className={`float-end mr-20 flex flex-col gap-16 items-center`}>
+                    {Object.values(presets).map((preset, index) => (<SpacePreviewCard
+                        key={index}
+                        card={preset}
+                        onMouseEnter={() => handleSetBackground(preset.spaceProps.images[0])}
+                        onMouseLeave={() => clearBackground(preset.spaceProps.images[0])}
+                    />))}
                     {Object.values(presets).map((preset, index) => (<SpacePreviewCard
                         key={index}
                         card={preset}

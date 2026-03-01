@@ -23,7 +23,9 @@ export const ParticleSketch: React.FC<ParticleSketchProps> = ({
         <div
             id={containerId}
             style={{
-                position: "relative",
+                zIndex: 10,
+                position: "absolute",
+                top: 0,
                 height: '80%',
                 aspectRatio: "1/1",
                 display: 'block',
