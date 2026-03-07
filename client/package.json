@@ -3,7 +3,11 @@
   "module": "src/index.tsx",
   "type": "module",
   "scripts": {
-    "dev": "vite --open"
+    "dev": "vite --open",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui"
   },
   "devDependencies": {
     "@types/bun": "latest"

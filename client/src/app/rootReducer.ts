@@ -1,6 +1,5 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import { StreamSlice } from "@/slices/StreamSlice.ts";
-import { ModalSlice } from "@/slices/ModalSlice.ts";
 import { IntersectionSlice } from "@/slices/IntersectionSlice.ts";
 import { PresetSlice } from "@/slices/PresetSlice.ts";
 import { WidgetSlice } from "@/slices/WidgetSlice.ts";
@@ -10,7 +9,6 @@ import { baseApi } from "@/utils/api";
 
 export const rootReducer = combineReducers({
     [StreamSlice.name]: StreamSlice.reducer,
-    [ModalSlice.name]: ModalSlice.reducer,
     [IntersectionSlice.name]: IntersectionSlice.reducer,
     [PresetSlice.name]: PresetSlice.reducer,
     [WidgetSlice.name]: WidgetSlice.reducer,

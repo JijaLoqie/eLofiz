@@ -7,7 +7,10 @@ export enum WidgetType {
     MUSIC = "music",
     BACKGROUND = "background",
     AUDIO_VISUALIZER = "audio-visualiser",
-    TIMER = "timer"
+    TIMER = "timer",
+    AMBIENT = "ambient",
+    NATURE = "nature",
+    FOCUS = "focus",
 }
 
 
