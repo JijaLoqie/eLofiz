@@ -1,4 +1,5 @@
-import { SoundWidget } from "../AmbientWidgets/SoundWidget.tsx";
+import { type FC } from "react";
+import { AmbientWidget } from "@/components/Widget/custom/AmbientWidgets/AmbientWidget.tsx";
 
 interface ForestSoundsWidgetProps {
     spaceId: string;

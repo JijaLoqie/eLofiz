@@ -1,4 +1,5 @@
-import { SoundWidget } from "./SoundWidget.tsx";
+import { type FC } from "react";
+import { AmbientWidget } from "@/components/Widget/custom/AmbientWidgets/AmbientWidget.tsx";
 
 interface WhiteNoiseWidgetProps {
     spaceId: string;
