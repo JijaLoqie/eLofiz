@@ -1,5 +1,6 @@
 import { type FC } from "react";
 import { AmbientWidget } from "@/components/Widget/custom/AmbientWidgets/AmbientWidget.tsx";
+import { SoundWidget } from "@/components/Widget/custom/AmbientWidgets/SoundWidget.tsx";
 
 interface ThunderstormWidgetProps {
     spaceId: string;

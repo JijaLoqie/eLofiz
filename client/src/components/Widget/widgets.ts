@@ -40,6 +40,8 @@ import { FlameEffectsWidget } from "./custom/EffectsWidgets/FlameEffectsWidget.t
 import { SnowEffectsWidget } from "./custom/EffectsWidgets/SnowEffectsWidget.tsx";
 import { RainEffectsWidget } from "./custom/EffectsWidgets/RainEffectsWidget.tsx";
 import { SnowyWindEffectsWidget } from "./custom/EffectsWidgets/SnowyWindEffectsWidget.tsx";
+import { appStore } from "@/app/appStore.ts";
+import { updateWidgetRegistry } from "@/slices/WidgetSlice.ts";
 
 registerWidget({
     id: 'basic player',
