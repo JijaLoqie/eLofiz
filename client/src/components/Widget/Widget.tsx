@@ -1,139 +1,208 @@
+import { use, useCallback, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/index.tsx";
-import { createContext, type JSX, type ReactNode, use, useCallback, useMemo, useRef } from "react";
-import { useDragHandler } from "@/components/hooks/useDragHandler.ts";
-import { removeWidget } from "@/slices/SpaceSlice.ts";
-import { selectCurrentSpace } from "@/slices/IntersectionSlice.ts";
-import { BackgroundWidget } from "@/components/Widget/custom/BackgroundWidget/BackgroundWidget.tsx";
-import { PlayerWidget } from "@/components/Widget/custom/PlayerWidget/PlayerWidget.tsx";
-import { AudioVisualizerWidget } from "@/components/Widget/custom/AudioVisualizers/AudioVisualizerWidget.tsx";
-import { CircleAudioVisualizerWidget } from "@/components/Widget/custom/AudioVisualizers/CircleAudioVisualizerWidget.tsx";
-import { TextAudioVisualizerWidget } from "@/components/Widget/custom/AudioVisualizers/TextAudioVisualizerWidget.tsx";
-import { YodaTimerWidget } from "@/components/Widget/custom/YodaTimerWidget.tsx";
-import { PomodoroTimerWidget } from "@/components/Widget/custom/PomodoroTimerWidget.tsx";
-
-import { RainSoundsWidget } from "@/components/Widget/custom/AmbientWidgets/RainSoundsWidget.tsx";
-import { ForestSoundsWidget } from "@/components/Widget/custom/NatureWidgets/ForestSoundsWidget.tsx";
-import { CafeAmbienceWidget } from "@/components/Widget/custom/AmbientWidgets/CafeAmbienceWidget.tsx";
-import { WhiteNoiseWidget } from "@/components/Widget/custom/AmbientWidgets/WhiteNoiseWidget.tsx";
-import { LofiPlayerWidget } from "@/components/Widget/custom/AmbientWidgets/LofiPlayerWidget.tsx";
-import { PianoPlayerWidget } from "@/components/Widget/custom/AmbientWidgets/PianoPlayerWidget.tsx";
-import { OceanWavesWidget } from "@/components/Widget/custom/NatureWidgets/OceanWavesWidget.tsx";
-import { FireplaceWidget } from "@/components/Widget/custom/NatureWidgets/FireplaceWidget.tsx";
-import { WindSoundsWidget } from "@/components/Widget/custom/NatureWidgets/WindSoundsWidget.tsx";
-import { BinauralBeatsWidget } from "@/components/Widget/custom/FocusWidgets/BinauralBeatsWidget.tsx";
-import { ThunderstormWidget } from "@/components/Widget/custom/NatureWidgets/ThunderstormWidget.tsx";
-import { BirdsongWidget } from "@/components/Widget/custom/NatureWidgets/BirdsongWidget.tsx";
-import { NightSoundsWidget } from "@/components/Widget/custom/NatureWidgets/NightSoundsWidget.tsx";
-
-import { AuroraBackgroundWidget } from "@/components/Widget/custom/BackgroundWidgets/AuroraBackgroundWidget.tsx";
-import { GradientBackgroundWidget } from "@/components/Widget/custom/BackgroundWidgets/GradientBackgroundWidget.tsx";
-import { ParticleBackgroundWidget } from "@/components/Widget/custom/BackgroundWidgets/ParticleBackgroundWidget.tsx";
-import { StarfieldWidget } from "@/components/Widget/custom/BackgroundWidgets/StarfieldWidget.tsx";
-
-import { WaveVisualizerWidget } from "@/components/Widget/custom/AudioVisualizers/WaveVisualizerWidget.tsx";
-import { BarsVisualizerWidget } from "@/components/Widget/custom/AudioVisualizers/BarsVisualizerWidget.tsx";
-import { SpiralVisualizerWidget } from "@/components/Widget/custom/AudioVisualizers/SpiralVisualizerWidget.tsx";
-import { OrbVisualizerWidget } from "@/components/Widget/custom/AudioVisualizers/OrbVisualizerWidget.tsx";
-
-import { ForestTimerWidget } from "@/components/Widget/custom/TimerWidgets/ForestTimerWidget.tsx";
-import { DeepWorkTimerWidget } from "@/components/Widget/custom/TimerWidgets/DeepWorkTimerWidget.tsx";
-import { MeditationTimerWidget } from "@/components/Widget/custom/TimerWidgets/MeditationTimerWidget.tsx";
-import { ReadingTimerWidget } from "@/components/Widget/custom/TimerWidgets/ReadingTimerWidget.tsx";
-import type { WidgetInstance } from "@/types.ts";
+import type { WidgetInstance, WidgetShape, WidgetSize } from "@/types";
+import { removeWidget, updateWidgetInstance } from "@/slices/SpaceSlice.ts";
 import { SpaceContext } from "@/components/Space/Space.tsx";
+import { useDragHandler } from "@/components/hooks/useDragHandler.ts";
+import { widgetRegistry, getWidgetConfig } from "./widgetRegistry.ts";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes, faExpand, faCompress, faCircle, faSquare } from "@fortawesome/free-solid-svg-icons";
+
+import "./widgets.ts";
 
 interface WidgetProps {
     widgetInfoId: string;
     widgetInstance?: WidgetInstance;
 }
 
-export const Widget = (props: WidgetProps) => {
-    const {widgetInfoId, widgetInstance} = props;
+interface ContextMenuState {
+    visible: boolean;
+    x: number;
+    y: number;
+}
 
+const shapeClasses: Record<WidgetShape, string> = {
+    square: 'rounded-2xl',
+    circle: 'rounded-full',
+};
+
+const sizeClasses: Record<WidgetSize, string> = {
+    small: 'w-32 h-32',
+    medium: 'w-48 h-48',
+    large: 'w-64 h-64',
+    auto: '',
+};
+
+export const Widget = ({ widgetInfoId, widgetInstance }: WidgetProps) => {
+    const spaceId = use(SpaceContext);
     const headerRef = useRef<HTMLDivElement>(null);
     const rootRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
+    
+    const [contextMenu, setContextMenu] = useState<ContextMenuState>({ visible: false, x: 0, y: 0 });
+    const [isResizing, setIsResizing] = useState(false);
 
-    const spaceId = use(SpaceContext);
+    const widgetConfig = getWidgetConfig(widgetInfoId);
+    const shape = widgetInstance?.shape ?? widgetConfig?.defaultShape ?? 'square';
+    const size = widgetInstance?.size ?? widgetConfig?.defaultSize ?? 'auto';
+    const canResize = widgetConfig?.resizable ?? false;
 
-    useDragHandler(
-        {
-            // @ts-ignore
-            selectElementRef: headerRef,
-            // @ts-ignore
-            dragElementRef: rootRef,
-            options: {
-            }
-        }
-    );
+    useDragHandler({
+        selectElementRef: headerRef,
+        dragElementRef: rootRef,
+        options: {}
+    });
 
-    const renderWidget = (id: string) => {
-        switch (id) {
-            case "basic player": {return (<PlayerWidget spaceId={spaceId} />)}
-            case "basic redactor": {return (<BackgroundWidget spaceId={spaceId} />)}
-            case "basic visualizer": {return (<AudioVisualizerWidget spaceId={spaceId} />)}
-            case "circle visualizer": {return (<CircleAudioVisualizerWidget spaceId={spaceId} />)}
-            case "text visualizer": {return (<TextAudioVisualizerWidget spaceId={spaceId} />)}
-            case "yoda timer": {return (<YodaTimerWidget spaceId={spaceId} />)}
-            case "pomodoro timer": {return (<PomodoroTimerWidget spaceId={spaceId} />)}
+    const handleClose = useCallback((id: string) => {
+        dispatch(removeWidget({ widgetInstanceId: id, spaceId }));
+    }, [dispatch, spaceId]);
 
-            case "rain sounds": {return (<RainSoundsWidget spaceId={spaceId} />)}
-            case "forest sounds": {return (<ForestSoundsWidget spaceId={spaceId} />)}
-            case "cafe ambience": {return (<CafeAmbienceWidget spaceId={spaceId} />)}
-            case "white noise": {return (<WhiteNoiseWidget spaceId={spaceId} />)}
-            case "lofi player": {return (<LofiPlayerWidget spaceId={spaceId} />)}
-            case "piano player": {return (<PianoPlayerWidget spaceId={spaceId} />)}
-            case "ocean waves": {return (<OceanWavesWidget spaceId={spaceId} />)}
-            case "fireplace": {return (<FireplaceWidget spaceId={spaceId} />)}
-            case "wind sounds": {return (<WindSoundsWidget spaceId={spaceId} />)}
-            case "binaural beats": {return (<BinauralBeatsWidget spaceId={spaceId} />)}
-            case "thunderstorm": {return (<ThunderstormWidget spaceId={spaceId} />)}
-            case "birdsong": {return (<BirdsongWidget spaceId={spaceId} />)}
-            case "night sounds": {return (<NightSoundsWidget spaceId={spaceId} />)}
+    const handleContextMenu = useCallback((e: React.MouseEvent) => {
+        e.preventDefault();
+        setContextMenu({ visible: true, x: e.clientX, y: e.clientY });
+    }, []);
 
-            case "aurora background": {return (<AuroraBackgroundWidget spaceId={spaceId} />)}
-            case "gradient background": {return (<GradientBackgroundWidget spaceId={spaceId} />)}
-            case "particle background": {return (<ParticleBackgroundWidget spaceId={spaceId} />)}
-            case "starfield": {return (<StarfieldWidget spaceId={spaceId} />)}
+    const closeContextMenu = useCallback(() => {
+        setContextMenu(prev => ({ ...prev, visible: false }));
+    }, []);
 
-            case "wave visualizer": {return (<WaveVisualizerWidget spaceId={spaceId} />)}
-            case "bars visualizer": {return (<BarsVisualizerWidget spaceId={spaceId} />)}
-            case "spiral visualizer": {return (<SpiralVisualizerWidget spaceId={spaceId} />)}
-            case "orb visualizer": {return (<OrbVisualizerWidget spaceId={spaceId} />)}
-
-            case "forest timer": {return (<ForestTimerWidget spaceId={spaceId} />)}
-            case "deep work timer": {return (<DeepWorkTimerWidget spaceId={spaceId} />)}
-            case "meditation timer": {return (<MeditationTimerWidget spaceId={spaceId} />)}
-            case "reading timer": {return (<ReadingTimerWidget spaceId={spaceId} />)}
-        }
-    };
-
-    const handleClose = (id: string) => {
-        dispatch(removeWidget({
-            widgetInstanceId: id,
+    const handleToggleShape = useCallback(() => {
+        if (!widgetInstance) return;
+        const newShape: WidgetShape = shape === 'square' ? 'circle' : 'square';
+        dispatch(updateWidgetInstance({
             spaceId,
+            widgetInstanceId: widgetInstance.id,
+            updates: { shape: newShape }
         }));
+        closeContextMenu();
+    }, [dispatch, spaceId, widgetInstance, shape, closeContextMenu]);
+
+    const handleToggleSize = useCallback(() => {
+        if (!widgetInstance || !canResize) return;
+        const sizeOrder: WidgetSize[] = ['small', 'medium', 'large', 'auto'];
+        const currentIndex = sizeOrder.indexOf(size);
+        const nextSize = sizeOrder[(currentIndex + 1) % sizeOrder.length];
+        dispatch(updateWidgetInstance({
+            spaceId,
+            widgetInstanceId: widgetInstance.id,
+            updates: { size: nextSize }
+        }));
+        closeContextMenu();
+    }, [dispatch, spaceId, widgetInstance, size, canResize, closeContextMenu]);
+
+    const renderWidgetContent = () => {
+        const config = getWidgetConfig(widgetInfoId);
+        if (!config) return <div className="text-white/50 text-sm">Widget not found</div>;
+        
+        const Component = config.component;
+        return <Component spaceId={spaceId} widgetInstance={widgetInstance} />;
     };
+
+    const sizeClass = size !== 'auto' ? sizeClasses[size] : '';
 
     return (
-        <div ref={rootRef} className="widget liquidGlass-effect resizable-wrapper">
-            <div ref={headerRef} className="widget__header">
-                {
-                widgetInstance && (<button
-                        className="button"
-                        data-type="close"
-                        aria-label="Close widget"
-                        onClick={() => handleClose(widgetInstance.id)}
-                        style={{display: "inline", paddingInline: "4px"}}
-                >
-                    &times;
-                </button>)
-                }
+        <>
+            <div
+                ref={rootRef}
+                className={`
+                    widget liquidGlass-effect resizable-wrapper
+                    ${shapeClasses[shape]}
+                    ${sizeClass}
+                    ${isResizing ? 'ring-2 ring-blue-400' : ''}
+                    transition-all duration-200
+                `}
+                onContextMenu={handleContextMenu}
+            >
+                <div ref={headerRef} className="widget__header cursor-move">
+                    {widgetInstance && (
+                        <button
+                            className="button text-white/70 hover:text-white hover:bg-white/20"
+                            data-type="close"
+                            aria-label="Close widget"
+                            onClick={() => handleClose(widgetInstance.id)}
+                            onMouseDown={(e) => e.stopPropagation()}
+                        >
+                            <FontAwesomeIcon icon={faTimes} />
+                        </button>
+                    )}
+                </div>
+                
+                <div className="widget__content h-full flex items-center justify-center">
+                    {renderWidgetContent()}
+                </div>
+
+                {canResize && (
+                    <div
+                        className="absolute bottom-1 right-1 w-4 h-4 cursor-se-resize opacity-0 hover:opacity-100 transition-opacity"
+                        onMouseDown={(e) => {
+                            e.stopPropagation();
+                            setIsResizing(true);
+                            const startX = e.clientX;
+                            const startY = e.clientY;
+                            const handleMouseMove = (moveEvent: MouseEvent) => {
+                                const deltaX = moveEvent.clientX - startX;
+                                const deltaY = moveEvent.clientY - startY;
+                                if (rootRef.current) {
+                                    rootRef.current.style.width = `${Math.max(100, rootRef.current.offsetWidth + deltaX)}px`;
+                                    rootRef.current.style.height = `${Math.max(100, rootRef.current.offsetHeight + deltaY)}px`;
+                                }
+                            };
+                            const handleMouseUp = () => {
+                                setIsResizing(false);
+                                document.removeEventListener('mousemove', handleMouseMove);
+                                document.removeEventListener('mouseup', handleMouseUp);
+                            };
+                            document.addEventListener('mousemove', handleMouseMove);
+                            document.addEventListener('mouseup', handleMouseUp);
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faExpand} className="text-white/50 text-xs" />
+                    </div>
+                )}
             </div>
-            <div className="widget__content">
-                {renderWidget(widgetInfoId)}
-            </div>
-        </div>
+
+            {contextMenu.visible && (
+                <>
+                    <div className="fixed inset-0 z-40" onClick={closeContextMenu} />
+                    <div
+                        className="fixed z-50 bg-black/80 backdrop-blur-md rounded-lg py-2 min-w-[160px] shadow-xl border border-white/10"
+                        style={{ left: contextMenu.x, top: contextMenu.y }}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button
+                            className="w-full px-4 py-2 text-left text-white/80 hover:bg-white/10 hover:text-white flex items-center gap-3 transition-colors"
+                            onClick={handleToggleShape}
+                        >
+                            <FontAwesomeIcon icon={shape === 'square' ? faCircle : faSquare} />
+                            <span>Make {shape === 'square' ? 'Circle' : 'Square'}</span>
+                        </button>
+                        
+                        {canResize && (
+                            <button
+                                className="w-full px-4 py-2 text-left text-white/80 hover:bg-white/10 hover:text-white flex items-center gap-3 transition-colors"
+                                onClick={handleToggleSize}
+                            >
+                                <FontAwesomeIcon icon={faExpand} />
+                                <span>Size: {size}</span>
+                            </button>
+                        )}
+                        
+                        <hr className="my-2 border-white/10" />
+                        
+                        <button
+                            className="w-full px-4 py-2 text-left text-red-400 hover:bg-red-500/20 flex items-center gap-3 transition-colors"
+                            onClick={() => {
+                                if (widgetInstance) handleClose(widgetInstance.id);
+                                closeContextMenu();
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faTimes} />
+                            <span>Close Widget</span>
+                        </button>
+                    </div>
+                </>
+            )}
+        </>
     );
 };

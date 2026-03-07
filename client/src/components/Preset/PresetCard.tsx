@@ -3,7 +3,6 @@ import type { RootState } from "@/index.tsx";
 import { EntityType, type IPreset } from "@/types.ts";
 import { selectPreset } from "@/slices/PresetSlice.ts";
 import { use, useCallback } from "react";
-import { toggleItemsList } from "@/slices/ModalSlice.ts";
 import { createSpace } from "@/slices/SpaceSlice.ts";
 import { ModalContext } from "@/components/Modal/ModalProvider.tsx";
 import { NotificationContext } from "@/components/Notifications/NotificationProvider.tsx";

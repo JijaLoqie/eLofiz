@@ -1,5 +1,5 @@
 import { createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { type ImageInfo, type ISpace, type SpaceParams, type WidgetInstance } from "@/types.ts";
+import { type ImageInfo, type ISpace, type SpaceParams, type WidgetInstance, type SpaceEffects } from "@/types.ts";
 import type { RootState } from "@/index.tsx";
 import { uuid } from "@/utils";
 
@@ -78,13 +78,49 @@ export const SpaceSlice = createSlice({
             const space: ISpace = createDefaultSpace(props);
             state.items.push(space);
         },
+        updateWidgetInstance: (state, action: PayloadAction<{
+            spaceId: string;
+            widgetInstanceId: string;
+            updates: Partial<WidgetInstance>;
+        }>) => {
+            const { spaceId, widgetInstanceId, updates } = action.payload;
+            const space = state.items.find(item => item.id === spaceId);
+            if (space) {
+                const widget = space.widgets.find(w => w.id === widgetInstanceId);
+                if (widget) {
+                    Object.assign(widget, updates);
+                }
+            }
+        },
+        updateSpaceEffects: (state, action: PayloadAction<{
+            spaceId: string;
+            effects: Partial<SpaceEffects>;
+        }>) => {
+            const { spaceId, effects } = action.payload;
+            const space = state.items.find(item => item.id === spaceId);
+            if (space) {
+                space.effects = { ...space.effects, ...effects };
+            }
+        },
+        clearSpaceEffects: (state, action: PayloadAction<{
+            spaceId: string;
+            effectKeys: (keyof SpaceEffects)[];
+        }>) => {
+            const { spaceId, effectKeys } = action.payload;
+            const space = state.items.find(item => item.id === spaceId);
+            if (space && space.effects) {
+                effectKeys.forEach(key => {
+                    delete space.effects![key];
+                });
+            }
+        },
     },
     selectors: {
         selectSpaces: (state) => state.items,
     }
 })
 
-export const { addWidget, removeWidget, updateSpace, createSpace } = SpaceSlice.actions;
+export const { addWidget, removeWidget, updateSpace, createSpace, updateWidgetInstance, updateSpaceEffects, clearSpaceEffects } = SpaceSlice.actions;
 export const { selectSpaces } = SpaceSlice.selectors;
 
 export const selectSpace = createSelector(

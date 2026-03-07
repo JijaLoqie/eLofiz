@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import type { ISpace, WidgetInstance } from "@/types.ts";
+import type { ISpace, WidgetInstance, SpaceEffects } from "@/types.ts";
 import type { RootState } from "@/index.tsx";
 import { selectSpace, selectWidgetsOnSpace } from "@/slices/SpaceSlice.ts";
 import { Widget } from "@/components/Widget/Widget.tsx";
@@ -8,6 +8,7 @@ import { registerAudio } from "@/actions.ts";
 import { selectIntersectionMetrics } from "@/slices/IntersectionSlice.ts";
 import { setVolume } from "@/middlewares/AudioMiddleware.ts";
 import { trailingThrottle } from "@/utils/utils.ts";
+import { SpaceEffectsOverlay } from "./SpaceEffectsOverlay.tsx";
 
 interface SpaceProps {
     spaceId: string;
@@ -22,6 +23,7 @@ export const Space = (props: SpaceProps) => {
     const spaceInfo = useSelector((state: RootState): ISpace => selectSpace(state, spaceId));
     const widgets = useSelector((state: RootState): WidgetInstance[] => selectWidgetsOnSpace(state, `${spaceId}`));
     const spaceMetrics = useSelector((state: RootState) => selectIntersectionMetrics(state, spaceId))
+    const spaceEffects = spaceInfo.effects;
 
     const htmlAudio = useRef<HTMLAudioElement>(null);
     const dispatch = useDispatch();
@@ -37,7 +39,6 @@ export const Space = (props: SpaceProps) => {
         dispatch(setVolume({spaceId, volume: newVolume}))
     }, [dispatch, spaceId]);
 
-    // Create throttled function once and memoize it
     const throttledUpdateVolume = useRef(trailingThrottle(updateVolume, 0)).current;
 
     useEffect(() => {
@@ -53,8 +54,12 @@ export const Space = (props: SpaceProps) => {
             <div
                 id={`${id}`}
                 className={`space ${fixed ? "space--fixed" : ""}`}
-                style={{backgroundImage:`url('${images[currentBackground].imageUrl}')`}}
+                style={{
+                    backgroundImage: `url('${images[currentBackground].imageUrl}')`,
+                    ...(spaceEffects?.blur ? { filter: `blur(${spaceEffects.blur}px)` } : {}),
+                }}
             >
+                <SpaceEffectsOverlay effects={spaceEffects} />
                 <audio ref={htmlAudio} className="space__music">NaN</audio>
                 {widgets.map((widInst) => <Widget key={widInst.id} widgetInfoId={widInst.widgetId} widgetInstance={widInst} />)}
             </div>

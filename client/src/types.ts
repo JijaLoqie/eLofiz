@@ -11,13 +11,19 @@ export enum WidgetType {
     AMBIENT = "ambient",
     NATURE = "nature",
     FOCUS = "focus",
+    EFFECTS = "effects",
 }
 
+export type WidgetShape = 'square' | 'circle';
+export type WidgetSize = 'small' | 'medium' | 'large' | 'auto';
 
 export interface IWidget extends IObject {
     title: string;
     preview: string;
     type: WidgetType;
+    shape?: WidgetShape;
+    defaultSize?: WidgetSize;
+    resizable?: boolean;
 }
 
 export interface ISpace extends IObject {
@@ -102,6 +108,9 @@ export interface WidgetInstance extends IObject {
     spaceId: string;
     widgetId: string;
     position: { x: number; y: number };
+    shape?: WidgetShape;
+    size?: WidgetSize;
+    effects?: Record<string, unknown>;
 }
 
 export interface SpaceParams {
@@ -125,4 +134,25 @@ export interface ParticleConfig {
     backgroundColor: [number, number, number];
     particleColor: [number, number, number];
     accentColor: string;
+}
+
+export interface SpaceEffects {
+    aurora?: boolean;
+    gradient?: string[];
+    particles?: boolean;
+    starfield?: boolean;
+    blur?: number;
+    vignette?: boolean;
+    noise?: boolean;
+    customOverlay?: string;
+}
+
+export interface ISpace extends IObject {
+    name: string;
+    currentBackground: string;
+    images: Record<string, ImageInfo>
+    streamId: string;
+    fixed: boolean;
+    widgets: WidgetInstance[];
+    effects?: SpaceEffects;
 }

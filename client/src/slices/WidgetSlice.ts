@@ -200,6 +200,30 @@ const initialState: WidgetSliceState = {
             preview: "preview/reading.png",
             type: WidgetType.TIMER,
         },
+        "aurora effect": {
+            id: "aurora effect",
+            title: "Эффект: Северное сияние",
+            preview: "preview/aurora-effect.png",
+            type: WidgetType.EFFECTS,
+        },
+        "blur effect": {
+            id: "blur effect",
+            title: "Эффект: Размытие",
+            preview: "preview/blur-effect.png",
+            type: WidgetType.EFFECTS,
+        },
+        "vignette effect": {
+            id: "vignette effect",
+            title: "Эффект: Виньетка",
+            preview: "preview/vignette-effect.png",
+            type: WidgetType.EFFECTS,
+        },
+        "noise effect": {
+            id: "noise effect",
+            title: "Эффект: Зерно",
+            preview: "preview/noise-effect.png",
+            type: WidgetType.EFFECTS,
+        },
     },
 }
 

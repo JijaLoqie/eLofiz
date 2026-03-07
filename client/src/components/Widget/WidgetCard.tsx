@@ -3,7 +3,6 @@ import type { RootState } from "@/index.tsx";
 import { EntityType, type IWidget } from "@/types.ts";
 import { selectWidget } from "@/slices/WidgetSlice.ts";
 import { use, useCallback } from "react";
-import { toggleItemsList } from "@/slices/ModalSlice.ts";
 import { selectCurrentSpace } from "@/slices/IntersectionSlice.ts";
 import { addWidget } from "@/slices/SpaceSlice.ts";
 import { ModalContext } from "@/components/Modal/ModalProvider.tsx";
@@ -19,6 +18,10 @@ const WIDGET_ICON_MAP: Record<string, string> = {
     "audio-visualiser": "fas fa-wave-square",
     "background": "fas fa-image",
     "music": "fas fa-music",
+    "ambient": "fas fa-volume-up",
+    "nature": "fas fa-leaf",
+    "focus": "fas fa-brain",
+    "effects": "fas fa-magic",
 };
 
 // Map widget types to accent colors
@@ -27,6 +30,10 @@ const WIDGET_COLOR_MAP: Record<string, { border: string; bg: string; line: strin
     "audio-visualiser": { border: "group-hover:border-purple-500", bg: "group-hover:bg-purple-500/20", line: "group-hover:via-purple-500" },
     "background": { border: "group-hover:border-emerald-500", bg: "group-hover:bg-emerald-500/20", line: "group-hover:via-emerald-500" },
     "music": { border: "group-hover:border-pink-500", bg: "group-hover:bg-pink-500/20", line: "group-hover:via-pink-500" },
+    "ambient": { border: "group-hover:border-blue-500", bg: "group-hover:bg-blue-500/20", line: "group-hover:via-blue-500" },
+    "nature": { border: "group-hover:border-green-500", bg: "group-hover:bg-green-500/20", line: "group-hover:via-green-500" },
+    "focus": { border: "group-hover:border-indigo-500", bg: "group-hover:bg-indigo-500/20", line: "group-hover:via-indigo-500" },
+    "effects": { border: "group-hover:border-cyan-500", bg: "group-hover:bg-cyan-500/20", line: "group-hover:via-cyan-500" },
 };
 
 export const WidgetCard = (props: WidgetCardProps) => {
