@@ -144,6 +144,10 @@ export interface SpaceEffects {
     blur?: number;
     vignette?: boolean;
     noise?: boolean;
+    flame?: boolean;
+    snow?: boolean;
+    rain?: boolean;
+    snowyWind?: boolean;
     customOverlay?: string;
 }
 

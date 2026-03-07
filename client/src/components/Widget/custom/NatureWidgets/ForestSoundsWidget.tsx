@@ -1,17 +1,16 @@
-import { type FC } from "react";
-import { AmbientWidget } from "./AmbientWidget.tsx";
+import { SoundWidget } from "../AmbientWidgets/SoundWidget.tsx";
 
 interface ForestSoundsWidgetProps {
     spaceId: string;
 }
 
-export const ForestSoundsWidget: FC<ForestSoundsWidgetProps> = ({ spaceId }) => {
+export const ForestSoundsWidget = ({ spaceId }: ForestSoundsWidgetProps) => {
     return (
-        <AmbientWidget
+        <SoundWidget
             spaceId={spaceId}
             soundUrl="https://cdn.pixabay.com/audio/2022/08/04/audio_1daf0a0b80.mp3"
-            title="Forest"
-            icon="🌲"
+            title="Лес"
+            icon="forest"
         />
     );
 };

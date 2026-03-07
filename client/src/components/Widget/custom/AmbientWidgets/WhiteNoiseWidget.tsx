@@ -1,17 +1,16 @@
-import { type FC } from "react";
-import { AmbientWidget } from "./AmbientWidget.tsx";
+import { SoundWidget } from "./SoundWidget.tsx";
 
 interface WhiteNoiseWidgetProps {
     spaceId: string;
 }
 
-export const WhiteNoiseWidget: FC<WhiteNoiseWidgetProps> = ({ spaceId }) => {
+export const WhiteNoiseWidget = ({ spaceId }: WhiteNoiseWidgetProps) => {
     return (
-        <AmbientWidget
+        <SoundWidget
             spaceId={spaceId}
             soundUrl="https://cdn.pixabay.com/audio/2022/03/15/audio_445497a6e2.mp3"
-            title="White Noise"
-            icon="📻"
+            title="Шум"
+            icon="ambient"
         />
     );
 };

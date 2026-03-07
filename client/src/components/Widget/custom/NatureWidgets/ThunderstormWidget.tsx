@@ -1,17 +1,16 @@
-import { type FC } from "react";
-import { AmbientWidget } from "./AmbientWidget.tsx";
+import { SoundWidget } from "../AmbientWidgets/SoundWidget.tsx";
 
 interface ThunderstormWidgetProps {
     spaceId: string;
 }
 
-export const ThunderstormWidget: FC<ThunderstormWidgetProps> = ({ spaceId }) => {
+export const ThunderstormWidget = ({ spaceId }: ThunderstormWidgetProps) => {
     return (
-        <AmbientWidget
+        <SoundWidget
             spaceId={spaceId}
             soundUrl="https://cdn.pixabay.com/audio/2022/03/10/audio_4d73b89c0a.mp3"
-            title="Thunder"
-            icon="⛈️"
+            title="Гроза"
+            icon="thunder"
         />
     );
 };

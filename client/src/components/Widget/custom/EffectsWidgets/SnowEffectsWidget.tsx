@@ -1,0 +1,54 @@
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/index.tsx";
+import { updateSpaceEffects, clearSpaceEffects } from "@/slices/SpaceSlice.ts";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faToggleOn, faToggleOff, faSnowflake } from "@fortawesome/free-solid-svg-icons";
+
+interface SnowEffectsWidgetProps {
+    spaceId: string;
+}
+
+export const SnowEffectsWidget = ({ spaceId }: SnowEffectsWidgetProps) => {
+    const dispatch = useDispatch();
+    const space = useSelector((state: RootState) => 
+        state.spaces.items.find(s => s.id === spaceId)
+    );
+    const isActive = space?.effects?.snow === true;
+    const [intensity, setIntensity] = useState(50);
+
+    const handleToggle = () => {
+        if (isActive) {
+            dispatch(clearSpaceEffects({ spaceId, effectKeys: ['snow'] }));
+        } else {
+            dispatch(updateSpaceEffects({ spaceId, effects: { snow: true, flame: false, rain: false, snowyWind: false } }));
+        }
+    };
+
+    return (
+        <div className="w-40 bg-black/40 backdrop-blur-md rounded-2xl p-3">
+            <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faSnowflake} className="text-blue-300" />
+                    <span className="text-white text-sm font-medium">Снег</span>
+                </div>
+                <button
+                    onClick={handleToggle}
+                    className={`text-lg transition-colors ${isActive ? 'text-green-400' : 'text-white/30'}`}
+                >
+                    <FontAwesomeIcon icon={isActive ? faToggleOn : faToggleOff} />
+                </button>
+            </div>
+            {isActive && (
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={intensity}
+                    onChange={(e) => setIntensity(parseInt(e.target.value))}
+                    className="w-full h-1 bg-white/20 rounded-full appearance-none cursor-pointer"
+                />
+            )}
+        </div>
+    );
+};

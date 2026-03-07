@@ -1,17 +1,16 @@
-import { type FC } from "react";
-import { AmbientWidget } from "./AmbientWidget.tsx";
+import { SoundWidget } from "../AmbientWidgets/SoundWidget.tsx";
 
 interface NightSoundsWidgetProps {
     spaceId: string;
 }
 
-export const NightSoundsWidget: FC<NightSoundsWidgetProps> = ({ spaceId }) => {
+export const NightSoundsWidget = ({ spaceId }: NightSoundsWidgetProps) => {
     return (
-        <AmbientWidget
+        <SoundWidget
             spaceId={spaceId}
             soundUrl="https://cdn.pixabay.com/audio/2022/08/04/audio_53d25d3a8a.mp3"
-            title="Night"
-            icon="🌙"
+            title="Ночь"
+            icon="night"
         />
     );
 };

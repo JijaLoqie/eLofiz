@@ -1,8 +1,11 @@
-import type { FC, JSX } from 'react';
-import type { WidgetInstance, SpaceEffects } from '@/types';
+import type { FC } from 'react';
+import type { WidgetInstance, SpaceEffects, WidgetType } from '@/types';
 
 export interface WidgetConfig {
     id: string;
+    title: string;
+    preview?: string;
+    type: WidgetType;
     component: FC<{ spaceId: string; widgetInstance?: WidgetInstance }>;
     defaultShape?: 'square' | 'circle';
     defaultSize?: 'small' | 'medium' | 'large' | 'auto';
@@ -22,4 +25,8 @@ export function getWidgetConfig(id: string): WidgetConfig | undefined {
 
 export function getAllWidgetIds(): string[] {
     return Object.keys(widgetRegistry);
+}
+
+export function getAllWidgets(): WidgetConfig[] {
+    return Object.values(widgetRegistry);
 }

@@ -1,17 +1,16 @@
-import { type FC } from "react";
-import { AmbientWidget } from "./AmbientWidget.tsx";
+import { SoundWidget } from "../AmbientWidgets/SoundWidget.tsx";
 
 interface BirdsongWidgetProps {
     spaceId: string;
 }
 
-export const BirdsongWidget: FC<BirdsongWidgetProps> = ({ spaceId }) => {
+export const BirdsongWidget = ({ spaceId }: BirdsongWidgetProps) => {
     return (
-        <AmbientWidget
+        <SoundWidget
             spaceId={spaceId}
             soundUrl="https://cdn.pixabay.com/audio/2022/08/31/audio_9521e05e71.mp3"
-            title="Birds"
-            icon="🐦"
+            title="Птицы"
+            icon="birds"
         />
     );
 };

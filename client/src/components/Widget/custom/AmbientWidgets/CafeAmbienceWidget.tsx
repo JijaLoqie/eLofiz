@@ -1,17 +1,16 @@
-import { type FC } from "react";
-import { AmbientWidget } from "./AmbientWidget.tsx";
+import { SoundWidget } from "./SoundWidget.tsx";
 
 interface CafeAmbienceWidgetProps {
     spaceId: string;
 }
 
-export const CafeAmbienceWidget: FC<CafeAmbienceWidgetProps> = ({ spaceId }) => {
+export const CafeAmbienceWidget = ({ spaceId }: CafeAmbienceWidgetProps) => {
     return (
-        <AmbientWidget
+        <SoundWidget
             spaceId={spaceId}
             soundUrl="https://cdn.pixabay.com/audio/2022/10/30/audio_fc8c33f4b2.mp3"
-            title="Cafe"
-            icon="☕"
+            title="Кафе"
+            icon="cafe"
         />
     );
 };

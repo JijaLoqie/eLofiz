@@ -1,17 +1,16 @@
-import { type FC } from "react";
-import { AmbientWidget } from "./AmbientWidget.tsx";
+import { SoundWidget } from "../AmbientWidgets/SoundWidget.tsx";
 
 interface FireplaceWidgetProps {
     spaceId: string;
 }
 
-export const FireplaceWidget: FC<FireplaceWidgetProps> = ({ spaceId }) => {
+export const FireplaceWidget = ({ spaceId }: FireplaceWidgetProps) => {
     return (
-        <AmbientWidget
+        <SoundWidget
             spaceId={spaceId}
             soundUrl="https://cdn.pixabay.com/audio/2021/08/09/audio_f7d7b8e8c2.mp3"
-            title="Fireplace"
-            icon="🔥"
+            title="Камин"
+            icon="fireplace"
         />
     );
 };

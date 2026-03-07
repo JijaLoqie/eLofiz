@@ -1,17 +1,16 @@
-import { type FC } from "react";
-import { AmbientWidget } from "./AmbientWidget.tsx";
+import { SoundWidget } from "../AmbientWidgets/SoundWidget.tsx";
 
 interface OceanWavesWidgetProps {
     spaceId: string;
 }
 
-export const OceanWavesWidget: FC<OceanWavesWidgetProps> = ({ spaceId }) => {
+export const OceanWavesWidget = ({ spaceId }: OceanWavesWidgetProps) => {
     return (
-        <AmbientWidget
+        <SoundWidget
             spaceId={spaceId}
             soundUrl="https://cdn.pixabay.com/audio/2022/06/07/audio_6382075a93.mp3"
-            title="Ocean"
-            icon="🌊"
+            title="Океан"
+            icon="ocean"
         />
     );
 };

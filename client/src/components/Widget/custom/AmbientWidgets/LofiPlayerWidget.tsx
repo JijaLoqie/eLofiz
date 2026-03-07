@@ -1,16 +1,16 @@
-import { type FC } from "react";
-import { MusicPlayerWidget } from "./MusicPlayerWidget.tsx";
+import { SoundWidget } from "./SoundWidget.tsx";
 
 interface LofiPlayerWidgetProps {
     spaceId: string;
 }
 
-export const LofiPlayerWidget: FC<LofiPlayerWidgetProps> = ({ spaceId }) => {
+export const LofiPlayerWidget = ({ spaceId }: LofiPlayerWidgetProps) => {
     return (
-        <MusicPlayerWidget
+        <SoundWidget
             spaceId={spaceId}
-            title="Lo-fi Beats"
-            coverColor="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+            soundUrl=""
+            title="Lo-fi"
+            icon="music"
         />
     );
 };

@@ -1,16 +1,16 @@
-import { type FC } from "react";
-import { MusicPlayerWidget } from "./MusicPlayerWidget.tsx";
+import { SoundWidget } from "./SoundWidget.tsx";
 
 interface PianoPlayerWidgetProps {
     spaceId: string;
 }
 
-export const PianoPlayerWidget: FC<PianoPlayerWidgetProps> = ({ spaceId }) => {
+export const PianoPlayerWidget = ({ spaceId }: PianoPlayerWidgetProps) => {
     return (
-        <MusicPlayerWidget
+        <SoundWidget
             spaceId={spaceId}
-            title="Piano Relax"
-            coverColor="linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)"
+            soundUrl=""
+            title="Пианино"
+            icon="music"
         />
     );
 };

@@ -7,6 +7,10 @@ interface SpaceEffectsOverlayProps {
 
 export const SpaceEffectsOverlay = ({ effects }: SpaceEffectsOverlayProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const particlesRef = useRef<Array<{
+        x: number; y: number; vx: number; vy: number; 
+        size: number; alpha: number; life: number; maxLife: number;
+    }>>([]);
 
     useEffect(() => {
         if (!effects) return;
@@ -27,8 +31,24 @@ export const SpaceEffectsOverlay = ({ effects }: SpaceEffectsOverlayProps) => {
         resize();
         window.addEventListener("resize", resize);
 
+        const initParticles = (count: number) => {
+            particlesRef.current = [];
+            for (let i = 0; i < count; i++) {
+                particlesRef.current.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: Math.random() * 2 + 1,
+                    size: Math.random() * 3 + 1,
+                    alpha: Math.random() * 0.5 + 0.3,
+                    life: Math.random() * 100,
+                    maxLife: 100,
+                });
+            }
+        };
+
         const draw = () => {
-            time += 0.01;
+            time += 0.016;
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -82,16 +102,25 @@ export const SpaceEffectsOverlay = ({ effects }: SpaceEffectsOverlayProps) => {
             }
 
             if (effects.particles) {
-                for (let i = 0; i < 50; i++) {
-                    const x = (Math.sin(time + i * 0.5) * 0.5 + 0.5) * canvas.width;
-                    const y = (Math.cos(time * 0.7 + i * 0.3) * 0.5 + 0.5) * canvas.height;
-                    const size = Math.sin(time + i) * 1 + 2;
+                if (particlesRef.current.length !== 50) initParticles(50);
+                
+                particlesRef.current.forEach((p) => {
+                    p.x += p.vx;
+                    p.y += p.vy;
                     
+                    if (p.y > canvas.height) {
+                        p.y = -10;
+                        p.x = Math.random() * canvas.width;
+                    }
+                    if (p.x < 0) p.x = canvas.width;
+                    if (p.x > canvas.width) p.x = 0;
+                    
+                    const pulse = Math.sin(time * 3 + p.life) * 0.3 + 0.7;
                     ctx.beginPath();
-                    ctx.arc(x, y, size, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(255, 255, 255, ${0.3 + Math.sin(time + i) * 0.2})`;
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha * pulse})`;
                     ctx.fill();
-                }
+                });
             }
 
             if (effects.starfield) {
@@ -105,6 +134,95 @@ export const SpaceEffectsOverlay = ({ effects }: SpaceEffectsOverlayProps) => {
                     ctx.fillStyle = `rgba(255, 255, 255, ${twinkle * 0.6})`;
                     ctx.fill();
                 }
+            }
+
+            if (effects.flame) {
+                if (particlesRef.current.length !== 100) initParticles(100);
+                
+                particlesRef.current.forEach((p, i) => {
+                    p.x += p.vx + Math.sin(time * 5 + i) * 0.5;
+                    p.y -= p.vy * 1.5;
+                    p.life -= 1;
+                    
+                    if (p.life <= 0 || p.y < 0) {
+                        p.y = canvas.height + 10;
+                        p.x = canvas.width / 2 + (Math.random() - 0.5) * 200;
+                        p.life = p.maxLife;
+                        p.vy = Math.random() * 2 + 2;
+                    }
+                    
+                    const alpha = (p.life / p.maxLife) * 0.8;
+                    const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3);
+                    gradient.addColorStop(0, `rgba(255, 200, 50, ${alpha})`);
+                    gradient.addColorStop(0.3, `rgba(255, 100, 0, ${alpha * 0.7})`);
+                    gradient.addColorStop(1, "transparent");
+                    
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                });
+            }
+
+            if (effects.snow) {
+                if (particlesRef.current.length !== 150) initParticles(150);
+                
+                particlesRef.current.forEach((p) => {
+                    p.x += p.vx * 0.5 + Math.sin(time + p.y * 0.01) * 0.5;
+                    p.y += p.vy * 0.8;
+                    
+                    if (p.y > canvas.height) {
+                        p.y = -10;
+                        p.x = Math.random() * canvas.width;
+                    }
+                    if (p.x < 0) p.x = canvas.width;
+                    if (p.x > canvas.width) p.x = 0;
+                    
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
+                    ctx.fill();
+                });
+            }
+
+            if (effects.rain) {
+                if (particlesRef.current.length !== 200) initParticles(200);
+                
+                particlesRef.current.forEach((p) => {
+                    p.x += p.vx;
+                    p.y += p.vy * 3;
+                    
+                    if (p.y > canvas.height) {
+                        p.y = -10;
+                        p.x = Math.random() * canvas.width;
+                    }
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p.x - p.vx * 2, p.y + p.size * 10);
+                    ctx.strokeStyle = `rgba(150, 180, 220, ${p.alpha * 0.6})`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                });
+            }
+
+            if (effects.snowyWind) {
+                if (particlesRef.current.length !== 120) initParticles(120);
+                
+                particlesRef.current.forEach((p) => {
+                    p.x += p.vx * 3 + Math.sin(time * 2 + p.y * 0.01) * 2;
+                    p.y += p.vy * 0.5;
+                    
+                    if (p.y > canvas.height || p.x > canvas.width) {
+                        p.y = Math.random() * canvas.height;
+                        p.x = -10;
+                    }
+                    
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size * 0.8, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(220, 235, 255, ${p.alpha * 0.7})`;
+                    ctx.fill();
+                });
             }
 
             animationId = requestAnimationFrame(draw);

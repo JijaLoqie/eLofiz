@@ -1,9 +1,5 @@
 import { registerWidget } from './widgetRegistry.ts';
-import { WidgetType, type SpaceEffects } from '@/types.ts';
-
-const createEffectsGetter = (effects: Partial<SpaceEffects>) => {
-    return () => effects;
-};
+import { WidgetType } from '@/types.ts';
 
 import { PlayerWidget } from "./custom/PlayerWidget/PlayerWidget.tsx";
 import { BackgroundWidget } from "./custom/BackgroundWidget/BackgroundWidget.tsx";
@@ -27,10 +23,7 @@ import { ThunderstormWidget } from "./custom/NatureWidgets/ThunderstormWidget.ts
 import { BirdsongWidget } from "./custom/NatureWidgets/BirdsongWidget.tsx";
 import { NightSoundsWidget } from "./custom/NatureWidgets/NightSoundsWidget.tsx";
 
-import { AuroraBackgroundWidget } from "./custom/BackgroundWidgets/AuroraBackgroundWidget.tsx";
 import { GradientBackgroundWidget } from "./custom/BackgroundWidgets/GradientBackgroundWidget.tsx";
-import { ParticleBackgroundWidget } from "./custom/BackgroundWidgets/ParticleBackgroundWidget.tsx";
-import { StarfieldWidget } from "./custom/BackgroundWidgets/StarfieldWidget.tsx";
 
 import { WaveVisualizerWidget } from "./custom/AudioVisualizers/WaveVisualizerWidget.tsx";
 import { BarsVisualizerWidget } from "./custom/AudioVisualizers/BarsVisualizerWidget.tsx";
@@ -43,12 +36,15 @@ import { MeditationTimerWidget } from "./custom/TimerWidgets/MeditationTimerWidg
 import { ReadingTimerWidget } from "./custom/TimerWidgets/ReadingTimerWidget.tsx";
 
 import { AuroraEffectsWidget } from "./custom/EffectsWidgets/AuroraEffectsWidget.tsx";
-import { BlurEffectsWidget } from "./custom/EffectsWidgets/BlurEffectsWidget.tsx";
-import { VignetteEffectsWidget } from "./custom/EffectsWidgets/VignetteEffectsWidget.tsx";
-import { NoiseEffectsWidget } from "./custom/EffectsWidgets/NoiseEffectsWidget.tsx";
+import { FlameEffectsWidget } from "./custom/EffectsWidgets/FlameEffectsWidget.tsx";
+import { SnowEffectsWidget } from "./custom/EffectsWidgets/SnowEffectsWidget.tsx";
+import { RainEffectsWidget } from "./custom/EffectsWidgets/RainEffectsWidget.tsx";
+import { SnowyWindEffectsWidget } from "./custom/EffectsWidgets/SnowyWindEffectsWidget.tsx";
 
 registerWidget({
     id: 'basic player',
+    title: 'Базовый аудио плеер',
+    type: WidgetType.MUSIC,
     component: PlayerWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
@@ -56,6 +52,8 @@ registerWidget({
 
 registerWidget({
     id: 'basic redactor',
+    title: 'Базовый редактор фона',
+    type: WidgetType.BACKGROUND,
     component: BackgroundWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
@@ -63,6 +61,8 @@ registerWidget({
 
 registerWidget({
     id: 'basic visualizer',
+    title: 'Базовый визуализатор',
+    type: WidgetType.AUDIO_VISUALIZER,
     component: AudioVisualizerWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
@@ -70,6 +70,8 @@ registerWidget({
 
 registerWidget({
     id: 'circle visualizer',
+    title: 'Круговой аудиовизуализатор',
+    type: WidgetType.AUDIO_VISUALIZER,
     component: CircleAudioVisualizerWidget,
     defaultShape: 'circle',
     defaultSize: 'medium',
@@ -78,6 +80,8 @@ registerWidget({
 
 registerWidget({
     id: 'text visualizer',
+    title: 'Текстовый аудиовизуализатор',
+    type: WidgetType.AUDIO_VISUALIZER,
     component: TextAudioVisualizerWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
@@ -85,6 +89,8 @@ registerWidget({
 
 registerWidget({
     id: 'yoda timer',
+    title: 'Йода таймер',
+    type: WidgetType.TIMER,
     component: YodaTimerWidget,
     defaultShape: 'circle',
     defaultSize: 'medium',
@@ -92,6 +98,8 @@ registerWidget({
 
 registerWidget({
     id: 'pomodoro timer',
+    title: 'Pomodoro таймер',
+    type: WidgetType.TIMER,
     component: PomodoroTimerWidget,
     defaultShape: 'circle',
     defaultSize: 'medium',
@@ -99,38 +107,44 @@ registerWidget({
 
 registerWidget({
     id: 'rain sounds',
+    title: 'Дождь',
+    type: WidgetType.AMBIENT,
     component: RainSoundsWidget,
     defaultShape: 'circle',
     defaultSize: 'small',
-    resizable: true,
 });
 
 registerWidget({
     id: 'forest sounds',
+    title: 'Лес',
+    type: WidgetType.NATURE,
     component: ForestSoundsWidget,
     defaultShape: 'circle',
     defaultSize: 'small',
-    resizable: true,
 });
 
 registerWidget({
     id: 'cafe ambience',
+    title: 'Кафе',
+    type: WidgetType.AMBIENT,
     component: CafeAmbienceWidget,
     defaultShape: 'circle',
     defaultSize: 'small',
-    resizable: true,
 });
 
 registerWidget({
     id: 'white noise',
+    title: 'Белый шум',
+    type: WidgetType.AMBIENT,
     component: WhiteNoiseWidget,
     defaultShape: 'circle',
     defaultSize: 'small',
-    resizable: true,
 });
 
 registerWidget({
     id: 'lofi player',
+    title: 'Lo-fi',
+    type: WidgetType.MUSIC,
     component: LofiPlayerWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
@@ -138,6 +152,8 @@ registerWidget({
 
 registerWidget({
     id: 'piano player',
+    title: 'Пианино',
+    type: WidgetType.MUSIC,
     component: PianoPlayerWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
@@ -145,30 +161,35 @@ registerWidget({
 
 registerWidget({
     id: 'ocean waves',
+    title: 'Океан',
+    type: WidgetType.NATURE,
     component: OceanWavesWidget,
     defaultShape: 'circle',
     defaultSize: 'small',
-    resizable: true,
 });
 
 registerWidget({
     id: 'fireplace',
+    title: 'Камин',
+    type: WidgetType.NATURE,
     component: FireplaceWidget,
     defaultShape: 'circle',
     defaultSize: 'small',
-    resizable: true,
 });
 
 registerWidget({
     id: 'wind sounds',
+    title: 'Ветер',
+    type: WidgetType.NATURE,
     component: WindSoundsWidget,
     defaultShape: 'circle',
     defaultSize: 'small',
-    resizable: true,
 });
 
 registerWidget({
     id: 'binaural beats',
+    title: 'Бинауральные ритмы',
+    type: WidgetType.FOCUS,
     component: BinauralBeatsWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
@@ -176,38 +197,35 @@ registerWidget({
 
 registerWidget({
     id: 'thunderstorm',
+    title: 'Гроза',
+    type: WidgetType.NATURE,
     component: ThunderstormWidget,
     defaultShape: 'circle',
     defaultSize: 'small',
-    resizable: true,
 });
 
 registerWidget({
     id: 'birdsong',
+    title: 'Пение птиц',
+    type: WidgetType.NATURE,
     component: BirdsongWidget,
     defaultShape: 'circle',
     defaultSize: 'small',
-    resizable: true,
 });
 
 registerWidget({
     id: 'night sounds',
+    title: 'Ночь',
+    type: WidgetType.NATURE,
     component: NightSoundsWidget,
     defaultShape: 'circle',
     defaultSize: 'small',
-    resizable: true,
-});
-
-registerWidget({
-    id: 'aurora background',
-    component: AuroraBackgroundWidget,
-    defaultShape: 'square',
-    defaultSize: 'auto',
-    effects: () => ({ aurora: true }),
 });
 
 registerWidget({
     id: 'gradient background',
+    title: 'Градиент',
+    type: WidgetType.BACKGROUND,
     component: GradientBackgroundWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
@@ -215,23 +233,9 @@ registerWidget({
 });
 
 registerWidget({
-    id: 'particle background',
-    component: ParticleBackgroundWidget,
-    defaultShape: 'square',
-    defaultSize: 'auto',
-    effects: () => ({ particles: true }),
-});
-
-registerWidget({
-    id: 'starfield',
-    component: StarfieldWidget,
-    defaultShape: 'square',
-    defaultSize: 'auto',
-    effects: () => ({ starfield: true }),
-});
-
-registerWidget({
     id: 'wave visualizer',
+    title: 'Волны',
+    type: WidgetType.AUDIO_VISUALIZER,
     component: WaveVisualizerWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
@@ -240,6 +244,8 @@ registerWidget({
 
 registerWidget({
     id: 'bars visualizer',
+    title: 'Столбцы',
+    type: WidgetType.AUDIO_VISUALIZER,
     component: BarsVisualizerWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
@@ -248,6 +254,8 @@ registerWidget({
 
 registerWidget({
     id: 'spiral visualizer',
+    title: 'Спираль',
+    type: WidgetType.AUDIO_VISUALIZER,
     component: SpiralVisualizerWidget,
     defaultShape: 'circle',
     defaultSize: 'medium',
@@ -256,6 +264,8 @@ registerWidget({
 
 registerWidget({
     id: 'orb visualizer',
+    title: 'Сфера',
+    type: WidgetType.AUDIO_VISUALIZER,
     component: OrbVisualizerWidget,
     defaultShape: 'circle',
     defaultSize: 'medium',
@@ -264,6 +274,8 @@ registerWidget({
 
 registerWidget({
     id: 'forest timer',
+    title: 'Лесной таймер',
+    type: WidgetType.TIMER,
     component: ForestTimerWidget,
     defaultShape: 'circle',
     defaultSize: 'medium',
@@ -271,6 +283,8 @@ registerWidget({
 
 registerWidget({
     id: 'deep work timer',
+    title: 'Глубокая работа',
+    type: WidgetType.TIMER,
     component: DeepWorkTimerWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
@@ -278,6 +292,8 @@ registerWidget({
 
 registerWidget({
     id: 'meditation timer',
+    title: 'Медитация',
+    type: WidgetType.TIMER,
     component: MeditationTimerWidget,
     defaultShape: 'circle',
     defaultSize: 'medium',
@@ -285,6 +301,8 @@ registerWidget({
 
 registerWidget({
     id: 'reading timer',
+    title: 'Чтение',
+    type: WidgetType.TIMER,
     component: ReadingTimerWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
@@ -292,6 +310,8 @@ registerWidget({
 
 registerWidget({
     id: 'aurora effect',
+    title: 'Северное сияние',
+    type: WidgetType.EFFECTS,
     component: AuroraEffectsWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
@@ -299,25 +319,61 @@ registerWidget({
 });
 
 registerWidget({
-    id: 'blur effect',
-    component: BlurEffectsWidget,
+    id: 'flame effect',
+    title: 'Пламя',
+    type: WidgetType.EFFECTS,
+    component: FlameEffectsWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
-    effects: () => ({ blur: 5 }),
+    effects: () => ({ flame: true }),
 });
 
 registerWidget({
-    id: 'vignette effect',
-    component: VignetteEffectsWidget,
+    id: 'snow effect',
+    title: 'Снег',
+    type: WidgetType.EFFECTS,
+    component: SnowEffectsWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
-    effects: () => ({ vignette: true }),
+    effects: () => ({ snow: true }),
 });
 
 registerWidget({
-    id: 'noise effect',
-    component: NoiseEffectsWidget,
+    id: 'rain effect',
+    title: 'Дождь',
+    type: WidgetType.EFFECTS,
+    component: RainEffectsWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
-    effects: () => ({ noise: true }),
+    effects: () => ({ rain: true }),
+});
+
+registerWidget({
+    id: 'snowy wind effect',
+    title: 'Снежный ветер',
+    type: WidgetType.EFFECTS,
+    component: SnowyWindEffectsWidget,
+    defaultShape: 'square',
+    defaultSize: 'auto',
+    effects: () => ({ snowyWind: true }),
+});
+
+registerWidget({
+    id: 'particles effect',
+    title: 'Частицы',
+    type: WidgetType.EFFECTS,
+    component: AuroraEffectsWidget,
+    defaultShape: 'square',
+    defaultSize: 'auto',
+    effects: () => ({ particles: true }),
+});
+
+registerWidget({
+    id: 'starfield effect',
+    title: 'Звёздное небо',
+    type: WidgetType.EFFECTS,
+    component: AuroraEffectsWidget,
+    defaultShape: 'square',
+    defaultSize: 'auto',
+    effects: () => ({ starfield: true }),
 });
