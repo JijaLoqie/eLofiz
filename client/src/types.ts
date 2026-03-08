@@ -111,6 +111,7 @@ export interface WidgetInstance extends IObject {
     shape?: WidgetShape;
     size?: WidgetSize;
     effects?: Record<string, unknown>;
+    transparency?: number;
 }
 
 export interface SpaceParams {

@@ -52,6 +52,16 @@ export const SpaceEffectsOverlay = ({ effects }: SpaceEffectsOverlayProps) => {
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            if (effects.gradient && effects.gradient.length >= 2) {
+                const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+                const step = 1 / (effects.gradient.length - 1);
+                effects.gradient.forEach((color, i) => {
+                    gradient.addColorStop(i * step, color);
+                });
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
             if (effects.vignette) {
                 const gradient = ctx.createRadialGradient(
                     canvas.width / 2, canvas.height / 2, 0,
@@ -137,28 +147,30 @@ export const SpaceEffectsOverlay = ({ effects }: SpaceEffectsOverlayProps) => {
             }
 
             if (effects.flame) {
-                if (particlesRef.current.length !== 100) initParticles(100);
+                if (particlesRef.current.length !== 150) initParticles(150);
                 
                 particlesRef.current.forEach((p, i) => {
-                    p.x += p.vx + Math.sin(time * 5 + i) * 0.5;
+                    p.x += p.vx + Math.sin(time * 5 + i) * 0.8;
                     p.y -= p.vy * 1.5;
                     p.life -= 1;
                     
                     if (p.life <= 0 || p.y < 0) {
                         p.y = canvas.height + 10;
-                        p.x = canvas.width / 2 + (Math.random() - 0.5) * 200;
+                        p.x = canvas.width * 0.3 + Math.random() * canvas.width * 0.4;
                         p.life = p.maxLife;
                         p.vy = Math.random() * 2 + 2;
                     }
                     
                     const alpha = (p.life / p.maxLife) * 0.8;
-                    const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3);
-                    gradient.addColorStop(0, `rgba(255, 200, 50, ${alpha})`);
-                    gradient.addColorStop(0.3, `rgba(255, 100, 0, ${alpha * 0.7})`);
+                    const size = 4 + Math.random() * 4;
+                    const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size * 4);
+                    gradient.addColorStop(0, `rgba(255, 220, 80, ${alpha})`);
+                    gradient.addColorStop(0.2, `rgba(255, 150, 30, ${alpha * 0.8})`);
+                    gradient.addColorStop(0.5, `rgba(255, 80, 20, ${alpha * 0.5})`);
                     gradient.addColorStop(1, "transparent");
                     
                     ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2);
+                    ctx.ellipse(p.x, p.y, size * 4, size * 2, 0, 0, Math.PI * 2);
                     ctx.fillStyle = gradient;
                     ctx.fill();
                 });

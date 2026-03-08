@@ -40,8 +40,9 @@ import { FlameEffectsWidget } from "./custom/EffectsWidgets/FlameEffectsWidget.t
 import { SnowEffectsWidget } from "./custom/EffectsWidgets/SnowEffectsWidget.tsx";
 import { RainEffectsWidget } from "./custom/EffectsWidgets/RainEffectsWidget.tsx";
 import { SnowyWindEffectsWidget } from "./custom/EffectsWidgets/SnowyWindEffectsWidget.tsx";
+import { ParticlesEffectsWidget } from "./custom/EffectsWidgets/ParticlesEffectsWidget.tsx";
+import { StarfieldEffectsWidget } from "./custom/EffectsWidgets/StarfieldEffectsWidget.tsx";
 import { appStore } from "@/app/appStore.ts";
-import { updateWidgetRegistry } from "@/slices/WidgetSlice.ts";
 
 registerWidget({
     id: 'basic player',
@@ -364,7 +365,7 @@ registerWidget({
     id: 'particles effect',
     title: 'Частицы',
     type: WidgetType.EFFECTS,
-    component: AuroraEffectsWidget,
+    component: ParticlesEffectsWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
     effects: () => ({ particles: true }),
@@ -374,7 +375,7 @@ registerWidget({
     id: 'starfield effect',
     title: 'Звёздное небо',
     type: WidgetType.EFFECTS,
-    component: AuroraEffectsWidget,
+    component: StarfieldEffectsWidget,
     defaultShape: 'square',
     defaultSize: 'auto',
     effects: () => ({ starfield: true }),

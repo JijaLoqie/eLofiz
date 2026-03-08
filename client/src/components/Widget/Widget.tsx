@@ -7,7 +7,7 @@ import { SpaceContext } from "@/components/Space/Space.tsx";
 import { useDragHandler } from "@/components/hooks/useDragHandler.ts";
 import { widgetRegistry, getWidgetConfig } from "./widgetRegistry.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faExpand, faCompress, faCircle, faSquare } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faExpand, faCompress, faCircle, faSquare, faTint } from "@fortawesome/free-solid-svg-icons";
 
 import "./widgets.ts";
 
@@ -46,6 +46,7 @@ export const Widget = ({ widgetInfoId, widgetInstance }: WidgetProps) => {
     const widgetConfig = getWidgetConfig(widgetInfoId);
     const shape = widgetInstance?.shape ?? widgetConfig?.defaultShape ?? 'square';
     const size = widgetInstance?.size ?? widgetConfig?.defaultSize ?? 'auto';
+    const transparency = widgetInstance?.transparency ?? 40;
     const canResize = widgetConfig?.resizable ?? false;
 
     useDragHandler({
@@ -91,6 +92,15 @@ export const Widget = ({ widgetInfoId, widgetInstance }: WidgetProps) => {
         closeContextMenu();
     }, [dispatch, spaceId, widgetInstance, size, canResize, closeContextMenu]);
 
+    const handleTransparencyChange = useCallback((value: number) => {
+        if (!widgetInstance) return;
+        dispatch(updateWidgetInstance({
+            spaceId,
+            widgetInstanceId: widgetInstance.id,
+            updates: { transparency: value }
+        }));
+    }, [dispatch, spaceId, widgetInstance]);
+
     const renderWidgetContent = () => {
         const config = getWidgetConfig(widgetInfoId);
         if (!config) return <div className="text-white/50 text-sm">Widget not found</div>;
@@ -100,6 +110,7 @@ export const Widget = ({ widgetInfoId, widgetInstance }: WidgetProps) => {
     };
 
     const sizeClass = size !== 'auto' ? sizeClasses[size] : '';
+    const bgOpacity = Math.max(5, transparency);
 
     return (
         <>
@@ -112,6 +123,9 @@ export const Widget = ({ widgetInfoId, widgetInstance }: WidgetProps) => {
                     ${isResizing ? 'ring-2 ring-blue-400' : ''}
                     transition-all duration-200
                 `}
+                style={{
+                    backgroundColor: `rgba(0, 0, 0, ${bgOpacity / 100})`,
+                }}
                 onContextMenu={handleContextMenu}
             >
                 <div ref={headerRef} className="widget__header cursor-move">
@@ -166,7 +180,7 @@ export const Widget = ({ widgetInfoId, widgetInstance }: WidgetProps) => {
                 <>
                     <div className="fixed inset-0 z-40" onClick={closeContextMenu} />
                     <div
-                        className="fixed z-50 bg-black/80 backdrop-blur-md rounded-lg py-2 min-w-[160px] shadow-xl border border-white/10"
+                        className="fixed z-50 bg-black/80 backdrop-blur-md rounded-lg py-2 min-w-[180px] shadow-xl border border-white/10"
                         style={{ left: contextMenu.x, top: contextMenu.y }}
                         onClick={(e) => e.stopPropagation()}
                     >
@@ -175,7 +189,7 @@ export const Widget = ({ widgetInfoId, widgetInstance }: WidgetProps) => {
                             onClick={handleToggleShape}
                         >
                             <FontAwesomeIcon icon={shape === 'square' ? faCircle : faSquare} />
-                            <span>Make {shape === 'square' ? 'Circle' : 'Square'}</span>
+                            <span>Shape: {shape === 'square' ? 'Circle' : 'Square'}</span>
                         </button>
                         
                         {canResize && (
@@ -187,6 +201,21 @@ export const Widget = ({ widgetInfoId, widgetInstance }: WidgetProps) => {
                                 <span>Size: {size}</span>
                             </button>
                         )}
+                        
+                        <div className="px-4 py-2">
+                            <div className="flex items-center gap-3 text-white/80 text-sm mb-1">
+                                <FontAwesomeIcon icon={faTint} />
+                                <span>Opacity: {transparency}%</span>
+                            </div>
+                            <input
+                                type="range"
+                                min="5"
+                                max="90"
+                                value={transparency}
+                                onChange={(e) => handleTransparencyChange(parseInt(e.target.value))}
+                                className="w-full h-1.5 bg-white/20 rounded-full appearance-none cursor-pointer"
+                            />
+                        </div>
                         
                         <hr className="my-2 border-white/10" />
                         

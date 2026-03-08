@@ -1,7 +1,9 @@
-import { createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { type IWidget, WidgetType } from "@/types.ts";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
+import { type IWidget } from "@/types.ts";
 import type { RootState } from "@/index.tsx";
-import { getAllWidgets, widgetRegistry } from "@/components/Widget/widgetRegistry.ts";
+
+import "@/components/Widget/widgets.ts";
+import { getAllWidgets } from "@/components/Widget/widgetRegistry.ts";
 
 function generateWidgetSliceState(): Record<string, IWidget> {
     const widgets = getAllWidgets();
@@ -30,18 +32,13 @@ const initialState: WidgetSliceState = {
 export const WidgetSlice = createSlice({
     name: "widget",
     initialState,
-    reducers: {
-        updateWidgetRegistry: (state) => {
-            state.items = generateWidgetSliceState();
-        }
-    },
+    reducers: {},
     selectors: {
-        selectWidgets: (state) => widgetRegistry,
+        selectWidgets: (state) => state.items,
     }
 });
 
 export const { selectWidgets } = WidgetSlice.selectors;
-export const { updateWidgetRegistry } = WidgetSlice.actions;
 
 export const selectWidget = createSelector(
     [
