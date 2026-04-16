@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import type { ISpace, WidgetInstance } from "@/shared/types.ts";
 import type { RootState } from "@/index.tsx";
-import { selectSpace, selectWidgetsOnSpace } from "@/entities/space/model/SpaceSlice.ts";
 import { Widget } from "@/widgets/widget/Widget.tsx";
 import { createContext, useCallback, useEffect, useRef } from "react";
 import { registerAudio } from "@/shared/actions.ts";
 import { selectIntersectionMetrics } from "@/pages/spaces/model/IntersectionSlice.ts";
 import { setVolume } from "@/shared/middlewares/AudioMiddleware.ts";
 import { trailingThrottle } from "@/shared/utils.ts";
+import { observer } from "mobx-react-lite";
+import { model } from "@/features/spaces-session"
 
 interface SpaceProps {
     spaceId: string;
@@ -17,10 +17,11 @@ interface SpaceProps {
 export const SpaceContext = createContext<string>("");
 
 
-export const Space = (props: SpaceProps) => {
+export const Space = observer((props: SpaceProps) => {
     const {spaceId} = props;
-    const spaceInfo = useSelector((state: RootState): ISpace => selectSpace(state, spaceId));
-    const widgets = useSelector((state: RootState): WidgetInstance[] => selectWidgetsOnSpace(state, `${spaceId}`));
+    const spaceListStore = model.useSpaceListStore();
+    const spaceInfo = spaceListStore.getSpace(spaceId);
+    const widgets = spaceListStore.getSpaceWidgets(spaceId);
     const spaceMetrics = useSelector((state: RootState) => selectIntersectionMetrics(state, spaceId))
 
     const htmlAudio = useRef<HTMLAudioElement>(null);
@@ -60,4 +61,4 @@ export const Space = (props: SpaceProps) => {
             </div>
         </SpaceContext.Provider>
     );
-}
+})

@@ -1,7 +1,5 @@
-import { useDispatch } from "react-redux";
 import { use, useRef } from "react";
 import type { WidgetInstance } from "@/shared/types.ts";
-import { removeWidget } from "@/entities/space/model/SpaceSlice.ts";
 
 import { useDragHandler } from "@/shared/hooks/useDragHandler.ts";
 import { BackgroundWidget } from "@/widgets/widget/custom/BackgroundWidget/BackgroundWidget.tsx";
@@ -12,18 +10,20 @@ import { TextAudioVisualizerWidget } from "@/widgets/widget/custom/AudioVisualiz
 import { YodaTimerWidget } from "@/widgets/widget/custom/YodaTimerWidget.tsx";
 import { PomodoroTimerWidget } from "@/widgets/widget/custom/PomodoroTimerWidget.tsx";
 import { SpaceContext } from "@/pages/spaces/Space.tsx";
+import { useSpaceListStore } from "@/features/spaces-session/model";
+import { observer } from "mobx-react-lite";
 
 interface WidgetProps {
     widgetInfoId: string;
     widgetInstance?: WidgetInstance;
 }
 
-export const Widget = (props: WidgetProps) => {
+export const Widget = observer((props: WidgetProps) => {
+    const spaceListStore = useSpaceListStore();
     const {widgetInfoId, widgetInstance} = props;
 
     const headerRef = useRef<HTMLDivElement>(null);
     const rootRef = useRef<HTMLDivElement>(null);
-    const dispatch = useDispatch();
 
     const spaceId = use(SpaceContext);
 
@@ -52,10 +52,7 @@ export const Widget = (props: WidgetProps) => {
     };
 
     const handleClose = (id: string) => {
-        dispatch(removeWidget({
-            widgetInstanceId: id,
-            spaceId,
-        }));
+        spaceListStore.removeWidget(spaceId, id);
     };
 
     return (
@@ -78,4 +75,4 @@ export const Widget = (props: WidgetProps) => {
             </div>
         </div>
     );
-};
+});

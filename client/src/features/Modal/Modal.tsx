@@ -9,6 +9,7 @@ export const Modal = () => {
     const editorData = use(EditorContext);
     const isOpenList = !!modalData?.value;
     const isOpenEditor = !!editorData?.stream;
+    console.log(modalData);
     return (
         <>
             {isOpenList && <ModalListWidget />}

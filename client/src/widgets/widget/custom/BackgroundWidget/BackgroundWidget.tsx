@@ -1,8 +1,7 @@
-import { type ChangeEvent, useCallback, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "@/index.tsx";
-import { selectSpace, updateSpace } from "@/entities/space/model/SpaceSlice.ts";
+import { type ChangeEvent, useCallback } from "react";
 import { ImagesField } from "@/widgets/widget/custom/BackgroundWidget/ImagesField.tsx";
+import { useSpaceListStore } from "@/features/spaces-session/model";
+import { observer } from "mobx-react-lite";
 
 type ImageInfo = {
     id: string;
@@ -13,19 +12,16 @@ interface BackgroundWidgetProps {
     spaceId: string;
 }
 
-export const BackgroundWidget = (props: BackgroundWidgetProps) => {
-    const space = useSelector((state: RootState) => selectSpace(state, props.spaceId));
-    const {images, currentBackground} = space;
-    const dispatch = useDispatch();
+export const BackgroundWidget = observer((props: BackgroundWidgetProps) => {
+    const spaceListStore = useSpaceListStore();
+    const space = spaceListStore.getSpace(props.spaceId);
+    const {images} = space;
 
     const handleToggleFixed = useCallback(() => {
-        dispatch(updateSpace({
-            spaceId: `${props.spaceId}`,
-            props: {
-                fixed: !space.fixed
-            }
-        }))
-    }, [space.fixed, dispatch, props.spaceId])
+        spaceListStore.updateSpace(props.spaceId, {
+            fixed: !space.fixed
+        });
+    }, [space.fixed, props.spaceId])
 
     const handleLoadImage = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
@@ -38,10 +34,7 @@ export const BackgroundWidget = (props: BackgroundWidgetProps) => {
                 ...images,
                 [id]: imageInfo
             };
-            dispatch(updateSpace({
-                spaceId: space.id,
-                props: {images: newImages}
-            }));
+            spaceListStore.updateSpace(props.spaceId, {images: newImages});
         };
 
         Array.from(files).forEach((file) => {
@@ -53,7 +46,7 @@ export const BackgroundWidget = (props: BackgroundWidgetProps) => {
         });
 
         e.target.value = '';
-    }, [dispatch, props.spaceId, images]);
+    }, [props.spaceId, images]);
 
     return (
         <div className="image-widget">
@@ -94,4 +87,4 @@ export const BackgroundWidget = (props: BackgroundWidgetProps) => {
             </div>
         </div>
     )
-}
+})

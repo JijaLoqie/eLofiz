@@ -1,11 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/index.tsx";
-import { selectSpace } from "@/entities/space/model/SpaceSlice.ts";
 import { useAudioNode } from "@/shared/hooks/useAudioNode.ts";
 import type { IStream } from "@/shared/types.ts";
 import { selectStream } from "@/entities/stream/model/StreamSlice.ts";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { formatDuration } from "../../../../shared/StreamEditor";
+import { formatDuration } from "@/shared/StreamEditor";
 import { playBeep } from "@/shared/actions.ts";
 import { useDurationQuery } from "@/entities/stream/api/StreamApi.ts";
 import { useStreamData } from "@/shared/hooks/useStreamData.ts";
@@ -13,13 +12,15 @@ import { PlayerInfo } from "./PlayerInfo.tsx";
 import { PlayerNavigation } from "./PlayerNavigation.tsx";
 import { PlayerControls } from "./PlayerControls.tsx";
 import { PlayerTimeline } from "./PlayerTimeline.tsx";
+import { model } from "@/features/spaces-session";
 
 interface PlayerWidgetProps {
     spaceId: string;
 }
 
 export const PlayerWidget = (props: PlayerWidgetProps) => {
-    const space = useSelector((state: RootState) => selectSpace(state, props.spaceId));
+    const spaceListStore = model.useSpaceListStore();
+    const space = spaceListStore.getSpace(props.spaceId);
     const stream = useSelector((state: RootState): IStream | undefined => selectStream(state, space.streamId))
     const { data: duration = 0 } = useDurationQuery(space.streamId);
     const { handleOpenEditor } = useStreamData(space.streamId);

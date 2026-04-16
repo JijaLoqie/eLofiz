@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { useSelector } from 'react-redux';
-import { selectSpaces } from '@/entities/space/model/SpaceSlice.ts';
 import { ensureElement } from '@/shared/utils';
+import type { ISpace } from "@/shared/types.ts";
 
 export interface SpaceMetrics {
     index: number;
@@ -11,9 +10,7 @@ export interface SpaceMetrics {
     isVisible: boolean;
 }
 
-export const useIntersectionSpaceHandler = () => {
-    const spaces = useSelector(selectSpaces);
-
+export const useIntersectionSpaceHandler = (spaces: ISpace[]) => {
     const spacesRef = useRef<HTMLElement[]>([]);
     const spaceMetricsRef = useRef<Map<HTMLElement, number>>(new Map());
     const intersectionObserverRef = useRef<IntersectionObserver | null>(null);

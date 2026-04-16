@@ -1,8 +1,7 @@
 import { type FC, useCallback } from "react";
 import type { IPreset } from "@/shared/types.ts";
-import { createSpace } from "@/entities/space/model/SpaceSlice.ts";
-import { useDispatch } from "react-redux";
 import { useFloatAnimation } from "@/shared/hooks/useFloatAnimation.ts";
+import { useSpaceListStore } from "@/features/spaces-session/model";
 
 interface SpacePreviewCardProps {
     card: IPreset
@@ -15,14 +14,14 @@ export const SpacePreviewCard: FC<SpacePreviewCardProps> = ({
                                                                 onMouseEnter,
                                                                 onMouseLeave,
                                                             }) => {
+    const spaceListStore = useSpaceListStore();
     const { tags, spaceProps, color } = card;
     const { images, name } = spaceProps;
-    const dispatch = useDispatch();
     const floatAnimation = useFloatAnimation();
 
     const handleClick = useCallback(() => {
-        dispatch(createSpace(spaceProps));
-    }, [dispatch, spaceProps]);
+        spaceListStore.createSpace(spaceProps);
+    }, [spaceProps]);
 
     return (
         <div

@@ -1,18 +1,18 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import type { RootState } from "@/index.tsx";
 import { type IPreset } from "@/shared/types.ts";
 import { selectPreset } from "@/entities/preset/model/PresetSlice.ts";
 import { use, useCallback } from "react";
-import { createSpace } from "@/entities/space/model/SpaceSlice.ts";
 import { ModalContext } from "@/features/Modal/ModalProvider.tsx";
 import { NotificationContext } from "@/shared/Notifications/NotificationProvider.tsx";
+import { useSpaceListStore } from "@/features/spaces-session/model";
 
 interface PresetCardProps {
     presetId: string;
 }
 
 export const PresetCard = (props: PresetCardProps) => {
-    const dispatch = useDispatch();
+    const spaceListStore = useSpaceListStore();
     const modalData = use(ModalContext);
     const notificationData = use(NotificationContext);
     const presetInfo = useSelector((state: RootState): IPreset => selectPreset(state, props.presetId));
@@ -20,8 +20,7 @@ export const PresetCard = (props: PresetCardProps) => {
     const { images, name } = spaceProps;
 
     const handleCreateSpace = useCallback(() => {
-        // dispatch(addWidget({ spaceId: currentSpace, widgetId: widgetInfo.id }));
-        dispatch(createSpace(spaceProps));
+        spaceListStore.createSpace(spaceProps);
         modalData?.setValue?.("");
 
         setTimeout(() => window.scrollTo({

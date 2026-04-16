@@ -1,12 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import type { RootState } from "@/index.tsx";
 import { type IWidget } from "@/shared/types.ts";
 import { selectWidget } from "@/entities/widget/model/WidgetSlice.ts";
 import { use, useCallback } from "react";
 import { selectCurrentSpace } from "@/pages/spaces/model/IntersectionSlice.ts";
-import { addWidget } from "@/entities/space/model/SpaceSlice.ts";
 import { ModalContext } from "@/features/Modal/ModalProvider.tsx";
 import { NotificationContext } from "@/shared/Notifications/NotificationProvider.tsx";
+import { useSpaceListStore } from "@/features/spaces-session/model";
+import { observer } from "mobx-react-lite";
 
 interface WidgetCardProps {
     widgetCardId: string;
@@ -28,15 +29,15 @@ const WIDGET_COLOR_MAP: Record<string, { border: string; bg: string; line: strin
     "music": { border: "group-hover:border-pink-500", bg: "group-hover:bg-pink-500/20", line: "group-hover:via-pink-500" },
 };
 
-export const WidgetCard = (props: WidgetCardProps) => {
+export const WidgetCard = observer((props: WidgetCardProps) => {
+    const spaceListStore = useSpaceListStore();
     const modalData = use(ModalContext);
     const notificationData = use(NotificationContext);
     const currentSpace = useSelector((state: RootState) => selectCurrentSpace(state));
     const widgetInfo = useSelector((state: RootState): IWidget => selectWidget(state, props.widgetCardId));
-    const dispatch = useDispatch();
 
     const handleAddWidget = useCallback(() => {
-        dispatch(addWidget({ spaceId: currentSpace, widgetId: widgetInfo.id }));
+        spaceListStore.addWidget(currentSpace, widgetInfo.id);
         modalData?.setValue?.("");
         notificationData?.setValue?.("Создан новый виджет!");
 
@@ -88,4 +89,4 @@ export const WidgetCard = (props: WidgetCardProps) => {
             </div>
         </div>
     );
-};
+});

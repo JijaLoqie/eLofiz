@@ -1,24 +1,18 @@
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "@/index.tsx";
-import { selectImageInfo, updateSpace } from "@/entities/space/model/SpaceSlice.ts";
 import { useCallback } from "react";
+import { observer } from "mobx-react-lite";
+import { useSpaceListStore } from "@/features/spaces-session/model";
 
 interface ImagesFieldProps {
     spaceId: string;
 }
 
-export const ImagesField = (props: ImagesFieldProps) => {
-    const {spaceId} = props;
-    const {images, currentBackground} = useSelector((state: RootState) => selectImageInfo(state, spaceId));
-    const dispatch = useDispatch();
+export const ImagesField = observer((props: ImagesFieldProps) => {
+    const spaceListStore = useSpaceListStore();
+    const {images, currentBackground} = spaceListStore.getSpaceImageInfo(props.spaceId);
 
     const handleSetBackground = useCallback((newImageId: string) => {
-        dispatch(
-            updateSpace({
-                spaceId: spaceId, props: { currentBackground: newImageId }
-            })
-        )
-    }, [dispatch, spaceId]);
+        spaceListStore.updateSpace(props.spaceId, { currentBackground: newImageId });
+    }, [props.spaceId]);
 
     return (
         <div className="image-widget__grid">
@@ -31,4 +25,4 @@ export const ImagesField = (props: ImagesFieldProps) => {
             </div>))}
         </div>
     )
-}
+})

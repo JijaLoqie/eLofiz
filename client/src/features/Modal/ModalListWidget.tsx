@@ -6,14 +6,16 @@ import { StreamCardList } from "@/widgets/stream/StreamCardList.tsx";
 import { PresetCardList } from "@/widgets/preset/PresetCardList.tsx";
 import { WidgetCardList } from "@/widgets/widget/WidgetCardList.tsx";
 import { selectCurrentSpace } from "@/pages/spaces/model/IntersectionSlice.ts";
-import { selectSpace } from "@/entities/space/model/SpaceSlice.ts";
 import { ModalContext } from "@/features/Modal/ModalProvider.tsx";
+import { model } from "@/features/spaces-session";
+import { observer } from "mobx-react-lite";
 
-export const ModalListWidget = () => {
+export const ModalListWidget = observer(() => {
+    const spaceListStore = model.useSpaceListStore();
     const modalData = use(ModalContext);
     const entityType = modalData?.value;
     const currentSpaceId = useSelector((state: RootState) => selectCurrentSpace(state));
-    const currentSpace = useSelector((state: RootState) => selectSpace(state, currentSpaceId));
+    const currentSpace = spaceListStore.getSpace(currentSpaceId);
 
     const renderList = () => {
         switch (entityType) {
@@ -46,4 +48,4 @@ export const ModalListWidget = () => {
             </div>
         </div>
     )
-}
+})
