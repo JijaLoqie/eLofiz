@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { rootReducer } from "./rootReducer.ts";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { AudioMiddleware } from "@/middlewares/AudioMiddleware.ts";
-import { baseApi } from "@/utils/api";
+import { AudioMiddleware } from "@/shared/middlewares/AudioMiddleware.ts";
+import { baseApi } from "../shared/api";
 
 function makeStore() {
     const store = configureStore({

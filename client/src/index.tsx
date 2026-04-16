@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { appStore } from "@/app/appStore.ts";
-import { ensureElement } from "@/utils";
+import { ensureElement } from "@/shared/utils";
 import { Provider } from "react-redux";
 import { AppEntry } from "@/app/appEntry.tsx";
 
