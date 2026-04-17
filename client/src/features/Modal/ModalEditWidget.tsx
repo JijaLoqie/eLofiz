@@ -1,16 +1,16 @@
+import { observer } from "mobx-react-lite";
 import React, { use, useCallback } from "react";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/index.tsx";
-import { selectStream } from "@/entities/stream/model/StreamSlice.ts";
 import StreamEditor from "@/widgets/stream/StreamEditor/StreamEditor.tsx";
 import { EditorContext } from "@/features/Modal/EditorProvider.tsx";
+import { useStreamStore } from "@/features/preload-session/store";
 
 interface ModalEditWidgetProps {
 }
 
-export const ModalEditWidget: React.FC<ModalEditWidgetProps> = () => {
+export const ModalEditWidget: React.FC<ModalEditWidgetProps> = observer(() => {
     const editorContext = use(EditorContext);
-    const stream = useSelector((state: RootState) => selectStream(state, editorContext?.stream?.id || ""));
+    const streamStore = useStreamStore();
+    const stream = streamStore.getItem(editorContext?.stream?.id || "");
 
     const handleCloseClick = useCallback(() => {
         editorContext?.handleClose();
@@ -88,6 +88,6 @@ export const ModalEditWidget: React.FC<ModalEditWidgetProps> = () => {
             </div>
         </>
     );
-};
+});
 
 export default ModalEditWidget;

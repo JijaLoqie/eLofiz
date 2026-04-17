@@ -1,15 +1,14 @@
-import { useSelector } from "react-redux";
-import type { RootState } from "@/index.tsx";
 import { PresetCard } from "@/widgets/preset/PresetCard.tsx";
-import { selectPresets } from "@/entities/preset/model/PresetSlice.ts";
+import { usePresetStore } from "@/features/preload-session/store";
+import { observer } from "mobx-react-lite";
 
-export const PresetCardList = () => {
-    const presets = useSelector((state: RootState) => selectPresets(state));
+export const PresetCardList = observer(() => {
+    const {items} = usePresetStore();
     return (
         <div className="items-list">
-            {Object.keys(presets).map((presetId) => (
-                <PresetCard key={presetId} presetId={presetId} />
+            {items.map((item) => (
+                <PresetCard key={item.id} presetId={item.id} />
             ))}
         </div>
     );
-}
+});

@@ -1,20 +1,17 @@
 import { EntityType } from "@/shared/types.ts";
 import React, { use } from "react";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/index.tsx";
 import { StreamCardList } from "@/widgets/stream/StreamCardList.tsx";
 import { PresetCardList } from "@/widgets/preset/PresetCardList.tsx";
 import { WidgetCardList } from "@/widgets/widget/WidgetCardList.tsx";
-import { selectCurrentSpace } from "@/pages/spaces/model/IntersectionSlice.ts";
 import { ModalContext } from "@/features/Modal/ModalProvider.tsx";
-import { model } from "@/features/spaces-session";
 import { observer } from "mobx-react-lite";
+import { model } from "@/features/spaces-session";
 
 export const ModalListWidget = observer(() => {
     const spaceListStore = model.useSpaceListStore();
     const modalData = use(ModalContext);
     const entityType = modalData?.value;
-    const currentSpaceId = useSelector((state: RootState) => selectCurrentSpace(state));
+    const { currentSpaceId } = model.useIntersectionStore();
     const currentSpace = spaceListStore.getSpace(currentSpaceId);
 
     const renderList = () => {

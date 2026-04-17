@@ -1,16 +1,14 @@
 import { StreamCard } from "@/widgets/stream/StreamCard.tsx";
-import { useSelector } from "react-redux";
-import { selectStreams } from "@/entities/stream/model/StreamSlice.ts";
-import type { RootState } from "@/index.tsx";
-import type { IStream } from "@/shared/types.ts";
+import { useStreamStore } from "@/features/preload-session/store";
+import { observer } from "mobx-react-lite";
 
-export const StreamCardList = () => {
-    const streams = useSelector((state: RootState): Record<string, IStream> => selectStreams(state));
+export const StreamCardList = observer(() => {
+    const {items} = useStreamStore();
     return (
         <div className="items-list">
-            {Object.keys(streams).map((streamId) => (
-                <StreamCard key={streamId} streamId={streamId} />
+            {items.map((item) => (
+                <StreamCard key={item.id} streamId={item.id} />
             ))}
         </div>
     );
-};
+});

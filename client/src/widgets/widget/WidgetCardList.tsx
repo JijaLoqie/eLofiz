@@ -1,16 +1,14 @@
-import { useSelector } from "react-redux";
-import type { RootState } from "@/index.tsx";
-import type { IWidget } from "@/shared/types.ts";
-import { selectWidgets } from "@/entities/widget/model/WidgetSlice.ts";
 import { WidgetCard } from "@/widgets/widget/WidgetCard.tsx";
+import { useWidgetStore } from "@/features/preload-session/store";
+import { observer } from "mobx-react-lite";
 
-export const WidgetCardList = () => {
-    const widgets = useSelector((state: RootState): Record<string, IWidget> => selectWidgets(state));
+export const WidgetCardList = observer(() => {
+    const {items} = useWidgetStore();
     return (
         <div className="items-list">
-            {Object.keys(widgets).map((widgetId) => (
-                <WidgetCard key={widgetId} widgetCardId={widgetId} />
+            {items.map((item) => (
+                <WidgetCard key={item.id} widgetCardId={item.id} />
             ))}
         </div>
     );
-}
+});

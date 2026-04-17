@@ -1,5 +1,5 @@
-import { audioState } from "@/shared/middlewares/AudioMiddleware.ts";
-import { useEffect, useEffectEvent, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useSpaceAudioStore } from "@/features/spaces-session/model";
 
 interface useAnalyzerProps {
     spaceId: string;
@@ -10,7 +10,7 @@ interface useAnalyzerProps {
 export const useAnalyzer = (props: useAnalyzerProps) => {
     const {spaceId, fftSize} = props;
     const analyser = useRef<AnalyserNode>(null)
-
+    const audioState = useSpaceAudioStore();
 
     useEffect(() => {
         if (analyser.current) return;

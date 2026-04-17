@@ -14,13 +14,9 @@
 /* Widget Content */
 
 .widget {
-    --x: 10px;
-    --y: 10px;
+    position: absolute;
     min-width: 100px;
     min-height: 100px;
-    position: absolute;
-    top: var(--y);
-    left: var(--x);
     display: flex;
     flex-direction: column;
     border-radius: 8px;

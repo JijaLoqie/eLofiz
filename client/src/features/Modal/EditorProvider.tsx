@@ -1,8 +1,7 @@
 import { createContext, type FC, type ReactNode, use, useCallback, useRef, useState } from "react";
-import type { IPreset, IStream, IWidget } from "@/shared/types.ts";
-import { useDispatch } from "react-redux";
-import { saveStream } from "@/entities/stream/model/StreamSlice.ts";
+import type { IStream } from "@/shared/types.ts";
 import { NotificationContext } from "@/shared/Notifications/NotificationProvider.tsx";
+import { useStreamStore } from "@/features/preload-session/store";
 
 export interface EditorContextType {
     stream: IStream | null;
@@ -16,7 +15,7 @@ export const EditorContext = createContext<EditorContextType | undefined>(undefi
 
 
 export const EditorProvider: FC<{children: ReactNode}> = ({children}) => {
-    const dispatch = useDispatch();
+    const streamStore = useStreamStore();
     const notificationContext = use(NotificationContext);
     const [editorItem, setEditorItem] = useState<IStream | null>(null);
 
@@ -33,10 +32,10 @@ export const EditorProvider: FC<{children: ReactNode}> = ({children}) => {
 
     const handleSave = useCallback(() => {
         if (!editorItem) return;
-        dispatch(saveStream(editorItem));
+        streamStore.saveStream(editorItem);
         notificationContext?.setValue?.("Успешно сохранено");
         handleClose();
-    }, [handleClose, dispatch, editorItem]);
+    }, [handleClose, editorItem]);
 
     const handleOpen = (item: IStream) => {
         // todo: need to write normal logic here

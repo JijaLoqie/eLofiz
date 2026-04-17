@@ -57,6 +57,14 @@ export class SpaceListStore implements ILocalStore {
         }
     }
 
+    public updateWidget(spaceId: string, widgetId: string, widgetProps: Partial<WidgetInstance>) {
+        const space = this._list.entities[spaceId];
+        const widget = space?.widgets?.find?.(widget => widget.id === widgetId);
+        if (widget) {
+            Object.assign(widget, widgetProps);
+        }
+    }
+
     public createSpace(props: SpaceParams) {
         const space: ISpace = createDefaultSpace(props);
         let spaces = linearizeCollection(this._list);

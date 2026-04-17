@@ -1,6 +1,6 @@
 import { type FC, useEffect, useEffectEvent, useState } from "react";
-import { useDispatch } from "react-redux";
-import { playBeep } from "@/shared/actions.ts";
+import { observer } from "mobx-react-lite";
+import { useSpaceAudioStore } from "@/features/spaces-session/model";
 
 interface YodaTimerWidgetProps {
     spaceId: string;
@@ -8,12 +8,12 @@ interface YodaTimerWidgetProps {
 
 const defaultTime = 60 * 5;
 
-export const YodaTimerWidget: FC<YodaTimerWidgetProps> = () => {
-    const dispatch = useDispatch();
+export const YodaTimerWidget: FC<YodaTimerWidgetProps> = observer(() => {
     const [hover, setHover] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [timeLeft, setTimeLeft] = useState(defaultTime);
     const [ringing, setRinging] = useState(false);
+    const spaceAudioStore = useSpaceAudioStore();
 
     useEffect(() => {
         if (!isPlaying) return;
@@ -36,12 +36,12 @@ export const YodaTimerWidget: FC<YodaTimerWidgetProps> = () => {
     useEffect(() => {
         if (!ringing) return;
         const id = setInterval(() => {
-            dispatch(playBeep());
+            spaceAudioStore.playBeep();
         }, 500);
         return () => {
             clearInterval(id);
         }
-    }, [ringing, dispatch])
+    }, [ringing])
 
 
     const handleReset = useEffectEvent(() => {
@@ -106,4 +106,4 @@ export const YodaTimerWidget: FC<YodaTimerWidgetProps> = () => {
     </div>);
 
 
-};
+});

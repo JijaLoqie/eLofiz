@@ -1,7 +1,8 @@
 import { type FC, useCallback } from "react";
 import type { IPreset } from "@/shared/types.ts";
 import { useFloatAnimation } from "@/shared/hooks/useFloatAnimation.ts";
-import { useSpaceListStore } from "@/features/spaces-session/model";
+import { useIntersectionStore, useSpaceListStore } from "@/features/spaces-session/model";
+import { observer } from "mobx-react-lite";
 
 interface SpacePreviewCardProps {
     card: IPreset
@@ -9,7 +10,7 @@ interface SpacePreviewCardProps {
     onMouseLeave: () => void;
 }
 
-export const SpacePreviewCard: FC<SpacePreviewCardProps> = ({
+export const SpacePreviewCard: FC<SpacePreviewCardProps> = observer(({
                                                                 card,
                                                                 onMouseEnter,
                                                                 onMouseLeave,
@@ -47,4 +48,4 @@ export const SpacePreviewCard: FC<SpacePreviewCardProps> = ({
             />
         </div>
     );
-};
+});

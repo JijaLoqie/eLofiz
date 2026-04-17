@@ -1,14 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { selectStream } from "@/entities/stream/model/StreamSlice.ts";
-
-import type { RootState } from "@/index.tsx";
 import { ensureElement } from "@/shared/utils";
 import type { IStream } from "@/shared/types.ts";
 
-export const useAudioNode = (props: {spaceId: string, streamId: string}) => {
-    const {spaceId, streamId} = props;
-    const stream = useSelector((state: RootState): IStream | undefined => selectStream(state, streamId))
+export const useAudioNode = (props: {spaceId: string, stream: IStream}) => {
+    const {spaceId, stream} = props;
     const audioNode = useRef(ensureElement<HTMLAudioElement>(`#${spaceId} audio`));
     const [isPlaying, setPlaying] = useState(!audioNode.current.paused);
     const [currentTime, _setCurrentTime] = useState(audioNode.current.currentTime);

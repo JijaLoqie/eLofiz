@@ -1,13 +1,24 @@
-import { useStreamData } from "@/shared/hooks/useStreamData.ts";
 import { useAudioFileUtils } from "@/shared/hooks/useAudioFileUtils.ts";
 import { useResolveAudioTracks } from "@/shared/hooks/useResolveAudioTracks.ts";
+import { observer } from "mobx-react-lite";
+import { use, useCallback } from "react";
+import { EditorContext } from "@/features/Modal/EditorProvider.tsx";
+import { useStreamStore } from "@/features/preload-session/store";
 
 interface StreamCardProps {
     streamId: string;
 }
 
-export const StreamCard: React.FC<StreamCardProps> = ({ streamId }) => {
-    const { stream, handleOpenEditor } = useStreamData(streamId);
+export const StreamCard: React.FC<StreamCardProps> = observer(({ streamId }) => {
+    const editorContext = use(EditorContext);
+    const streamStore = useStreamStore();
+    const stream = streamStore.getItem(streamId);
+    const handleOpenEditor = useCallback(() => {
+        if (stream) {
+            editorContext?.handleOpen(stream);
+        }
+    }, [stream]);
+
     const { formatDuration } =
         useAudioFileUtils();
     const { tracks, totalDuration } = useResolveAudioTracks(
@@ -70,6 +81,6 @@ export const StreamCard: React.FC<StreamCardProps> = ({ streamId }) => {
             </div>
         </div>
     );
-};
+});
 
 export default StreamCard;

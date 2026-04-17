@@ -1,30 +1,40 @@
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "@/index.tsx";
 import { useAudioNode } from "@/shared/hooks/useAudioNode.ts";
-import type { IStream } from "@/shared/types.ts";
-import { selectStream } from "@/entities/stream/model/StreamSlice.ts";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { use, useCallback, useEffect, useMemo, useState } from "react";
 import { formatDuration } from "@/shared/StreamEditor";
-import { playBeep } from "@/shared/actions.ts";
-import { useDurationQuery } from "@/entities/stream/api/StreamApi.ts";
-import { useStreamData } from "@/shared/hooks/useStreamData.ts";
 import { PlayerInfo } from "./PlayerInfo.tsx";
 import { PlayerNavigation } from "./PlayerNavigation.tsx";
 import { PlayerControls } from "./PlayerControls.tsx";
 import { PlayerTimeline } from "./PlayerTimeline.tsx";
 import { model } from "@/features/spaces-session";
+import { useStreamStore } from "@/features/preload-session/store";
+import { observer } from "mobx-react-lite";
+import { EditorContext } from "@/features/Modal/EditorProvider.tsx";
+import { getDuration } from "@/shared/lib/getDuration.ts";
 
 interface PlayerWidgetProps {
     spaceId: string;
 }
 
-export const PlayerWidget = (props: PlayerWidgetProps) => {
+export const PlayerWidget = observer((props: PlayerWidgetProps) => {
+    const editorContext = use(EditorContext);
     const spaceListStore = model.useSpaceListStore();
+    const spaceAudioStore = model.useSpaceAudioStore();
     const space = spaceListStore.getSpace(props.spaceId);
-    const stream = useSelector((state: RootState): IStream | undefined => selectStream(state, space.streamId))
-    const { data: duration = 0 } = useDurationQuery(space.streamId);
-    const { handleOpenEditor } = useStreamData(space.streamId);
-    const dispatch = useDispatch();
+    const streamStore = useStreamStore();
+    const stream = streamStore.getItem(space.streamId);
+    const [duration, setDuration] = useState(0);
+
+    useEffect(() => {
+        if (stream) {
+            getDuration(stream).then(setDuration).catch(console.error);
+        }
+    }, [stream]);
+
+    const handleOpenEditor = useCallback(() => {
+        if (stream) {
+            editorContext?.handleOpen(stream);
+        }
+    }, [stream]);
     const [titleOffset, setTitleOffset] = useState(0);
 
     const {
@@ -34,13 +44,13 @@ export const PlayerWidget = (props: PlayerWidgetProps) => {
         currentTime, setCurrentTime
     } = useAudioNode({
         spaceId: space.id,
-        streamId: space.streamId,
+        stream,
     });
 
     const handleClick = useCallback((callback: () => void) => {
-        dispatch(playBeep());
+        spaceAudioStore.playBeep();
         callback();
-    }, [dispatch]);
+    }, []);
 
     const currentTimeView = useMemo(() => formatDuration(currentTime * 1000), [currentTime]);
     const durationView = useMemo(() => formatDuration(duration), [duration]);
@@ -101,6 +111,6 @@ export const PlayerWidget = (props: PlayerWidgetProps) => {
             />
         </div>
     )
-}
+});
 
 export default PlayerWidget;

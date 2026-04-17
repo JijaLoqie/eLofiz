@@ -1,8 +1,7 @@
-import React, { type FC, use, useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
-import { formatDuration } from "../../../shared/StreamEditor";
-import { useDurationQuery } from "@/entities/stream/api/StreamApi.ts";
-import { useDragHandler } from "@/shared/hooks/useDragHandler.ts";
+import React, { type FC, use, useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
+import { formatDuration } from "@/shared/StreamEditor";
 import { EditorContext } from "@/features/Modal/EditorProvider.tsx";
+import { getDuration } from "@/shared/lib/getDuration.ts";
 
 interface StreamTimelineProps {
 }
@@ -10,7 +9,13 @@ interface StreamTimelineProps {
 export const StreamTimeline: FC<StreamTimelineProps> = () => {
     const stream = use(EditorContext)?.stream;
 
-    const {data: duration = 0, isLoading} = useDurationQuery(stream?.id || "");
+    const [duration, setDuration] = useState(0);
+
+    useEffect(() => {
+        if (stream) {
+            getDuration(stream).then(setDuration).catch(console.error);
+        }
+    }, [stream]);
 
     const breakpoints = useMemo(() => {
         return stream?.breakpoints || []
@@ -23,11 +28,9 @@ export const StreamTimeline: FC<StreamTimelineProps> = () => {
                 data-component="timeline"
             >
                 {
-                    isLoading ? (
-                        <div className="m-auto text-white">Loading...</div>
-                    ) : duration === 0 ? (
-                        <div className="m-auto text-white">Произошла ошибка</div>
-                    ) : breakpoints.map((time, index) => (
+                    duration === 0 ? (<div className="m-auto text-white">
+                            <div className="m-auto text-white">Loading...</div>
+                        </div>) : breakpoints.map((time, index) => (
                         <Breakpoint key={`${time}-${index}`} time={time} duration={duration} />
                     ))
                 }
@@ -59,22 +62,6 @@ export const Breakpoint: FC<{time: number, duration: number}> = (props) => {
             }
         }).sort();
         handleUpdate?.({breakpoints: newBreakpoints});
-    });
-
-    useDragHandler({
-        // @ts-ignore
-        selectElementRef: breakpointRef,
-        // @ts-ignore
-        dragElementRef: breakpointRef,
-        options: {
-            manual: true,
-            onDragEnd: handleDragEnd,
-            onDrag: (_e, offsetX, _offsetY) => {
-                if (!breakpointRef.current?.parentElement) return;
-                const clientWidth = breakpointRef.current.parentElement.clientWidth;
-                setCurrentTime(offsetX * duration / clientWidth);
-            },
-        }
     });
 
     const percentTime = useMemo(() => `calc(${(currentTime / duration) * 100}%)`, [duration, currentTime]);

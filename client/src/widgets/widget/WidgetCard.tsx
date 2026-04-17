@@ -1,13 +1,9 @@
-import { useSelector } from "react-redux";
-import type { RootState } from "@/index.tsx";
-import { type IWidget } from "@/shared/types.ts";
-import { selectWidget } from "@/entities/widget/model/WidgetSlice.ts";
 import { use, useCallback } from "react";
-import { selectCurrentSpace } from "@/pages/spaces/model/IntersectionSlice.ts";
 import { ModalContext } from "@/features/Modal/ModalProvider.tsx";
 import { NotificationContext } from "@/shared/Notifications/NotificationProvider.tsx";
-import { useSpaceListStore } from "@/features/spaces-session/model";
+import { useIntersectionStore, useSpaceListStore } from "@/features/spaces-session/model";
 import { observer } from "mobx-react-lite";
+import { useWidgetStore } from "@/features/preload-session/store";
 
 interface WidgetCardProps {
     widgetCardId: string;
@@ -33,16 +29,16 @@ export const WidgetCard = observer((props: WidgetCardProps) => {
     const spaceListStore = useSpaceListStore();
     const modalData = use(ModalContext);
     const notificationData = use(NotificationContext);
-    const currentSpace = useSelector((state: RootState) => selectCurrentSpace(state));
-    const widgetInfo = useSelector((state: RootState): IWidget => selectWidget(state, props.widgetCardId));
-
+    const { currentSpaceId } = useIntersectionStore();
+    const widgetStore = useWidgetStore();
+    const widgetInfo = widgetStore.getItem(props.widgetCardId);
     const handleAddWidget = useCallback(() => {
-        spaceListStore.addWidget(currentSpace, widgetInfo.id);
+        spaceListStore.addWidget(currentSpaceId, widgetInfo.id);
         modalData?.setValue?.("");
         notificationData?.setValue?.("Создан новый виджет!");
 
 
-    }, [widgetInfo.id, currentSpace]);
+    }, [widgetInfo.id, currentSpaceId]);
 
     const iconClass = WIDGET_ICON_MAP[widgetInfo.type.toLowerCase()] || "fas fa-cube";
     const colors = WIDGET_COLOR_MAP[widgetInfo.type.toLowerCase()] || WIDGET_COLOR_MAP["timer"];
